@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum RoleName {
+  CLIENT
+  OWNER
+  REVIEWER
+  ADMIN
+  DEVELOPER
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  DISABLED
+}
+
+enum PropertyStatus {
+  DRAFT
+  PENDING
+  CHANGES_REQUESTED
+  APPROVED
+  PENDING_UPDATE
+  REJECTED
+  SUSPENDED
+  ARCHIVED
+}
+
+enum PropertyType {
+  HOTEL
+  RESTAURANT
+  TOURIST_SITE
+  PUBLIC_FACILITY
+  SERVICE_STATION
+  OTHER
+}
+
+model User {
+  id           String     @id @default(uuid())
+  email        String     @unique
+  passwordHash String
+  name         String
+  phone        String?
+  language     String     @default("en")
+  status       UserStatus @default(ACTIVE)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  roles         UserRole[] @relation("UserRoles")
+  rolesAssigned UserRole[] @relation("AssignedRoles")
+  properties    Property[]
+
+  @@index([status])
+  @@index([createdAt])
+}
+
+model Role {
+  id          String   @id @default(uuid())
+  name        RoleName @unique
+  description String?
+  createdAt   DateTime @default(now())
+
+  users UserRole[]
+}
+
+model UserRole {
+  userId       String
+  roleId       String
+  assignedAt   DateTime @default(now())
+  assignedById String?
+  systemReason String?
+
+  user       User  @relation("UserRoles", fields: [userId], references: [id], onDelete: Cascade)
+  role       Role  @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  assignedBy User? @relation("AssignedRoles", fields: [assignedById], references: [id], onDelete: SetNull)
+
+  @@id([userId, roleId])
+  @@index([roleId])
+  @@index([assignedById])
+}
+
+model Property {
+  id              String         @id @default(uuid())
+  ownerUserId     String
+  lifecycleStatus PropertyStatus @default(DRAFT)
+  activeVersionId String?        @unique
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+
+  owner         User              @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
+  versions      PropertyVersion[] @relation("PropertyVersions")
+  activeVersion PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
+
+  @@index([ownerUserId])
+  @@index([lifecycleStatus])
+  @@index([createdAt])
+}
+
+model PropertyVersion {
+  id           String       @id @default(uuid())
+  propertyId   String
+  version      Int
+  propertyType PropertyType
+  name         String
+  organisation String?
+  description  String?
+  accessNotes  String?
+  isFree       Boolean      @default(true)
+  feeLkr       Decimal?     @db.Decimal(10, 2)
+  phone        String?
+  email        String?
+  website      String?
+  address      String
+  district     String
+  city         String
+  latitude     Decimal      @db.Decimal(10, 7)
+  longitude    Decimal      @db.Decimal(10, 7)
+  submittedAt  DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  property          Property          @relation("PropertyVersions", fields: [propertyId], references: [id], onDelete: Cascade)
+  activeForProperty Property?         @relation("ActivePropertyVersion")
+  photos            PropertyPhoto[]
+  amenities         PropertyAmenity[]
+  openingHours      OpeningHour[]
+
+  @@unique([propertyId, version])
+  @@index([propertyId])
+  @@index([district])
+  @@index([city])
+  @@index([submittedAt])
+}
+
+model PropertyPhoto {
+  id                String   @id @default(uuid())
+  propertyVersionId String
+  url               String
+  storageKey        String
+  sortOrder         Int      @default(0)
+  isCover           Boolean  @default(false)
+  altText           String?
+  createdAt         DateTime @default(now())
+
+  propertyVersion PropertyVersion @relation(fields: [propertyVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyVersionId, storageKey])
+  @@index([propertyVersionId, sortOrder])
+}
+
+model Amenity {
+  id          String   @id @default(uuid())
+  code        String   @unique
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  properties PropertyAmenity[]
+}
+
+model PropertyAmenity {
+  propertyVersionId String
+  amenityId         String
+  value             Boolean @default(true)
+  notes             String?
+
+  propertyVersion PropertyVersion @relation(fields: [propertyVersionId], references: [id], onDelete: Cascade)
+  amenity         Amenity         @relation(fields: [amenityId], references: [id], onDelete: Restrict)
+
+  @@id([propertyVersionId, amenityId])
+  @@index([amenityId])
+}
+
+model OpeningHour {
+  id                String  @id @default(uuid())
+  propertyVersionId String
+  weekday           Int
+  openTime          String?
+  closeTime         String?
+  isClosed          Boolean @default(false)
+  is24Hours         Boolean @default(false)
+
+  propertyVersion PropertyVersion @relation(fields: [propertyVersionId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyVersionId, weekday])
+  @@index([propertyVersionId])
+}
