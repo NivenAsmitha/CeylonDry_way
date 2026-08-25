@@ -52,3 +52,27 @@ export const PropertyType = {
 } as const
 
 export type PropertyType = (typeof PropertyType)[keyof typeof PropertyType]
+
+
+export const ReviewDecisionType = {
+  APPROVE: 'APPROVE',
+  REQUEST_CHANGES: 'REQUEST_CHANGES',
+  REJECT: 'REJECT',
+  SUSPEND: 'SUSPEND',
+  REACTIVATE: 'REACTIVATE'
+} as const
+
+export type ReviewDecisionType = (typeof ReviewDecisionType)[keyof typeof ReviewDecisionType]
+
+
+export const NotificationType = {
+  PROPERTY_APPROVED: 'PROPERTY_APPROVED',
+  PROPERTY_CHANGES_REQUESTED: 'PROPERTY_CHANGES_REQUESTED',
+  PROPERTY_REJECTED: 'PROPERTY_REJECTED',
+  PROPERTY_SUSPENDED: 'PROPERTY_SUSPENDED',
+  PROPERTY_REACTIVATED: 'PROPERTY_REACTIVATED',
+  ACCOUNT_STATUS_CHANGED: 'ACCOUNT_STATUS_CHANGED',
+  PASSWORD_CHANGED: 'PASSWORD_CHANGED'
+} as const
+
+export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]

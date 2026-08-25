@@ -29,6 +29,8 @@ import { AuthResponseDto } from './dto/auth-response.dto';
 import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { CurrentUserResponseDto } from '../users/dto/current-user-response.dto';
+import { ResetPasswordDto } from '../password-reset/dto/reset-password.dto';
+import { PasswordResetService } from '../password-reset/password-reset.service';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
@@ -70,7 +72,10 @@ function toAuthResponse(
 @ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly passwordResetService: PasswordResetService,
+  ) {}
 
   @Post('register')
   @UseGuards(ThrottlerGuard)
@@ -83,6 +88,22 @@ export class AuthController {
   })
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post('reset-password')
+  @HttpCode(HttpStatus.OK)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ auth: { limit: 5, ttl: 60_000 } })
+  @ApiOperation({ summary: 'Complete a one-time password reset' })
+  @ApiOkResponse({
+    schema: { example: { message: 'Password reset completed' } },
+  })
+  @ApiBadRequestResponse({
+    description: 'Reset token is invalid, expired, used, or revoked',
+  })
+  @ApiTooManyRequestsResponse({ description: 'Reset rate limit exceeded' })
+  resetPassword(@Body() input: ResetPasswordDto) {
+    return this.passwordResetService.complete(input);
   }
 
   @Post('login')

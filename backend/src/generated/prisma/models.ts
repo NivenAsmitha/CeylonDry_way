@@ -8,11 +8,15 @@
  * 🟢 You can import this file directly.
  */
 export type * from './models/User.js'
+export type * from './models/PasswordResetToken.js'
 export type * from './models/RefreshSession.js'
 export type * from './models/Role.js'
 export type * from './models/UserRole.js'
 export type * from './models/Property.js'
 export type * from './models/PropertyVersion.js'
+export type * from './models/ReviewDecision.js'
+export type * from './models/AuditLog.js'
+export type * from './models/Notification.js'
 export type * from './models/PropertyPhoto.js'
 export type * from './models/Amenity.js'
 export type * from './models/PropertyAmenity.js'

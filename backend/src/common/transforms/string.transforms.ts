@@ -11,3 +11,9 @@ export function normalizeEmail(params: TransformFnParams): unknown {
 
   return typeof value === 'string' ? value.toLowerCase() : value;
 }
+
+export function trimStringToNull(params: TransformFnParams): unknown {
+  const value = trimString(params);
+
+  return value === '' ? null : value;
+}

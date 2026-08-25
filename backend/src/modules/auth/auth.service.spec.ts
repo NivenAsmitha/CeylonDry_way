@@ -337,6 +337,20 @@ describe('AuthService', () => {
     expect(refreshSessionCreate).not.toHaveBeenCalled();
   });
 
+  it('rejects soft-deleted users even if their status is inconsistent', async () => {
+    userFindUnique.mockResolvedValue({
+      ...safeUser,
+      status: UserStatus.ACTIVE,
+      deletedAt: new Date(),
+      passwordHash: 'not-read-for-deleted-users',
+    });
+
+    await expect(
+      service.login({ email: safeUser.email, password: TEST_PASSWORD }, {}),
+    ).rejects.toBeInstanceOf(UnauthorizedException);
+    expect(refreshSessionCreate).not.toHaveBeenCalled();
+  });
+
   it('rejects an access token at the refresh boundary', async () => {
     const accessToken = await jwtService.signAsync(
       { sub: safeUser.id, type: 'access' },

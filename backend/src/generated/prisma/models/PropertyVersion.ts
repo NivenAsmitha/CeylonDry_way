@@ -290,8 +290,8 @@ export type PropertyVersionGroupByOutputType = {
   id: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType: $Enums.PropertyType | null
+  name: string | null
   organisation: string | null
   description: string | null
   accessNotes: string | null
@@ -300,11 +300,11 @@ export type PropertyVersionGroupByOutputType = {
   phone: string | null
   email: string | null
   website: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal
-  longitude: runtime.Decimal
+  address: string | null
+  district: string | null
+  city: string | null
+  latitude: runtime.Decimal | null
+  longitude: runtime.Decimal | null
   submittedAt: Date | null
   createdAt: Date
   updatedAt: Date
@@ -337,8 +337,8 @@ export type PropertyVersionWhereInput = {
   id?: Prisma.StringFilter<"PropertyVersion"> | string
   propertyId?: Prisma.StringFilter<"PropertyVersion"> | string
   version?: Prisma.IntFilter<"PropertyVersion"> | number
-  propertyType?: Prisma.EnumPropertyTypeFilter<"PropertyVersion"> | $Enums.PropertyType
-  name?: Prisma.StringFilter<"PropertyVersion"> | string
+  propertyType?: Prisma.EnumPropertyTypeNullableFilter<"PropertyVersion"> | $Enums.PropertyType | null
+  name?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   organisation?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   description?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   accessNotes?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
@@ -347,11 +347,11 @@ export type PropertyVersionWhereInput = {
   phone?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   email?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   website?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
-  address?: Prisma.StringFilter<"PropertyVersion"> | string
-  district?: Prisma.StringFilter<"PropertyVersion"> | string
-  city?: Prisma.StringFilter<"PropertyVersion"> | string
-  latitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  district?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  city?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  latitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.DateTimeNullableFilter<"PropertyVersion"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
@@ -360,14 +360,15 @@ export type PropertyVersionWhereInput = {
   photos?: Prisma.PropertyPhotoListRelationFilter
   amenities?: Prisma.PropertyAmenityListRelationFilter
   openingHours?: Prisma.OpeningHourListRelationFilter
+  reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
 }
 
 export type PropertyVersionOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  propertyType?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  propertyType?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   organisation?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   accessNotes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -376,11 +377,11 @@ export type PropertyVersionOrderByWithRelationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrder
-  district?: Prisma.SortOrder
-  city?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
-  longitude?: Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  district?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -389,6 +390,7 @@ export type PropertyVersionOrderByWithRelationInput = {
   photos?: Prisma.PropertyPhotoOrderByRelationAggregateInput
   amenities?: Prisma.PropertyAmenityOrderByRelationAggregateInput
   openingHours?: Prisma.OpeningHourOrderByRelationAggregateInput
+  reviewDecisions?: Prisma.ReviewDecisionOrderByRelationAggregateInput
 }
 
 export type PropertyVersionWhereUniqueInput = Prisma.AtLeast<{
@@ -399,8 +401,8 @@ export type PropertyVersionWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.PropertyVersionWhereInput | Prisma.PropertyVersionWhereInput[]
   propertyId?: Prisma.StringFilter<"PropertyVersion"> | string
   version?: Prisma.IntFilter<"PropertyVersion"> | number
-  propertyType?: Prisma.EnumPropertyTypeFilter<"PropertyVersion"> | $Enums.PropertyType
-  name?: Prisma.StringFilter<"PropertyVersion"> | string
+  propertyType?: Prisma.EnumPropertyTypeNullableFilter<"PropertyVersion"> | $Enums.PropertyType | null
+  name?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   organisation?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   description?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   accessNotes?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
@@ -409,11 +411,11 @@ export type PropertyVersionWhereUniqueInput = Prisma.AtLeast<{
   phone?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   email?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   website?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
-  address?: Prisma.StringFilter<"PropertyVersion"> | string
-  district?: Prisma.StringFilter<"PropertyVersion"> | string
-  city?: Prisma.StringFilter<"PropertyVersion"> | string
-  latitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  district?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  city?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  latitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.DateTimeNullableFilter<"PropertyVersion"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
@@ -422,14 +424,15 @@ export type PropertyVersionWhereUniqueInput = Prisma.AtLeast<{
   photos?: Prisma.PropertyPhotoListRelationFilter
   amenities?: Prisma.PropertyAmenityListRelationFilter
   openingHours?: Prisma.OpeningHourListRelationFilter
+  reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
 }, "id" | "propertyId_version">
 
 export type PropertyVersionOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   propertyId?: Prisma.SortOrder
   version?: Prisma.SortOrder
-  propertyType?: Prisma.SortOrder
-  name?: Prisma.SortOrder
+  propertyType?: Prisma.SortOrderInput | Prisma.SortOrder
+  name?: Prisma.SortOrderInput | Prisma.SortOrder
   organisation?: Prisma.SortOrderInput | Prisma.SortOrder
   description?: Prisma.SortOrderInput | Prisma.SortOrder
   accessNotes?: Prisma.SortOrderInput | Prisma.SortOrder
@@ -438,11 +441,11 @@ export type PropertyVersionOrderByWithAggregationInput = {
   phone?: Prisma.SortOrderInput | Prisma.SortOrder
   email?: Prisma.SortOrderInput | Prisma.SortOrder
   website?: Prisma.SortOrderInput | Prisma.SortOrder
-  address?: Prisma.SortOrder
-  district?: Prisma.SortOrder
-  city?: Prisma.SortOrder
-  latitude?: Prisma.SortOrder
-  longitude?: Prisma.SortOrder
+  address?: Prisma.SortOrderInput | Prisma.SortOrder
+  district?: Prisma.SortOrderInput | Prisma.SortOrder
+  city?: Prisma.SortOrderInput | Prisma.SortOrder
+  latitude?: Prisma.SortOrderInput | Prisma.SortOrder
+  longitude?: Prisma.SortOrderInput | Prisma.SortOrder
   submittedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -460,8 +463,8 @@ export type PropertyVersionScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
   propertyId?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
   version?: Prisma.IntWithAggregatesFilter<"PropertyVersion"> | number
-  propertyType?: Prisma.EnumPropertyTypeWithAggregatesFilter<"PropertyVersion"> | $Enums.PropertyType
-  name?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
+  propertyType?: Prisma.EnumPropertyTypeNullableWithAggregatesFilter<"PropertyVersion"> | $Enums.PropertyType | null
+  name?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
   organisation?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
   description?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
   accessNotes?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
@@ -470,11 +473,11 @@ export type PropertyVersionScalarWhereWithAggregatesInput = {
   phone?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
   email?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
   website?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
-  address?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
-  district?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
-  city?: Prisma.StringWithAggregatesFilter<"PropertyVersion"> | string
-  latitude?: Prisma.DecimalWithAggregatesFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalWithAggregatesFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
+  district?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
+  city?: Prisma.StringNullableWithAggregatesFilter<"PropertyVersion"> | string | null
+  latitude?: Prisma.DecimalNullableWithAggregatesFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableWithAggregatesFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"PropertyVersion"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"PropertyVersion"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"PropertyVersion"> | Date | string
@@ -483,8 +486,8 @@ export type PropertyVersionScalarWhereWithAggregatesInput = {
 export type PropertyVersionCreateInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -493,11 +496,11 @@ export type PropertyVersionCreateInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -506,14 +509,15 @@ export type PropertyVersionCreateInput = {
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -522,11 +526,11 @@ export type PropertyVersionUncheckedCreateInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -534,13 +538,14 @@ export type PropertyVersionUncheckedCreateInput = {
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -549,11 +554,11 @@ export type PropertyVersionUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -562,14 +567,15 @@ export type PropertyVersionUpdateInput = {
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -578,11 +584,11 @@ export type PropertyVersionUncheckedUpdateInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -590,14 +596,15 @@ export type PropertyVersionUncheckedUpdateInput = {
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionCreateManyInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -606,11 +613,11 @@ export type PropertyVersionCreateManyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -619,8 +626,8 @@ export type PropertyVersionCreateManyInput = {
 export type PropertyVersionUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -629,11 +636,11 @@ export type PropertyVersionUpdateManyMutationInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -643,8 +650,8 @@ export type PropertyVersionUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -653,11 +660,11 @@ export type PropertyVersionUncheckedUpdateManyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -840,8 +847,8 @@ export type IntFieldUpdateOperationsInput = {
   divide?: number
 }
 
-export type EnumPropertyTypeFieldUpdateOperationsInput = {
-  set?: $Enums.PropertyType
+export type NullableEnumPropertyTypeFieldUpdateOperationsInput = {
+  set?: $Enums.PropertyType | null
 }
 
 export type BoolFieldUpdateOperationsInput = {
@@ -856,12 +863,18 @@ export type NullableDecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
-export type DecimalFieldUpdateOperationsInput = {
-  set?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  increment?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  decrement?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  multiply?: runtime.Decimal | runtime.DecimalJsLike | number | string
-  divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
+export type PropertyVersionCreateNestedOneWithoutReviewDecisionsInput = {
+  create?: Prisma.XOR<Prisma.PropertyVersionCreateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedCreateWithoutReviewDecisionsInput>
+  connectOrCreate?: Prisma.PropertyVersionCreateOrConnectWithoutReviewDecisionsInput
+  connect?: Prisma.PropertyVersionWhereUniqueInput
+}
+
+export type PropertyVersionUpdateOneRequiredWithoutReviewDecisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyVersionCreateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedCreateWithoutReviewDecisionsInput>
+  connectOrCreate?: Prisma.PropertyVersionCreateOrConnectWithoutReviewDecisionsInput
+  upsert?: Prisma.PropertyVersionUpsertWithoutReviewDecisionsInput
+  connect?: Prisma.PropertyVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyVersionUpdateToOneWithWhereWithoutReviewDecisionsInput, Prisma.PropertyVersionUpdateWithoutReviewDecisionsInput>, Prisma.PropertyVersionUncheckedUpdateWithoutReviewDecisionsInput>
 }
 
 export type PropertyVersionCreateNestedOneWithoutPhotosInput = {
@@ -909,8 +922,8 @@ export type PropertyVersionUpdateOneRequiredWithoutOpeningHoursNestedInput = {
 export type PropertyVersionCreateWithoutPropertyInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -919,11 +932,11 @@ export type PropertyVersionCreateWithoutPropertyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -931,13 +944,14 @@ export type PropertyVersionCreateWithoutPropertyInput = {
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateWithoutPropertyInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -946,11 +960,11 @@ export type PropertyVersionUncheckedCreateWithoutPropertyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -958,6 +972,7 @@ export type PropertyVersionUncheckedCreateWithoutPropertyInput = {
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionCreateOrConnectWithoutPropertyInput = {
@@ -973,8 +988,8 @@ export type PropertyVersionCreateManyPropertyInputEnvelope = {
 export type PropertyVersionCreateWithoutActiveForPropertyInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -983,11 +998,11 @@ export type PropertyVersionCreateWithoutActiveForPropertyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -995,14 +1010,15 @@ export type PropertyVersionCreateWithoutActiveForPropertyInput = {
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateWithoutActiveForPropertyInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1011,17 +1027,18 @@ export type PropertyVersionUncheckedCreateWithoutActiveForPropertyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionCreateOrConnectWithoutActiveForPropertyInput = {
@@ -1052,8 +1069,8 @@ export type PropertyVersionScalarWhereInput = {
   id?: Prisma.StringFilter<"PropertyVersion"> | string
   propertyId?: Prisma.StringFilter<"PropertyVersion"> | string
   version?: Prisma.IntFilter<"PropertyVersion"> | number
-  propertyType?: Prisma.EnumPropertyTypeFilter<"PropertyVersion"> | $Enums.PropertyType
-  name?: Prisma.StringFilter<"PropertyVersion"> | string
+  propertyType?: Prisma.EnumPropertyTypeNullableFilter<"PropertyVersion"> | $Enums.PropertyType | null
+  name?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   organisation?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   description?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   accessNotes?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
@@ -1062,11 +1079,11 @@ export type PropertyVersionScalarWhereInput = {
   phone?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   email?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
   website?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
-  address?: Prisma.StringFilter<"PropertyVersion"> | string
-  district?: Prisma.StringFilter<"PropertyVersion"> | string
-  city?: Prisma.StringFilter<"PropertyVersion"> | string
-  latitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  district?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  city?: Prisma.StringNullableFilter<"PropertyVersion"> | string | null
+  latitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.DecimalNullableFilter<"PropertyVersion"> | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.DateTimeNullableFilter<"PropertyVersion"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
@@ -1086,8 +1103,8 @@ export type PropertyVersionUpdateToOneWithWhereWithoutActiveForPropertyInput = {
 export type PropertyVersionUpdateWithoutActiveForPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1096,11 +1113,11 @@ export type PropertyVersionUpdateWithoutActiveForPropertyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1108,14 +1125,15 @@ export type PropertyVersionUpdateWithoutActiveForPropertyInput = {
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateWithoutActiveForPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1124,14 +1142,143 @@ export type PropertyVersionUncheckedUpdateWithoutActiveForPropertyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
+}
+
+export type PropertyVersionCreateWithoutReviewDecisionsInput = {
+  id?: string
+  version: number
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
+  organisation?: string | null
+  description?: string | null
+  accessNotes?: string | null
+  isFree?: boolean
+  feeLkr?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
+  activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
+  amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
+  openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+}
+
+export type PropertyVersionUncheckedCreateWithoutReviewDecisionsInput = {
+  id?: string
+  propertyId: string
+  version: number
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
+  organisation?: string | null
+  description?: string | null
+  accessNotes?: string | null
+  isFree?: boolean
+  feeLkr?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
+  amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
+  openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+}
+
+export type PropertyVersionCreateOrConnectWithoutReviewDecisionsInput = {
+  where: Prisma.PropertyVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyVersionCreateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedCreateWithoutReviewDecisionsInput>
+}
+
+export type PropertyVersionUpsertWithoutReviewDecisionsInput = {
+  update: Prisma.XOR<Prisma.PropertyVersionUpdateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedUpdateWithoutReviewDecisionsInput>
+  create: Prisma.XOR<Prisma.PropertyVersionCreateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedCreateWithoutReviewDecisionsInput>
+  where?: Prisma.PropertyVersionWhereInput
+}
+
+export type PropertyVersionUpdateToOneWithWhereWithoutReviewDecisionsInput = {
+  where?: Prisma.PropertyVersionWhereInput
+  data: Prisma.XOR<Prisma.PropertyVersionUpdateWithoutReviewDecisionsInput, Prisma.PropertyVersionUncheckedUpdateWithoutReviewDecisionsInput>
+}
+
+export type PropertyVersionUpdateWithoutReviewDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  feeLkr?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
+  activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
+  amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
+  openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+}
+
+export type PropertyVersionUncheckedUpdateWithoutReviewDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  feeLkr?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1140,8 +1287,8 @@ export type PropertyVersionUncheckedUpdateWithoutActiveForPropertyInput = {
 export type PropertyVersionCreateWithoutPhotosInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1150,11 +1297,11 @@ export type PropertyVersionCreateWithoutPhotosInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1162,14 +1309,15 @@ export type PropertyVersionCreateWithoutPhotosInput = {
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateWithoutPhotosInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1178,17 +1326,18 @@ export type PropertyVersionUncheckedCreateWithoutPhotosInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionCreateOrConnectWithoutPhotosInput = {
@@ -1210,8 +1359,8 @@ export type PropertyVersionUpdateToOneWithWhereWithoutPhotosInput = {
 export type PropertyVersionUpdateWithoutPhotosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1220,11 +1369,11 @@ export type PropertyVersionUpdateWithoutPhotosInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1232,14 +1381,15 @@ export type PropertyVersionUpdateWithoutPhotosInput = {
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateWithoutPhotosInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1248,24 +1398,25 @@ export type PropertyVersionUncheckedUpdateWithoutPhotosInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionCreateWithoutAmenitiesInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1274,11 +1425,11 @@ export type PropertyVersionCreateWithoutAmenitiesInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1286,14 +1437,15 @@ export type PropertyVersionCreateWithoutAmenitiesInput = {
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateWithoutAmenitiesInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1302,17 +1454,18 @@ export type PropertyVersionUncheckedCreateWithoutAmenitiesInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionCreateOrConnectWithoutAmenitiesInput = {
@@ -1334,8 +1487,8 @@ export type PropertyVersionUpdateToOneWithWhereWithoutAmenitiesInput = {
 export type PropertyVersionUpdateWithoutAmenitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1344,11 +1497,11 @@ export type PropertyVersionUpdateWithoutAmenitiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1356,14 +1509,15 @@ export type PropertyVersionUpdateWithoutAmenitiesInput = {
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateWithoutAmenitiesInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1372,24 +1526,25 @@ export type PropertyVersionUncheckedUpdateWithoutAmenitiesInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionCreateWithoutOpeningHoursInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1398,11 +1553,11 @@ export type PropertyVersionCreateWithoutOpeningHoursInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1410,14 +1565,15 @@ export type PropertyVersionCreateWithoutOpeningHoursInput = {
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionUncheckedCreateWithoutOpeningHoursInput = {
   id?: string
   propertyId: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1426,17 +1582,18 @@ export type PropertyVersionUncheckedCreateWithoutOpeningHoursInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
 }
 
 export type PropertyVersionCreateOrConnectWithoutOpeningHoursInput = {
@@ -1458,8 +1615,8 @@ export type PropertyVersionUpdateToOneWithWhereWithoutOpeningHoursInput = {
 export type PropertyVersionUpdateWithoutOpeningHoursInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1468,11 +1625,11 @@ export type PropertyVersionUpdateWithoutOpeningHoursInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1480,14 +1637,15 @@ export type PropertyVersionUpdateWithoutOpeningHoursInput = {
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateWithoutOpeningHoursInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   propertyId?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1496,24 +1654,25 @@ export type PropertyVersionUncheckedUpdateWithoutOpeningHoursInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionCreateManyPropertyInput = {
   id?: string
   version: number
-  propertyType: $Enums.PropertyType
-  name: string
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
   organisation?: string | null
   description?: string | null
   accessNotes?: string | null
@@ -1522,11 +1681,11 @@ export type PropertyVersionCreateManyPropertyInput = {
   phone?: string | null
   email?: string | null
   website?: string | null
-  address: string
-  district: string
-  city: string
-  latitude: runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude: runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -1535,8 +1694,8 @@ export type PropertyVersionCreateManyPropertyInput = {
 export type PropertyVersionUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1545,11 +1704,11 @@ export type PropertyVersionUpdateWithoutPropertyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1557,13 +1716,14 @@ export type PropertyVersionUpdateWithoutPropertyInput = {
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1572,11 +1732,11 @@ export type PropertyVersionUncheckedUpdateWithoutPropertyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1584,13 +1744,14 @@ export type PropertyVersionUncheckedUpdateWithoutPropertyInput = {
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
 }
 
 export type PropertyVersionUncheckedUpdateManyWithoutPropertyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   version?: Prisma.IntFieldUpdateOperationsInput | number
-  propertyType?: Prisma.EnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType
-  name?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
@@ -1599,11 +1760,11 @@ export type PropertyVersionUncheckedUpdateManyWithoutPropertyInput = {
   phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
-  address?: Prisma.StringFieldUpdateOperationsInput | string
-  district?: Prisma.StringFieldUpdateOperationsInput | string
-  city?: Prisma.StringFieldUpdateOperationsInput | string
-  latitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
-  longitude?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -1618,12 +1779,14 @@ export type PropertyVersionCountOutputType = {
   photos: number
   amenities: number
   openingHours: number
+  reviewDecisions: number
 }
 
 export type PropertyVersionCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   photos?: boolean | PropertyVersionCountOutputTypeCountPhotosArgs
   amenities?: boolean | PropertyVersionCountOutputTypeCountAmenitiesArgs
   openingHours?: boolean | PropertyVersionCountOutputTypeCountOpeningHoursArgs
+  reviewDecisions?: boolean | PropertyVersionCountOutputTypeCountReviewDecisionsArgs
 }
 
 /**
@@ -1657,6 +1820,13 @@ export type PropertyVersionCountOutputTypeCountOpeningHoursArgs<ExtArgs extends 
   where?: Prisma.OpeningHourWhereInput
 }
 
+/**
+ * PropertyVersionCountOutputType without action
+ */
+export type PropertyVersionCountOutputTypeCountReviewDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewDecisionWhereInput
+}
+
 
 export type PropertyVersionSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1685,6 +1855,7 @@ export type PropertyVersionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   photos?: boolean | Prisma.PropertyVersion$photosArgs<ExtArgs>
   amenities?: boolean | Prisma.PropertyVersion$amenitiesArgs<ExtArgs>
   openingHours?: boolean | Prisma.PropertyVersion$openingHoursArgs<ExtArgs>
+  reviewDecisions?: boolean | Prisma.PropertyVersion$reviewDecisionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyVersionCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["propertyVersion"]>
 
@@ -1769,6 +1940,7 @@ export type PropertyVersionInclude<ExtArgs extends runtime.Types.Extensions.Inte
   photos?: boolean | Prisma.PropertyVersion$photosArgs<ExtArgs>
   amenities?: boolean | Prisma.PropertyVersion$amenitiesArgs<ExtArgs>
   openingHours?: boolean | Prisma.PropertyVersion$openingHoursArgs<ExtArgs>
+  reviewDecisions?: boolean | Prisma.PropertyVersion$reviewDecisionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyVersionCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyVersionIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1786,13 +1958,14 @@ export type $PropertyVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
     photos: Prisma.$PropertyPhotoPayload<ExtArgs>[]
     amenities: Prisma.$PropertyAmenityPayload<ExtArgs>[]
     openingHours: Prisma.$OpeningHourPayload<ExtArgs>[]
+    reviewDecisions: Prisma.$ReviewDecisionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
     propertyId: string
     version: number
-    propertyType: $Enums.PropertyType
-    name: string
+    propertyType: $Enums.PropertyType | null
+    name: string | null
     organisation: string | null
     description: string | null
     accessNotes: string | null
@@ -1801,11 +1974,11 @@ export type $PropertyVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
     phone: string | null
     email: string | null
     website: string | null
-    address: string
-    district: string
-    city: string
-    latitude: runtime.Decimal
-    longitude: runtime.Decimal
+    address: string | null
+    district: string | null
+    city: string | null
+    latitude: runtime.Decimal | null
+    longitude: runtime.Decimal | null
     submittedAt: Date | null
     createdAt: Date
     updatedAt: Date
@@ -2208,6 +2381,7 @@ export interface Prisma__PropertyVersionClient<T, Null = never, ExtArgs extends 
   photos<T extends Prisma.PropertyVersion$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   amenities<T extends Prisma.PropertyVersion$amenitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$amenitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyAmenityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   openingHours<T extends Prisma.PropertyVersion$openingHoursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$openingHoursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OpeningHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  reviewDecisions<T extends Prisma.PropertyVersion$reviewDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$reviewDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2747,6 +2921,30 @@ export type PropertyVersion$openingHoursArgs<ExtArgs extends runtime.Types.Exten
   take?: number
   skip?: number
   distinct?: Prisma.OpeningHourScalarFieldEnum | Prisma.OpeningHourScalarFieldEnum[]
+}
+
+/**
+ * PropertyVersion.reviewDecisions
+ */
+export type PropertyVersion$reviewDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReviewDecision
+   */
+  select?: Prisma.ReviewDecisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReviewDecision
+   */
+  omit?: Prisma.ReviewDecisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewDecisionInclude<ExtArgs> | null
+  where?: Prisma.ReviewDecisionWhereInput
+  orderBy?: Prisma.ReviewDecisionOrderByWithRelationInput | Prisma.ReviewDecisionOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewDecisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewDecisionScalarFieldEnum | Prisma.ReviewDecisionScalarFieldEnum[]
 }
 
 /**

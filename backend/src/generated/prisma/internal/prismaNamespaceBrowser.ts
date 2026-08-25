@@ -51,11 +51,15 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
+  PasswordResetToken: 'PasswordResetToken',
   RefreshSession: 'RefreshSession',
   Role: 'Role',
   UserRole: 'UserRole',
   Property: 'Property',
   PropertyVersion: 'PropertyVersion',
+  ReviewDecision: 'ReviewDecision',
+  AuditLog: 'AuditLog',
+  Notification: 'Notification',
   PropertyPhoto: 'PropertyPhoto',
   Amenity: 'Amenity',
   PropertyAmenity: 'PropertyAmenity',
@@ -86,11 +90,27 @@ export const UserScalarFieldEnum = {
   phone: 'phone',
   language: 'language',
   status: 'status',
+  statusChangedAt: 'statusChangedAt',
+  deletedAt: 'deletedAt',
+  deletionReason: 'deletionReason',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
+
+
+export const PasswordResetTokenScalarFieldEnum = {
+  id: 'id',
+  userId: 'userId',
+  tokenHash: 'tokenHash',
+  expiresAt: 'expiresAt',
+  usedAt: 'usedAt',
+  revokedAt: 'revokedAt',
+  createdAt: 'createdAt'
+} as const
+
+export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalarFieldEnum)[keyof typeof PasswordResetTokenScalarFieldEnum]
 
 
 export const RefreshSessionScalarFieldEnum = {
@@ -169,6 +189,47 @@ export const PropertyVersionScalarFieldEnum = {
 export type PropertyVersionScalarFieldEnum = (typeof PropertyVersionScalarFieldEnum)[keyof typeof PropertyVersionScalarFieldEnum]
 
 
+export const ReviewDecisionScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  propertyVersionId: 'propertyVersionId',
+  reviewerId: 'reviewerId',
+  decision: 'decision',
+  reason: 'reason',
+  fieldNotes: 'fieldNotes',
+  createdAt: 'createdAt'
+} as const
+
+export type ReviewDecisionScalarFieldEnum = (typeof ReviewDecisionScalarFieldEnum)[keyof typeof ReviewDecisionScalarFieldEnum]
+
+
+export const AuditLogScalarFieldEnum = {
+  id: 'id',
+  actorId: 'actorId',
+  action: 'action',
+  targetType: 'targetType',
+  targetId: 'targetId',
+  beforeSummary: 'beforeSummary',
+  afterSummary: 'afterSummary',
+  createdAt: 'createdAt'
+} as const
+
+export type AuditLogScalarFieldEnum = (typeof AuditLogScalarFieldEnum)[keyof typeof AuditLogScalarFieldEnum]
+
+
+export const NotificationScalarFieldEnum = {
+  id: 'id',
+  recipientId: 'recipientId',
+  type: 'type',
+  payload: 'payload',
+  readAt: 'readAt',
+  sentAt: 'sentAt',
+  createdAt: 'createdAt'
+} as const
+
+export type NotificationScalarFieldEnum = (typeof NotificationScalarFieldEnum)[keyof typeof NotificationScalarFieldEnum]
+
+
 export const PropertyPhotoScalarFieldEnum = {
   id: 'id',
   propertyVersionId: 'propertyVersionId',
@@ -226,6 +287,14 @@ export const SortOrder = {
 export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
 
 
+export const NullableJsonNullValueInput = {
+  DbNull: DbNull,
+  JsonNull: JsonNull
+} as const
+
+export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
+
+
 export const QueryMode = {
   default: 'default',
   insensitive: 'insensitive'
@@ -240,4 +309,13 @@ export const NullsOrder = {
 } as const
 
 export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
+
+
+export const JsonNullValueFilter = {
+  DbNull: DbNull,
+  JsonNull: JsonNull,
+  AnyNull: AnyNull
+} as const
+
+export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
 

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { UserStatus } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../prisma/prisma.service';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
+import { assertAllowedRoleCombination } from '../roles/role-combination.policy';
 import type { UpdateProfileDto } from './dto/update-profile.dto';
 import { mapSafeUser, safeUserSelect } from './user.mapper';
 
@@ -14,6 +15,7 @@ export class UsersService {
       where: {
         id: userId,
         status: UserStatus.ACTIVE,
+        deletedAt: null,
       },
       select: safeUserSelect,
     });
@@ -22,7 +24,7 @@ export class UsersService {
       throw new UnauthorizedException('Authentication required');
     }
 
-    return mapSafeUser(user);
+    return this.mapValidUser(user);
   }
 
   async updateCurrentUser(
@@ -50,6 +52,7 @@ export class UsersService {
         where: {
           id: userId,
           status: UserStatus.ACTIVE,
+          deletedAt: null,
         },
         data,
       });
@@ -68,6 +71,20 @@ export class UsersService {
       throw new UnauthorizedException('Authentication required');
     }
 
-    return mapSafeUser(user);
+    return this.mapValidUser(user);
+  }
+
+  private mapValidUser(
+    user: Parameters<typeof mapSafeUser>[0],
+  ): AuthenticatedUser {
+    const mappedUser = mapSafeUser(user);
+
+    try {
+      assertAllowedRoleCombination(mappedUser.roles);
+    } catch {
+      throw new UnauthorizedException('Authentication required');
+    }
+
+    return mappedUser;
   }
 }

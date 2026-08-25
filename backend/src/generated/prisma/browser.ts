@@ -22,6 +22,11 @@ export * from './enums.js';
  */
 export type User = Prisma.UserModel
 /**
+ * Model PasswordResetToken
+ * 
+ */
+export type PasswordResetToken = Prisma.PasswordResetTokenModel
+/**
  * Model RefreshSession
  * 
  */
@@ -46,6 +51,21 @@ export type Property = Prisma.PropertyModel
  * 
  */
 export type PropertyVersion = Prisma.PropertyVersionModel
+/**
+ * Model ReviewDecision
+ * 
+ */
+export type ReviewDecision = Prisma.ReviewDecisionModel
+/**
+ * Model AuditLog
+ * 
+ */
+export type AuditLog = Prisma.AuditLogModel
+/**
+ * Model Notification
+ * 
+ */
+export type Notification = Prisma.NotificationModel
 /**
  * Model PropertyPhoto
  * 

@@ -192,6 +192,7 @@ export type PropertyWhereInput = {
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   versions?: Prisma.PropertyVersionListRelationFilter
   activeVersion?: Prisma.XOR<Prisma.PropertyVersionNullableScalarRelationFilter, Prisma.PropertyVersionWhereInput> | null
+  reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -204,6 +205,7 @@ export type PropertyOrderByWithRelationInput = {
   owner?: Prisma.UserOrderByWithRelationInput
   versions?: Prisma.PropertyVersionOrderByRelationAggregateInput
   activeVersion?: Prisma.PropertyVersionOrderByWithRelationInput
+  reviewDecisions?: Prisma.ReviewDecisionOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -219,6 +221,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   owner?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   versions?: Prisma.PropertyVersionListRelationFilter
   activeVersion?: Prisma.XOR<Prisma.PropertyVersionNullableScalarRelationFilter, Prisma.PropertyVersionWhereInput> | null
+  reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
 }, "id" | "activeVersionId">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -253,6 +256,7 @@ export type PropertyCreateInput = {
   owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -263,6 +267,7 @@ export type PropertyUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -273,6 +278,7 @@ export type PropertyUpdateInput = {
   owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -283,6 +289,7 @@ export type PropertyUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -449,6 +456,20 @@ export type PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutActiveVersionInput, Prisma.PropertyUpdateWithoutActiveVersionInput>, Prisma.PropertyUncheckedUpdateWithoutActiveVersionInput>
 }
 
+export type PropertyCreateNestedOneWithoutReviewDecisionsInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedCreateWithoutReviewDecisionsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutReviewDecisionsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneRequiredWithoutReviewDecisionsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedCreateWithoutReviewDecisionsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutReviewDecisionsInput
+  upsert?: Prisma.PropertyUpsertWithoutReviewDecisionsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutReviewDecisionsInput, Prisma.PropertyUpdateWithoutReviewDecisionsInput>, Prisma.PropertyUncheckedUpdateWithoutReviewDecisionsInput>
+}
+
 export type PropertyCreateWithoutOwnerInput = {
   id?: string
   lifecycleStatus?: $Enums.PropertyStatus
@@ -456,6 +477,7 @@ export type PropertyCreateWithoutOwnerInput = {
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutOwnerInput = {
@@ -465,6 +487,7 @@ export type PropertyUncheckedCreateWithoutOwnerInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutOwnerInput = {
@@ -512,6 +535,7 @@ export type PropertyCreateWithoutVersionsInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutVersionsInput = {
@@ -521,6 +545,7 @@ export type PropertyUncheckedCreateWithoutVersionsInput = {
   activeVersionId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutVersionsInput = {
@@ -535,6 +560,7 @@ export type PropertyCreateWithoutActiveVersionInput = {
   updatedAt?: Date | string
   owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutActiveVersionInput = {
@@ -544,6 +570,7 @@ export type PropertyUncheckedCreateWithoutActiveVersionInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutActiveVersionInput = {
@@ -569,6 +596,7 @@ export type PropertyUpdateWithoutVersionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutVersionsInput = {
@@ -578,6 +606,7 @@ export type PropertyUncheckedUpdateWithoutVersionsInput = {
   activeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUpsertWithoutActiveVersionInput = {
@@ -598,12 +627,70 @@ export type PropertyUpdateWithoutActiveVersionInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutActiveVersionInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
   lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutReviewDecisionsInput = {
+  id?: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
+  activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutReviewDecisionsInput = {
+  id?: string
+  ownerUserId: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  activeVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutReviewDecisionsInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedCreateWithoutReviewDecisionsInput>
+}
+
+export type PropertyUpsertWithoutReviewDecisionsInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedUpdateWithoutReviewDecisionsInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedCreateWithoutReviewDecisionsInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutReviewDecisionsInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutReviewDecisionsInput, Prisma.PropertyUncheckedUpdateWithoutReviewDecisionsInput>
+}
+
+export type PropertyUpdateWithoutReviewDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
+  activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutReviewDecisionsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  activeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
@@ -624,6 +711,7 @@ export type PropertyUpdateWithoutOwnerInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutOwnerInput = {
@@ -633,6 +721,7 @@ export type PropertyUncheckedUpdateWithoutOwnerInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutOwnerInput = {
@@ -650,10 +739,12 @@ export type PropertyUncheckedUpdateManyWithoutOwnerInput = {
 
 export type PropertyCountOutputType = {
   versions: number
+  reviewDecisions: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   versions?: boolean | PropertyCountOutputTypeCountVersionsArgs
+  reviewDecisions?: boolean | PropertyCountOutputTypeCountReviewDecisionsArgs
 }
 
 /**
@@ -673,6 +764,13 @@ export type PropertyCountOutputTypeCountVersionsArgs<ExtArgs extends runtime.Typ
   where?: Prisma.PropertyVersionWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountReviewDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.ReviewDecisionWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -684,6 +782,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   versions?: boolean | Prisma.Property$versionsArgs<ExtArgs>
   activeVersion?: boolean | Prisma.Property$activeVersionArgs<ExtArgs>
+  reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -723,6 +822,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   owner?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   versions?: boolean | Prisma.Property$versionsArgs<ExtArgs>
   activeVersion?: boolean | Prisma.Property$activeVersionArgs<ExtArgs>
+  reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -740,6 +840,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     owner: Prisma.$UserPayload<ExtArgs>
     versions: Prisma.$PropertyVersionPayload<ExtArgs>[]
     activeVersion: Prisma.$PropertyVersionPayload<ExtArgs> | null
+    reviewDecisions: Prisma.$ReviewDecisionPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1145,6 +1246,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   owner<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   versions<T extends Prisma.Property$versionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$versionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyVersionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   activeVersion<T extends Prisma.Property$activeVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$activeVersionArgs<ExtArgs>>): Prisma.Prisma__PropertyVersionClient<runtime.Types.Result.GetResult<Prisma.$PropertyVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  reviewDecisions<T extends Prisma.Property$reviewDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reviewDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1621,6 +1723,30 @@ export type Property$activeVersionArgs<ExtArgs extends runtime.Types.Extensions.
    */
   include?: Prisma.PropertyVersionInclude<ExtArgs> | null
   where?: Prisma.PropertyVersionWhereInput
+}
+
+/**
+ * Property.reviewDecisions
+ */
+export type Property$reviewDecisionsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the ReviewDecision
+   */
+  select?: Prisma.ReviewDecisionSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the ReviewDecision
+   */
+  omit?: Prisma.ReviewDecisionOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.ReviewDecisionInclude<ExtArgs> | null
+  where?: Prisma.ReviewDecisionWhereInput
+  orderBy?: Prisma.ReviewDecisionOrderByWithRelationInput | Prisma.ReviewDecisionOrderByWithRelationInput[]
+  cursor?: Prisma.ReviewDecisionWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.ReviewDecisionScalarFieldEnum | Prisma.ReviewDecisionScalarFieldEnum[]
 }
 
 /**

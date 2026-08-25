@@ -42,24 +42,68 @@ enum PropertyType {
   OTHER
 }
 
-model User {
-  id           String     @id @default(uuid())
-  email        String     @unique
-  passwordHash String
-  name         String
-  phone        String?
-  language     String     @default("en")
-  status       UserStatus @default(ACTIVE)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
+enum ReviewDecisionType {
+  APPROVE
+  REQUEST_CHANGES
+  REJECT
+  SUSPEND
+  REACTIVATE
+}
 
-  roles           UserRole[]       @relation("UserRoles")
-  rolesAssigned   UserRole[]       @relation("AssignedRoles")
-  properties      Property[]
-  refreshSessions RefreshSession[]
+enum NotificationType {
+  PROPERTY_APPROVED
+  PROPERTY_CHANGES_REQUESTED
+  PROPERTY_REJECTED
+  PROPERTY_SUSPENDED
+  PROPERTY_REACTIVATED
+  ACCOUNT_STATUS_CHANGED
+  PASSWORD_CHANGED
+}
+
+model User {
+  id              String     @id @default(uuid())
+  email           String     @unique
+  passwordHash    String
+  name            String
+  phone           String?
+  language        String     @default("en")
+  status          UserStatus @default(ACTIVE)
+  statusChangedAt DateTime   @default(now())
+  deletedAt       DateTime?
+  deletionReason  String?    @db.VarChar(1000)
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
+
+  roles               UserRole[]           @relation("UserRoles")
+  rolesAssigned       UserRole[]           @relation("AssignedRoles")
+  properties          Property[]
+  refreshSessions     RefreshSession[]
+  reviewDecisions     ReviewDecision[]     @relation("ReviewDecisionReviewer")
+  auditLogs           AuditLog[]           @relation("AuditLogActor")
+  notifications       Notification[]       @relation("NotificationRecipient")
+  passwordResetTokens PasswordResetToken[]
 
   @@index([status])
+  @@index([deletedAt])
+  @@index([status, deletedAt])
   @@index([createdAt])
+}
+
+model PasswordResetToken {
+  id        String    @id @default(uuid())
+  userId    String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  revokedAt DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([usedAt])
+  @@index([userId, revokedAt, usedAt])
 }
 
 model RefreshSession {
@@ -115,49 +159,104 @@ model Property {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
 
-  owner         User              @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
-  versions      PropertyVersion[] @relation("PropertyVersions")
-  activeVersion PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
+  owner           User              @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
+  versions        PropertyVersion[] @relation("PropertyVersions")
+  activeVersion   PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
+  reviewDecisions ReviewDecision[]
 
   @@index([ownerUserId])
   @@index([lifecycleStatus])
+  @@index([lifecycleStatus, updatedAt, id])
   @@index([createdAt])
 }
 
 model PropertyVersion {
-  id           String       @id @default(uuid())
+  id           String        @id @default(uuid())
   propertyId   String
   version      Int
-  propertyType PropertyType
-  name         String
+  propertyType PropertyType?
+  name         String?
   organisation String?
   description  String?
   accessNotes  String?
-  isFree       Boolean      @default(true)
-  feeLkr       Decimal?     @db.Decimal(10, 2)
+  isFree       Boolean       @default(true)
+  feeLkr       Decimal?      @db.Decimal(10, 2)
   phone        String?
   email        String?
   website      String?
-  address      String
-  district     String
-  city         String
-  latitude     Decimal      @db.Decimal(10, 7)
-  longitude    Decimal      @db.Decimal(10, 7)
+  address      String?
+  district     String?
+  city         String?
+  latitude     Decimal?      @db.Decimal(10, 7)
+  longitude    Decimal?      @db.Decimal(10, 7)
   submittedAt  DateTime?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 
   property          Property          @relation("PropertyVersions", fields: [propertyId], references: [id], onDelete: Cascade)
   activeForProperty Property?         @relation("ActivePropertyVersion")
   photos            PropertyPhoto[]
   amenities         PropertyAmenity[]
   openingHours      OpeningHour[]
+  reviewDecisions   ReviewDecision[]
 
   @@unique([propertyId, version])
   @@index([propertyId])
   @@index([district])
   @@index([city])
   @@index([submittedAt])
+  @@index([submittedAt, id])
+}
+
+model ReviewDecision {
+  id                String             @id @default(uuid())
+  propertyId        String
+  propertyVersionId String
+  reviewerId        String
+  decision          ReviewDecisionType
+  reason            String?            @db.VarChar(1000)
+  fieldNotes        Json?              @db.JsonB
+  createdAt         DateTime           @default(now())
+
+  property        Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyVersion PropertyVersion @relation(fields: [propertyVersionId], references: [id], onDelete: Restrict)
+  reviewer        User            @relation("ReviewDecisionReviewer", fields: [reviewerId], references: [id], onDelete: Restrict)
+
+  @@index([propertyId, createdAt])
+  @@index([propertyVersionId, createdAt])
+  @@index([reviewerId, createdAt])
+  @@index([decision])
+}
+
+model AuditLog {
+  id            String   @id @default(uuid())
+  actorId       String
+  action        String   @db.VarChar(64)
+  targetType    String   @db.VarChar(64)
+  targetId      String
+  beforeSummary Json?    @db.JsonB
+  afterSummary  Json?    @db.JsonB
+  createdAt     DateTime @default(now())
+
+  actor User @relation("AuditLogActor", fields: [actorId], references: [id], onDelete: Restrict)
+
+  @@index([actorId, createdAt])
+  @@index([targetType, targetId, createdAt])
+}
+
+model Notification {
+  id          String           @id @default(uuid())
+  recipientId String
+  type        NotificationType
+  payload     Json?            @db.JsonB
+  readAt      DateTime?
+  sentAt      DateTime?
+  createdAt   DateTime         @default(now())
+
+  recipient User @relation("NotificationRecipient", fields: [recipientId], references: [id], onDelete: Cascade)
+
+  @@index([recipientId, readAt, createdAt])
+  @@index([type, createdAt])
 }
 
 model PropertyPhoto {

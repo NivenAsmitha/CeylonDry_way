@@ -59,7 +59,11 @@ describe('JwtStrategy', () => {
     expect(user).not.toHaveProperty('passwordHash');
     expect(userFindUnique).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: 'user-1', status: UserStatus.ACTIVE },
+        where: {
+          id: 'user-1',
+          status: UserStatus.ACTIVE,
+          deletedAt: null,
+        },
       }),
     );
   });

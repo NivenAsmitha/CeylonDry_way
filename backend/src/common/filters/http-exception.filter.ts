@@ -12,14 +12,21 @@ interface ErrorResponse {
   statusCode: number;
   code: string;
   message: string | string[];
+  details?: ValidationErrorDetail[];
   path: string;
   timestamp: string;
+}
+
+interface ValidationErrorDetail {
+  field: string;
+  message: string;
 }
 
 interface HttpExceptionDetails {
   statusCode: number;
   code: string;
   message: string | string[];
+  details?: ValidationErrorDetail[];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -31,6 +38,28 @@ function isStringArray(value: unknown): value is string[] {
     Array.isArray(value) &&
     value.every((item: unknown) => typeof item === 'string')
   );
+}
+
+function getValidationDetails(
+  value: unknown,
+): ValidationErrorDetail[] | undefined {
+  if (!Array.isArray(value)) {
+    return undefined;
+  }
+
+  const details = value.flatMap((item: unknown) => {
+    if (
+      !isRecord(item) ||
+      typeof item.field !== 'string' ||
+      typeof item.message !== 'string'
+    ) {
+      return [];
+    }
+
+    return [{ field: item.field, message: item.message }];
+  });
+
+  return details.length > 0 ? details : undefined;
 }
 
 function normalizeCode(value: string): string {
@@ -65,6 +94,7 @@ function getHttpExceptionDetails(
     const responseMessage = exceptionResponse.message;
     const responseCode = exceptionResponse.code;
     const responseError = exceptionResponse.error;
+    const responseDetails = getValidationDetails(exceptionResponse.details);
 
     const message =
       typeof responseMessage === 'string' || isStringArray(responseMessage)
@@ -81,6 +111,7 @@ function getHttpExceptionDetails(
       statusCode,
       code: normalizeCode(codeSource),
       message,
+      ...(responseDetails ? { details: responseDetails } : {}),
     };
   }
 

@@ -16,6 +16,7 @@ import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { Prisma, RoleName, UserStatus } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RolesService } from '../roles/roles.service';
+import { assertAllowedRoleCombination } from '../roles/role-combination.policy';
 import { mapSafeUser, safeUserSelect } from '../users/user.mapper';
 import {
   INVALID_CREDENTIALS_MESSAGE,
@@ -180,6 +181,8 @@ export class AuthService {
   }
 
   async register(registerDto: RegisterDto): Promise<AuthenticatedUser> {
+    const registrationRoles = [RoleName.CLIENT] as const;
+    assertAllowedRoleCombination(registrationRoles);
     const email = registerDto.email.trim().toLowerCase();
     const existingUser = await this.prisma.user.findUnique({
       where: { email },
@@ -223,7 +226,9 @@ export class AuthService {
         }),
       );
 
-      return mapSafeUser(user);
+      const mappedUser = mapSafeUser(user);
+      assertAllowedRoleCombination(mappedUser.roles);
+      return mappedUser;
     } catch (error: unknown) {
       if (hasPrismaErrorCode(error, 'P2002')) {
         throw new ConflictException(
@@ -245,7 +250,11 @@ export class AuthService {
       select: loginUserSelect,
     });
 
-    if (!userRecord || userRecord.status !== UserStatus.ACTIVE) {
+    if (
+      !userRecord ||
+      userRecord.status !== UserStatus.ACTIVE ||
+      userRecord.deletedAt
+    ) {
       throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
 
@@ -264,7 +273,15 @@ export class AuthService {
       throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
     }
 
-    return this.createSession(mapSafeUser(userRecord), randomUUID(), metadata);
+    const user = mapSafeUser(userRecord);
+
+    try {
+      assertAllowedRoleCombination(user.roles);
+    } catch {
+      throw new UnauthorizedException(INVALID_CREDENTIALS_MESSAGE);
+    }
+
+    return this.createSession(user, randomUUID(), metadata);
   }
 
   async refresh(
@@ -315,8 +332,17 @@ export class AuthService {
 
         if (
           session.expiresAt <= now ||
-          session.user.status !== UserStatus.ACTIVE
+          session.user.status !== UserStatus.ACTIVE ||
+          session.user.deletedAt
         ) {
+          return { kind: 'invalid' };
+        }
+
+        const currentUser = mapSafeUser(session.user);
+
+        try {
+          assertAllowedRoleCombination(currentUser.roles);
+        } catch {
           return { kind: 'invalid' };
         }
 
@@ -364,7 +390,7 @@ export class AuthService {
           auth: {
             accessToken,
             refreshToken: replacementRefreshToken,
-            user: mapSafeUser(session.user),
+            user: currentUser,
           },
         };
       },

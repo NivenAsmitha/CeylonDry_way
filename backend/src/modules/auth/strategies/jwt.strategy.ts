@@ -5,6 +5,7 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { UserStatus } from '../../../generated/prisma/client.js';
 import { PrismaService } from '../../../prisma/prisma.service';
 import { mapSafeUser, safeUserSelect } from '../../users/user.mapper';
+import { assertAllowedRoleCombination } from '../../roles/role-combination.policy';
 import type { AuthenticatedUser } from '../types/authenticated-user.type';
 import { isAccessJwtPayload } from '../types/jwt-payload.type';
 
@@ -30,6 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       where: {
         id: payload.sub,
         status: UserStatus.ACTIVE,
+        deletedAt: null,
       },
       select: safeUserSelect,
     });
@@ -38,6 +40,14 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
       throw new UnauthorizedException('Authentication required');
     }
 
-    return mapSafeUser(user);
+    const mappedUser = mapSafeUser(user);
+
+    try {
+      assertAllowedRoleCombination(mappedUser.roles);
+    } catch {
+      throw new UnauthorizedException('Authentication required');
+    }
+
+    return mappedUser;
   }
 }

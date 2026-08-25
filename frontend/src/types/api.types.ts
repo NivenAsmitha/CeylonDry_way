@@ -4,14 +4,21 @@ export interface ApiErrorResponse {
   statusCode: number;
   code: string;
   message: string | string[];
+  details?: ApiErrorDetail[];
   path: string;
   timestamp: string;
+}
+
+export interface ApiErrorDetail {
+  field: string;
+  message: string;
 }
 
 export interface NormalizedApiError {
   statusCode: number | null;
   code: string;
   messages: string[];
+  details: ApiErrorDetail[];
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -39,6 +46,24 @@ function isApiErrorResponse(value: unknown): value is ApiErrorResponse {
   );
 }
 
+function getApiErrorDetails(value: unknown): ApiErrorDetail[] {
+  if (!Array.isArray(value)) {
+    return [];
+  }
+
+  return value.flatMap((item: unknown) => {
+    if (
+      !isRecord(item) ||
+      typeof item.field !== "string" ||
+      typeof item.message !== "string"
+    ) {
+      return [];
+    }
+
+    return [{ field: item.field, message: item.message }];
+  });
+}
+
 export function normalizeApiError(error: unknown): NormalizedApiError {
   if (axios.isAxiosError(error)) {
     const responseData: unknown = error.response?.data;
@@ -51,6 +76,7 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
           typeof responseData.message === "string"
             ? [responseData.message]
             : responseData.message,
+        details: getApiErrorDetails(responseData.details),
       };
     }
 
@@ -61,6 +87,7 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
         messages: [
           "The service could not be reached. Check your connection and try again.",
         ],
+        details: [],
       };
     }
   }
@@ -69,6 +96,7 @@ export function normalizeApiError(error: unknown): NormalizedApiError {
     statusCode: null,
     code: "REQUEST_FAILED",
     messages: ["The request could not be completed. Please try again."],
+    details: [],
   };
 }
 

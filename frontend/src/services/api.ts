@@ -21,10 +21,20 @@ const unauthenticatedPaths = [
   "/auth/login",
   "/auth/refresh",
   "/auth/logout",
+  "/auth/reset-password",
 ] as const;
 
 let accessToken: string | null = null;
 let refreshPromise: Promise<AuthResponse> | null = null;
+let logoutInProgress = false;
+let authenticationGeneration = 0;
+
+class AuthenticationSupersededError extends Error {
+  constructor() {
+    super("Authentication refresh was superseded by logout");
+    this.name = "AuthenticationSupersededError";
+  }
+}
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -54,6 +64,32 @@ export function setAccessToken(token: string): void {
 
 export function clearAccessToken(): void {
   accessToken = null;
+}
+
+export function isLogoutInProgress(): boolean {
+  return logoutInProgress;
+}
+
+export function beginLogout(): Promise<void> {
+  logoutInProgress = true;
+  authenticationGeneration += 1;
+  clearAccessToken();
+
+  const pendingRefresh = refreshPromise;
+
+  if (!pendingRefresh) {
+    return Promise.resolve();
+  }
+
+  return pendingRefresh.then(
+    () => undefined,
+    () => undefined,
+  );
+}
+
+export function finishLogout(): void {
+  clearAccessToken();
+  logoutInProgress = false;
 }
 
 export function subscribeToAuthenticationFailure(
@@ -89,14 +125,24 @@ function requestHasBearerToken(config: InternalAxiosRequestConfig): boolean {
 }
 
 export function requestTokenRefresh(): Promise<AuthResponse> {
+  if (logoutInProgress) {
+    return Promise.reject(new AuthenticationSupersededError());
+  }
+
   if (refreshPromise) {
     return refreshPromise;
   }
+
+  const refreshGeneration = authenticationGeneration;
 
   refreshPromise = refreshClient
     .post<unknown>("/auth/refresh")
     .then((response) => authResponseSchema.parse(response.data))
     .then((authResponse) => {
+      if (logoutInProgress || refreshGeneration !== authenticationGeneration) {
+        throw new AuthenticationSupersededError();
+      }
+
       setAccessToken(authResponse.accessToken);
       return authResponse;
     })

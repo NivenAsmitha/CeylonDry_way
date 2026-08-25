@@ -176,6 +176,24 @@ describe('Authentication and current user (e2e)', () => {
       .expect(400);
   });
 
+  it.each([
+    ['roles', [RoleName.REVIEWER]],
+    ['status', UserStatus.ACTIVE],
+    ['passwordHash', 'forbidden'],
+  ])('rejects protected public registration field %s', async (field, value) => {
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/register')
+      .send({
+        name: 'Test Person',
+        email: 'other@example.com',
+        password: 'VeryStrongPass123!',
+        [field]: value,
+      })
+      .expect(400);
+
+    expect(register).not.toHaveBeenCalled();
+  });
+
   it('returns an access token, sets an HttpOnly refresh cookie, and never serializes it', async () => {
     const response = await request(app.getHttpServer())
       .post('/api/v1/auth/login')

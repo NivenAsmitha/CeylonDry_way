@@ -57,6 +57,52 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
+## Privileged account operations
+
+Public registration creates `CLIENT` accounts only. Privileged accounts are
+created through the controlled hierarchy:
+
+- Run `npm run bootstrap:developer` in an interactive terminal to create the
+  first `DEVELOPER`-only account. The script requires explicit confirmation,
+  accepts the password without echoing it, rejects duplicates, and writes a
+  bootstrap audit record. It never seeds or prints credentials.
+- A `DEVELOPER` creates an `ADMIN` through `POST /api/v1/developer/admins`.
+- An `ADMIN` creates a `REVIEWER` through `POST /api/v1/admin/reviewers`.
+
+Run `npm run roles:audit` for a privacy-safe dry run of the role-correction
+policy. Applying corrections additionally requires both `--apply` and the
+normalized email of an existing `DEVELOPER`-only audit actor:
+
+```bash
+npm run roles:audit -- --apply --actor-email=operator@example.com
+```
+
+Accounts with multiple staff roles are reported and deliberately left
+unchanged for an operator decision.
+
+## User-management policy
+
+`ADMIN` and `DEVELOPER` accounts use the shared
+`/api/v1/management/users` API. Every mutation is audited and the backend
+re-checks the actor, target roles, and account state. `ADMIN` cannot change the
+status or deletion state of `ADMIN` or `DEVELOPER` accounts. `DEVELOPER` may
+manage those accounts, except for itself or the final active `DEVELOPER`.
+Neither role can assign arbitrary roles through this API.
+
+Deleting an account is always recoverable soft deletion: the user becomes
+`DISABLED`, refresh sessions and unused password-reset tokens are revoked, and
+the user row and all related properties, reviews, decisions, roles, and audit
+records are preserved. Account status does not implicitly change a property's
+lifecycle. An approved facility remains governed by the reviewer workflow and
+must be suspended explicitly, with its own audit record, when moderation
+requires it.
+
+Password reset initiation stores only a SHA-256 token hash and completion uses
+Argon2id for the new password. A production email adapter must be configured
+before reset instructions can be delivered; the default adapter fails safely
+without logging or returning the raw token. Staff never receive or choose the
+account holder's final password.
+
 ## Deployment
 
 When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.

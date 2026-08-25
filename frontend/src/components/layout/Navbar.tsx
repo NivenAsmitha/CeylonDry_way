@@ -10,21 +10,6 @@ function navLinkClass({ isActive }: { isActive: boolean }): string {
   }`;
 }
 
-function FutureLink({ children }: { children: string }) {
-  return (
-    <span
-      className="flex min-h-11 cursor-not-allowed items-center gap-2 rounded-xl px-3 py-2 text-sm font-semibold text-slate-400"
-      aria-disabled="true"
-      title="Coming in a future phase"
-    >
-      {children}
-      <span className="rounded-full bg-slate-100 px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide text-slate-500">
-        Soon
-      </span>
-    </span>
-  );
-}
-
 export function Navbar() {
   const { user, isAuthenticated, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -45,6 +30,10 @@ export function Navbar() {
   }
 
   const hasOwnerRole = user?.roles.includes("OWNER") ?? false;
+  const hasClientRole = user?.roles.includes("CLIENT") ?? false;
+  const hasReviewerRole = user?.roles.includes("REVIEWER") ?? false;
+  const hasAdminRole = user?.roles.includes("ADMIN") ?? false;
+  const hasDeveloperRole = user?.roles.includes("DEVELOPER") ?? false;
 
   return (
     <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
@@ -100,10 +89,83 @@ export function Navbar() {
             >
               Home
             </NavLink>
-            <FutureLink>Explore</FutureLink>
-            <FutureLink>Map</FutureLink>
-            <FutureLink>List your property</FutureLink>
-            {hasOwnerRole ? <FutureLink>Owner tools</FutureLink> : null}
+            <NavLink
+              className={navLinkClass}
+              to="/explore"
+              onClick={() => setMenuOpen(false)}
+            >
+              Explore
+            </NavLink>
+            <NavLink
+              className={navLinkClass}
+              to="/map"
+              onClick={() => setMenuOpen(false)}
+            >
+              Map
+            </NavLink>
+            {isAuthenticated && hasClientRole ? (
+              <NavLink
+                className={navLinkClass}
+                to="/list-property"
+                onClick={() => setMenuOpen(false)}
+              >
+                List Your Property
+              </NavLink>
+            ) : null}
+            {isAuthenticated && hasOwnerRole ? (
+              <NavLink
+                className={navLinkClass}
+                to="/owner/properties"
+                onClick={() => setMenuOpen(false)}
+              >
+                My Properties
+              </NavLink>
+            ) : null}
+            {isAuthenticated && hasReviewerRole ? (
+              <NavLink
+                className={navLinkClass}
+                to="/reviewer"
+                onClick={() => setMenuOpen(false)}
+              >
+                Reviewer
+              </NavLink>
+            ) : null}
+            {isAuthenticated && hasAdminRole ? (
+              <>
+                <NavLink
+                  className={navLinkClass}
+                  to="/admin/users"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Users
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/admin/reviewers"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Reviewer Accounts
+                </NavLink>
+              </>
+            ) : null}
+            {isAuthenticated && hasDeveloperRole ? (
+              <>
+                <NavLink
+                  className={navLinkClass}
+                  to="/developer/users"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Users
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/developer/admins"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Admin Accounts
+                </NavLink>
+              </>
+            ) : null}
 
             <span className="my-2 h-px bg-slate-200 lg:mx-2 lg:my-0 lg:h-7 lg:w-px" />
 

@@ -49,3 +49,9 @@ export interface UpdateProfileInput {
   phone?: string | null;
   language?: SupportedLanguage;
 }
+
+export interface ResetPasswordInput {
+  token: string;
+  newPassword: string;
+  confirmPassword: string;
+}

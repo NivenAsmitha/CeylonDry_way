@@ -1,5 +1,6 @@
 import { Prisma } from '../../generated/prisma/client.js';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
+import { normalizeRoleSet } from '../roles/role-combination.policy';
 
 export const safeUserSelect = {
   id: true,
@@ -8,6 +9,7 @@ export const safeUserSelect = {
   phone: true,
   language: true,
   status: true,
+  deletedAt: true,
   createdAt: true,
   roles: {
     select: {
@@ -32,7 +34,7 @@ export function mapSafeUser(user: SafeUserRecord): AuthenticatedUser {
     phone: user.phone,
     language: user.language,
     status: user.status,
-    roles: user.roles.map(({ role }) => role.name),
+    roles: normalizeRoleSet(user.roles.map(({ role }) => role.name)),
     createdAt: user.createdAt,
   };
 }

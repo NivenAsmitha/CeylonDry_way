@@ -3,6 +3,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -15,6 +16,7 @@ import type {
 } from "../features/auth/types/auth.types";
 import {
   getAccessToken,
+  isLogoutInProgress,
   subscribeToAuthenticationFailure,
 } from "../services/api";
 import {
@@ -30,42 +32,58 @@ interface AuthProviderProps {
 
 export function AuthProvider({ children }: AuthProviderProps) {
   const queryClient = useQueryClient();
+  const authenticationLifecycle = useRef(0);
   const [isInitializing, setIsInitializing] = useState(true);
   const [initializationError, setInitializationError] = useState<string | null>(
     null,
   );
   const currentUserQuery = useQuery({
     queryKey: CURRENT_USER_QUERY_KEY,
-    queryFn: authService.getCurrentUser,
+    queryFn: ({ signal }) => authService.getCurrentUser(signal),
     enabled: false,
     staleTime: 60_000,
   });
   const user = currentUserQuery.data ?? null;
 
-  const clearPrivateAuthenticationState = useCallback(() => {
+  const removePrivateAuthenticationState = useCallback(() => {
     queryClient.removeQueries({ queryKey: PRIVATE_QUERY_KEY });
   }, [queryClient]);
 
   useEffect(
-    () => subscribeToAuthenticationFailure(clearPrivateAuthenticationState),
-    [clearPrivateAuthenticationState],
+    () => subscribeToAuthenticationFailure(removePrivateAuthenticationState),
+    [removePrivateAuthenticationState],
   );
 
   useEffect(() => {
     let active = true;
+    const lifecycle = authenticationLifecycle.current;
 
     async function initializeAuthentication(): Promise<void> {
       try {
         await authService.refreshSession();
+
+        if (
+          !active ||
+          lifecycle !== authenticationLifecycle.current ||
+          isLogoutInProgress()
+        ) {
+          return;
+        }
+
         await queryClient.fetchQuery({
           queryKey: CURRENT_USER_QUERY_KEY,
-          queryFn: authService.getCurrentUser,
+          queryFn: ({ signal }) => authService.getCurrentUser(signal),
           staleTime: 0,
         });
       } catch (error: unknown) {
-        clearPrivateAuthenticationState();
+        removePrivateAuthenticationState();
 
-        if (active && normalizeApiError(error).statusCode !== 401) {
+        if (
+          active &&
+          lifecycle === authenticationLifecycle.current &&
+          !isLogoutInProgress() &&
+          normalizeApiError(error).statusCode !== 401
+        ) {
           setInitializationError(getApiErrorMessage(error));
         }
       } finally {
@@ -80,10 +98,11 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return () => {
       active = false;
     };
-  }, [clearPrivateAuthenticationState, queryClient]);
+  }, [queryClient, removePrivateAuthenticationState]);
 
   const login = useCallback(
     async (input: LoginInput): Promise<CurrentUser> => {
+      authenticationLifecycle.current += 1;
       const authResponse = await authService.login(input);
       queryClient.setQueryData(CURRENT_USER_QUERY_KEY, authResponse.user);
       await queryClient.invalidateQueries({
@@ -102,19 +121,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const logout = useCallback(async (): Promise<void> => {
+    authenticationLifecycle.current += 1;
+    const logoutRequest = authService.logout();
+
+    void logoutRequest.catch(() => undefined);
+
     try {
-      await authService.logout();
+      await queryClient.cancelQueries({ queryKey: PRIVATE_QUERY_KEY });
+      removePrivateAuthenticationState();
+      await logoutRequest;
     } finally {
-      clearPrivateAuthenticationState();
+      await queryClient.cancelQueries({ queryKey: PRIVATE_QUERY_KEY });
+      removePrivateAuthenticationState();
       setInitializationError(null);
     }
-  }, [clearPrivateAuthenticationState]);
+  }, [queryClient, removePrivateAuthenticationState]);
 
   const refreshSession = useCallback(async (): Promise<CurrentUser> => {
     await authService.refreshSession();
     return queryClient.fetchQuery({
       queryKey: CURRENT_USER_QUERY_KEY,
-      queryFn: authService.getCurrentUser,
+      queryFn: ({ signal }) => authService.getCurrentUser(signal),
       staleTime: 0,
     });
   }, [queryClient]);

@@ -1,6 +1,8 @@
 import {
   apiClient,
+  beginLogout,
   clearAccessToken,
+  finishLogout,
   requestTokenRefresh,
   setAccessToken,
 } from "../../services/api";
@@ -13,8 +15,19 @@ import type {
   CurrentUser,
   LoginInput,
   RegisterInput,
+  ResetPasswordInput,
   UpdateProfileInput,
 } from "./types/auth.types";
+
+export async function resetPassword(
+  input: ResetPasswordInput,
+): Promise<{ message: string }> {
+  const response = await apiClient.post<{ message: string }>(
+    "/auth/reset-password",
+    input,
+  );
+  return response.data;
+}
 
 export async function register(input: RegisterInput): Promise<CurrentUser> {
   const response = await apiClient.post<unknown>("/auth/register", input);
@@ -34,16 +47,34 @@ export function refreshSession(): Promise<AuthResponse> {
   return requestTokenRefresh();
 }
 
-export async function logout(): Promise<void> {
-  try {
-    await apiClient.post("/auth/logout");
-  } finally {
-    clearAccessToken();
+let logoutPromise: Promise<void> | null = null;
+
+export function logout(): Promise<void> {
+  if (logoutPromise) {
+    return logoutPromise;
   }
+
+  const pendingRefresh = beginLogout();
+
+  logoutPromise = (async () => {
+    try {
+      await pendingRefresh;
+      await apiClient.post<void>("/auth/logout");
+    } finally {
+      clearAccessToken();
+      finishLogout();
+    }
+  })().finally(() => {
+    logoutPromise = null;
+  });
+
+  return logoutPromise;
 }
 
-export async function getCurrentUser(): Promise<CurrentUser> {
-  const response = await apiClient.get<unknown>("/me");
+export async function getCurrentUser(
+  signal?: AbortSignal,
+): Promise<CurrentUser> {
+  const response = await apiClient.get<unknown>("/me", { signal });
 
   return currentUserResponseSchema.parse(response.data);
 }
