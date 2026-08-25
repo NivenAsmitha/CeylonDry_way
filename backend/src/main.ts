@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser';
 import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+import { REFRESH_COOKIE_NAME } from './modules/auth/auth.constants';
 
 async function bootstrap(): Promise<void> {
   const app = await NestFactory.create(AppModule);
@@ -42,6 +43,10 @@ async function bootstrap(): Promise<void> {
       .setDescription('Ceylon DryWay REST API documentation')
       .setVersion('1.0')
       .addBearerAuth()
+      .addCookieAuth(REFRESH_COOKIE_NAME, {
+        type: 'apiKey',
+        in: 'cookie',
+      })
       .build();
     const swaggerDocument = SwaggerModule.createDocument(app, swaggerConfig);
 

@@ -5,6 +5,8 @@ describe('environmentValidationSchema', () => {
     const validationResult = environmentValidationSchema.validate(
       {
         DATABASE_URL: 'postgresql://user:password@localhost/test',
+        JWT_ACCESS_SECRET: 'access-secret-that-is-at-least-32-characters',
+        JWT_REFRESH_SECRET: 'refresh-secret-that-is-at-least-32-characters',
         OPERATING_SYSTEM_VALUE: 'allowed',
       },
       {
@@ -32,6 +34,8 @@ describe('environmentValidationSchema', () => {
         PORT: 70_000,
         FRONTEND_URL: 'not-a-url',
         DATABASE_URL: 'mysql://localhost/test',
+        JWT_ACCESS_SECRET: 'short',
+        JWT_REFRESH_SECRET: 'short',
       },
       {
         abortEarly: false,
@@ -39,6 +43,19 @@ describe('environmentValidationSchema', () => {
       },
     );
 
-    expect(error?.details).toHaveLength(4);
+    expect(error?.details).toHaveLength(7);
+  });
+
+  it('requires different access and refresh secrets', () => {
+    const sharedSecret = 'same-secret-that-is-at-least-32-characters';
+    const { error } = environmentValidationSchema.validate({
+      DATABASE_URL: 'postgresql://user:password@localhost/test',
+      JWT_ACCESS_SECRET: sharedSecret,
+      JWT_REFRESH_SECRET: sharedSecret,
+    });
+
+    expect(error?.message).toContain(
+      'JWT_REFRESH_SECRET must differ from JWT_ACCESS_SECRET',
+    );
   });
 });

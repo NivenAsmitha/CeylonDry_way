@@ -5,8 +5,8 @@ export interface EnvironmentVariables {
   PORT: number;
   FRONTEND_URL: string;
   DATABASE_URL: string;
-  JWT_ACCESS_SECRET?: string;
-  JWT_REFRESH_SECRET?: string;
+  JWT_ACCESS_SECRET: string;
+  JWT_REFRESH_SECRET: string;
   JWT_ACCESS_EXPIRES_IN: string;
   JWT_REFRESH_EXPIRES_IN: string;
   CLOUDINARY_CLOUD_NAME?: string;
@@ -30,10 +30,21 @@ export const environmentValidationSchema: Joi.ObjectSchema<EnvironmentVariables>
     DATABASE_URL: Joi.string()
       .uri({ scheme: ['postgres', 'postgresql'] })
       .required(),
-    JWT_ACCESS_SECRET: optionalString,
-    JWT_REFRESH_SECRET: optionalString,
-    JWT_ACCESS_EXPIRES_IN: Joi.string().min(1).default('15m'),
-    JWT_REFRESH_EXPIRES_IN: Joi.string().min(1).default('7d'),
+    JWT_ACCESS_SECRET: Joi.string().trim().min(32).required(),
+    JWT_REFRESH_SECRET: Joi.string()
+      .trim()
+      .min(32)
+      .invalid(Joi.ref('JWT_ACCESS_SECRET'))
+      .required()
+      .messages({
+        'any.invalid': 'JWT_REFRESH_SECRET must differ from JWT_ACCESS_SECRET',
+      }),
+    JWT_ACCESS_EXPIRES_IN: Joi.string()
+      .pattern(/^[1-9]\d*(?:s|m|h|d|w)$/)
+      .default('15m'),
+    JWT_REFRESH_EXPIRES_IN: Joi.string()
+      .pattern(/^[1-9]\d*(?:s|m|h|d|w)$/)
+      .default('7d'),
     CLOUDINARY_CLOUD_NAME: optionalString,
     CLOUDINARY_API_KEY: optionalString,
     CLOUDINARY_API_SECRET: optionalString,
