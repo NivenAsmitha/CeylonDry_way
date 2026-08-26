@@ -58,8 +58,19 @@ describe('UserManagementService security invariants', () => {
     );
     const prisma = {
       $transaction: transactionRunner,
+      user: {
+        ...transaction.user,
+        count: jest.fn().mockResolvedValue(0),
+      },
+      refreshSession: {
+        ...transaction.refreshSession,
+        count: jest.fn().mockResolvedValue(0),
+      },
       passwordResetToken: transaction.passwordResetToken,
-      auditLog: transaction.auditLog,
+      auditLog: {
+        ...transaction.auditLog,
+        findMany: jest.fn().mockResolvedValue([]),
+      },
     } as unknown as PrismaService;
     const sendPasswordReset = jest.fn().mockResolvedValue(undefined);
     const delivery = {
@@ -69,6 +80,7 @@ describe('UserManagementService security invariants', () => {
 
     return {
       service,
+      prisma,
       transaction,
       transactionRunner,
       sendPasswordReset,
@@ -88,6 +100,156 @@ describe('UserManagementService security invariants', () => {
       }),
     ).rejects.toBeInstanceOf(ForbiddenException);
     expect(fixture.transaction.user.update).not.toHaveBeenCalled();
+    expect(fixture.transaction.auditLog.create).toHaveBeenCalledWith({
+      data: {
+        actorId: 'admin',
+        action: 'USER_MANAGEMENT_DENIED',
+        targetType: 'User',
+        targetId: 'developer',
+        afterSummary: {
+          attemptedAction: 'CHANGE_STATUS',
+          denialCategory: 'ADMIN_TARGET_OUTSIDE_AUTHORITY',
+        },
+      },
+    });
+  });
+
+  it.each([
+    [RoleName.ADMIN, 'VIEW'],
+    [RoleName.ADMIN, 'EDIT_PROFILE'],
+    [RoleName.ADMIN, 'CHANGE_STATUS'],
+    [RoleName.ADMIN, 'SOFT_DELETE'],
+    [RoleName.ADMIN, 'RESTORE'],
+    [RoleName.ADMIN, 'INITIATE_PASSWORD_RESET'],
+    [RoleName.ADMIN, 'REVOKE_SESSIONS'],
+    [RoleName.DEVELOPER, 'VIEW'],
+    [RoleName.DEVELOPER, 'EDIT_PROFILE'],
+    [RoleName.DEVELOPER, 'CHANGE_STATUS'],
+    [RoleName.DEVELOPER, 'SOFT_DELETE'],
+    [RoleName.DEVELOPER, 'RESTORE'],
+    [RoleName.DEVELOPER, 'INITIATE_PASSWORD_RESET'],
+    [RoleName.DEVELOPER, 'REVOKE_SESSIONS'],
+  ] as const)(
+    'denies Admin %s target operation %s before sensitive work',
+    async (targetRole, action) => {
+      const fixture = createFixture(
+        participant('admin', RoleName.ADMIN),
+        participant('restricted', targetRole),
+      );
+
+      const operation = (() => {
+        switch (action) {
+          case 'VIEW':
+            return fixture.service.getUser('admin', 'restricted');
+          case 'EDIT_PROFILE':
+            return fixture.service.updateUser('admin', 'restricted', {
+              name: 'Restricted account',
+            });
+          case 'CHANGE_STATUS':
+            return fixture.service.changeStatus('admin', 'restricted', {
+              status: UserStatus.SUSPENDED,
+              reason: 'Policy verification',
+            });
+          case 'SOFT_DELETE':
+            return fixture.service.softDelete('admin', 'restricted', {
+              reason: 'Policy verification',
+            });
+          case 'RESTORE':
+            return fixture.service.restore('admin', 'restricted', {
+              reason: 'Policy verification',
+            });
+          case 'INITIATE_PASSWORD_RESET':
+            return fixture.service.initiatePasswordReset(
+              'admin',
+              'restricted',
+              { reason: 'Policy verification' },
+            );
+          case 'REVOKE_SESSIONS':
+            return fixture.service.revokeSessions('admin', 'restricted', {
+              reason: 'Policy verification',
+            });
+        }
+      })();
+
+      await expect(operation).rejects.toBeInstanceOf(ForbiddenException);
+      expect(fixture.transaction.user.update).not.toHaveBeenCalled();
+      expect(
+        fixture.transaction.refreshSession.updateMany,
+      ).not.toHaveBeenCalled();
+      expect(
+        fixture.transaction.passwordResetToken.create,
+      ).not.toHaveBeenCalled();
+      expect(
+        (fixture.prisma.refreshSession.count as jest.Mock).mock.calls,
+      ).toHaveLength(0);
+      expect(
+        (fixture.prisma.auditLog.findMany as jest.Mock).mock.calls,
+      ).toHaveLength(0);
+      expect(fixture.transaction.auditLog.create).toHaveBeenCalledWith({
+        data: expect.objectContaining({
+          actorId: 'admin',
+          action: 'USER_MANAGEMENT_DENIED',
+          targetId: 'restricted',
+          afterSummary: {
+            attemptedAction: action,
+            denialCategory: 'ADMIN_TARGET_OUTSIDE_AUTHORITY',
+          },
+        }),
+      });
+    },
+  );
+
+  it('applies Admin list authority before role filters and search', async () => {
+    const fixture = createFixture();
+    fixture.transaction.user.findMany.mockResolvedValue([]);
+
+    await fixture.service.listUsers('actor', {
+      page: 1,
+      pageSize: 20,
+      sort: 'created_desc',
+      includeDeleted: false,
+      role: RoleName.DEVELOPER,
+      search: 'staff',
+    });
+
+    const listCall = fixture.transaction.user.findMany.mock.calls[0][0] as {
+      where: { AND: unknown[] };
+    };
+    const authorityFilter = JSON.stringify(listCall.where.AND[0]);
+    expect(authorityFilter).toContain(RoleName.CLIENT);
+    expect(authorityFilter).toContain(RoleName.OWNER);
+    expect(authorityFilter).toContain(RoleName.REVIEWER);
+    expect(authorityFilter).not.toContain(RoleName.ADMIN);
+    expect(authorityFilter).not.toContain(RoleName.DEVELOPER);
+  });
+
+  it('denies and categorizes an ambiguous target role set', async () => {
+    const ambiguousTarget = {
+      ...participant('ambiguous', RoleName.CLIENT),
+      roles: [
+        { role: { name: RoleName.CLIENT } },
+        { role: { name: RoleName.REVIEWER } },
+      ],
+    };
+    const fixture = createFixture(
+      participant('developer', RoleName.DEVELOPER),
+      ambiguousTarget,
+    );
+
+    await expect(
+      fixture.service.getUser('developer', 'ambiguous'),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(fixture.transaction.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        actorId: 'developer',
+        action: 'USER_MANAGEMENT_DENIED',
+        targetId: 'ambiguous',
+        afterSummary: {
+          attemptedAction: 'VIEW',
+          denialCategory: 'INVALID_TARGET_ROLE_SET',
+        },
+      }),
+    });
   });
 
   it('protects the final active Developer inside the state transaction', async () => {

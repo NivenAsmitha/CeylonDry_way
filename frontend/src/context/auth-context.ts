@@ -10,6 +10,7 @@ export interface AuthContextValue {
   user: CurrentUser | null;
   isAuthenticated: boolean;
   isInitializing: boolean;
+  isLoggingOut: boolean;
   initializationError: string | null;
   login: (input: LoginInput) => Promise<CurrentUser>;
   register: (input: RegisterInput) => Promise<CurrentUser>;

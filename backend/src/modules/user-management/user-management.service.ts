@@ -27,6 +27,7 @@ import {
   assertCanManageUser,
   getAllowedUserManagementActions,
   getManagementActorRole,
+  getUserManagementDenialCategory,
   type UserManagementAction,
 } from './user-management.policy';
 
@@ -63,6 +64,11 @@ const participantSelect = {
   roles: { select: { role: { select: { name: true } } } },
 } satisfies Prisma.UserSelect;
 
+const authorizationTargetSelect = {
+  id: true,
+  roles: { select: { role: { select: { name: true } } } },
+} satisfies Prisma.UserSelect;
+
 type ManagementUserRecord = Prisma.UserGetPayload<{
   select: typeof managementUserSelect;
 }>;
@@ -75,6 +81,41 @@ type DatabaseClient = PrismaService | Prisma.TransactionClient;
 
 interface RecordWithRoles {
   roles: Array<{ role: { name: RoleName } }>;
+}
+
+function exactRoleSetWhere(roles: readonly RoleName[]): Prisma.UserWhereInput {
+  return {
+    AND: [
+      ...roles.map((name) => ({
+        roles: { some: { role: { name } } },
+      })),
+      {
+        roles: {
+          none: { role: { name: { notIn: [...roles] } } },
+        },
+      },
+    ],
+  };
+}
+
+function manageableUsersWhere(actor: ParticipantRecord): Prisma.UserWhereInput {
+  const actorRole = getManagementActorRole(roleNames(actor));
+  const allowedRoleSets =
+    actorRole === RoleName.ADMIN
+      ? [
+          [RoleName.CLIENT],
+          [RoleName.CLIENT, RoleName.OWNER],
+          [RoleName.REVIEWER],
+        ]
+      : [
+          [RoleName.CLIENT],
+          [RoleName.CLIENT, RoleName.OWNER],
+          [RoleName.REVIEWER],
+          [RoleName.ADMIN],
+          [RoleName.DEVELOPER],
+        ];
+
+  return { OR: allowedRoleSets.map(exactRoleSetWhere) };
 }
 
 function roleNames(user: RecordWithRoles): RoleName[] {
@@ -146,6 +187,8 @@ function safeAuditSummary(value: Prisma.JsonValue | null) {
     'sessionsRevoked',
     'revokedSessionCount',
     'expiresAt',
+    'attemptedAction',
+    'denialCategory',
   ]) {
     if (key in source) safe[key] = source[key];
   }
@@ -180,21 +223,25 @@ export class UserManagementService {
 
   async listUsers(actorId: string, query: UserListQueryDto) {
     const actor = await this.loadActor(this.prisma, actorId);
-    const where: Prisma.UserWhereInput = {
-      ...(query.includeDeleted ? {} : { deletedAt: null }),
-      ...(query.status ? { status: query.status } : {}),
-      ...(query.role
-        ? { roles: { some: { role: { name: query.role } } } }
-        : {}),
-      ...(query.search
-        ? {
-            OR: [
-              { name: { contains: query.search, mode: 'insensitive' } },
-              { email: { contains: query.search, mode: 'insensitive' } },
-            ],
-          }
-        : {}),
-    };
+    const filters: Prisma.UserWhereInput[] = [manageableUsersWhere(actor)];
+    if (!query.includeDeleted) filters.push({ deletedAt: null });
+    if (query.status) filters.push({ status: query.status });
+    if (query.role) {
+      filters.push({ roles: { some: { role: { name: query.role } } } });
+    }
+    if (query.search) {
+      filters.push({
+        OR: [
+          {
+            name: { contains: query.search, mode: 'insensitive' },
+          },
+          {
+            email: { contains: query.search, mode: 'insensitive' },
+          },
+        ],
+      });
+    }
+    const where: Prisma.UserWhereInput = { AND: filters };
     const [items, totalItems] = await this.prisma.$transaction([
       this.prisma.user.findMany({
         where,
@@ -218,43 +265,41 @@ export class UserManagementService {
   }
 
   async getUser(actorId: string, targetId: string) {
-    const [actor, target, activeSessionCount, auditHistory] = await Promise.all(
-      [
-        this.loadActor(this.prisma, actorId),
-        this.prisma.user.findUnique({
-          where: { id: targetId },
-          select: {
-            ...managementUserSelect,
-            _count: {
-              select: {
-                properties: true,
-                reviewDecisions: true,
-              },
+    const { actor } = await this.authorizeTarget(actorId, targetId, 'VIEW');
+    const [target, activeSessionCount, auditHistory] = await Promise.all([
+      this.prisma.user.findUnique({
+        where: { id: targetId },
+        select: {
+          ...managementUserSelect,
+          _count: {
+            select: {
+              properties: true,
+              reviewDecisions: true,
             },
           },
-        }),
-        this.prisma.refreshSession.count({
-          where: {
-            userId: targetId,
-            revokedAt: null,
-            expiresAt: { gt: new Date() },
-          },
-        }),
-        this.prisma.auditLog.findMany({
-          where: { targetType: 'User', targetId },
-          select: {
-            id: true,
-            action: true,
-            beforeSummary: true,
-            afterSummary: true,
-            createdAt: true,
-            actor: { select: { name: true } },
-          },
-          orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
-          take: 50,
-        }),
-      ],
-    );
+        },
+      }),
+      this.prisma.refreshSession.count({
+        where: {
+          userId: targetId,
+          revokedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+      }),
+      this.prisma.auditLog.findMany({
+        where: { targetType: 'User', targetId },
+        select: {
+          id: true,
+          action: true,
+          beforeSummary: true,
+          afterSummary: true,
+          createdAt: true,
+          actor: { select: { name: true } },
+        },
+        orderBy: [{ createdAt: 'desc' }, { id: 'desc' }],
+        take: 50,
+      }),
+    ]);
 
     if (!target) throw new NotFoundException('User not found');
     assertCanManageUser(
@@ -299,6 +344,7 @@ export class UserManagementService {
     targetId: string,
     input: UpdateManagedUserDto,
   ) {
+    await this.authorizeTarget(actorId, targetId, 'EDIT_PROFILE');
     await this.prisma.$transaction(async (transaction) => {
       const { actor, target } = await this.loadParticipants(
         transaction,
@@ -342,6 +388,7 @@ export class UserManagementService {
     targetId: string,
     input: ChangeUserStatusDto,
   ) {
+    await this.authorizeTarget(actorId, targetId, 'CHANGE_STATUS');
     await this.prisma.$transaction(
       async (transaction) => {
         const { actor, target, targetRoles } = await this.loadParticipants(
@@ -404,6 +451,7 @@ export class UserManagementService {
     targetId: string,
     input: ManagementReasonDto,
   ) {
+    await this.authorizeTarget(actorId, targetId, 'SOFT_DELETE');
     await this.prisma.$transaction(
       async (transaction) => {
         const { actor, target, targetRoles } = await this.loadParticipants(
@@ -461,6 +509,7 @@ export class UserManagementService {
   }
 
   async restore(actorId: string, targetId: string, input: ManagementReasonDto) {
+    await this.authorizeTarget(actorId, targetId, 'RESTORE');
     await this.prisma.$transaction(
       async (transaction) => {
         const { actor, target, targetRoles } = await this.loadParticipants(
@@ -516,6 +565,7 @@ export class UserManagementService {
     targetId: string,
     input: ManagementReasonDto,
   ): Promise<{ revokedSessionCount: number }> {
+    await this.authorizeTarget(actorId, targetId, 'REVOKE_SESSIONS');
     return this.prisma.$transaction(async (transaction) => {
       const { actor } = await this.loadParticipants(
         transaction,
@@ -549,6 +599,7 @@ export class UserManagementService {
     targetId: string,
     input: ManagementReasonDto,
   ): Promise<{ accepted: true; message: string }> {
+    await this.authorizeTarget(actorId, targetId, 'INITIATE_PASSWORD_RESET');
     const rawToken = randomBytes(32).toString('base64url');
     const now = new Date();
     const expiresAt = new Date(
@@ -645,6 +696,50 @@ export class UserManagementService {
     }
 
     return actor;
+  }
+
+  private async authorizeTarget(
+    actorId: string,
+    targetId: string,
+    action: UserManagementAction,
+  ): Promise<{ actor: ParticipantRecord; targetRoles: RoleName[] }> {
+    const [actor, target] = await Promise.all([
+      this.loadActor(this.prisma, actorId),
+      this.prisma.user.findUnique({
+        where: { id: targetId },
+        select: authorizationTargetSelect,
+      }),
+    ]);
+
+    if (!target) throw new NotFoundException('User not found');
+    const targetRoles = roleNames(target);
+    const denialCategory = getUserManagementDenialCategory(
+      actor.id,
+      roleNames(actor),
+      target.id,
+      targetRoles,
+      action,
+    );
+
+    if (denialCategory) {
+      await this.prisma.auditLog.create({
+        data: {
+          actorId: actor.id,
+          action: 'USER_MANAGEMENT_DENIED',
+          targetType: 'User',
+          targetId,
+          afterSummary: {
+            attemptedAction: action,
+            denialCategory,
+          },
+        },
+      });
+      throw new ForbiddenException(
+        'This account action is not permitted by the management hierarchy',
+      );
+    }
+
+    return { actor, targetRoles };
   }
 
   private async loadParticipants(

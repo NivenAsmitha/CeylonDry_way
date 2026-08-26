@@ -11,7 +11,6 @@ import {
   hash as hashPassword,
   verify as verifyPassword,
 } from 'argon2';
-import type { CookieOptions } from 'express';
 import { createHash, randomUUID, timingSafeEqual } from 'node:crypto';
 import { Prisma, RoleName, UserStatus } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../prisma/prisma.service';
@@ -128,7 +127,6 @@ export class AuthService {
   private readonly accessLifetimeSeconds: number;
   private readonly refreshLifetimeSeconds: number;
   private readonly refreshLifetimeMilliseconds: number;
-  private readonly production: boolean;
 
   constructor(
     private readonly prisma: PrismaService,
@@ -157,27 +155,6 @@ export class AuthService {
       1,
       Math.ceil(this.refreshLifetimeMilliseconds / 1_000),
     );
-    this.production =
-      configService.getOrThrow<string>('NODE_ENV') === 'production';
-  }
-
-  getRefreshCookieOptions(): CookieOptions {
-    return {
-      httpOnly: true,
-      secure: this.production,
-      sameSite: 'lax',
-      path: '/api/v1/auth',
-      maxAge: this.refreshLifetimeMilliseconds,
-    };
-  }
-
-  getRefreshCookieClearOptions(): CookieOptions {
-    return {
-      httpOnly: true,
-      secure: this.production,
-      sameSite: 'lax',
-      path: '/api/v1/auth',
-    };
   }
 
   async register(registerDto: RegisterDto): Promise<AuthenticatedUser> {
@@ -408,23 +385,26 @@ export class AuthService {
       return;
     }
 
-    const tokenHash = hashRefreshToken(refreshToken);
-    const session = await this.prisma.refreshSession.findUnique({
-      where: { tokenHash },
-      select: { id: true },
-    });
+    try {
+      const tokenHash = hashRefreshToken(refreshToken);
+      const session = await this.prisma.refreshSession.findUnique({
+        where: { tokenHash },
+        select: { userId: true, familyId: true },
+      });
 
-    if (!session) {
-      return;
+      if (!session) return;
+
+      await this.prisma.refreshSession.updateMany({
+        where: {
+          userId: session.userId,
+          familyId: session.familyId,
+          revokedAt: null,
+        },
+        data: { revokedAt: new Date() },
+      });
+    } catch {
+      // Logout is intentionally idempotent. Cookie clearing must still succeed.
     }
-
-    await this.prisma.refreshSession.updateMany({
-      where: {
-        id: session.id,
-        revokedAt: null,
-      },
-      data: { revokedAt: new Date() },
-    });
   }
 
   private async createSession(

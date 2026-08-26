@@ -11,21 +11,19 @@ function navLinkClass({ isActive }: { isActive: boolean }): string {
 }
 
 export function Navbar() {
-  const { user, isAuthenticated, logout } = useAuth();
+  const { user, isAuthenticated, isLoggingOut, logout } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const navigate = useNavigate();
 
   async function handleLogout(): Promise<void> {
-    setIsLoggingOut(true);
+    setMenuOpen(false);
 
     try {
       await logout();
     } catch {
       // Local authentication state is cleared even when the network is down.
     } finally {
-      setIsLoggingOut(false);
-      navigate("/", { replace: true });
+      navigate("/login", { replace: true });
     }
   }
 

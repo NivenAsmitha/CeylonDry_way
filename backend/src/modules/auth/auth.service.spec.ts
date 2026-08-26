@@ -444,8 +444,11 @@ describe('AuthService', () => {
     expect(transactionRefreshCreate).not.toHaveBeenCalled();
   });
 
-  it('logs out idempotently and revokes only a matching active session', async () => {
-    refreshSessionFindUnique.mockResolvedValue({ id: 'session-to-revoke' });
+  it('logs out idempotently and revokes the matching refresh family', async () => {
+    refreshSessionFindUnique.mockResolvedValue({
+      userId: 'user-to-revoke',
+      familyId: 'family-to-revoke',
+    });
     refreshSessionUpdateMany.mockResolvedValue({ count: 1 });
 
     await service.logout('opaque-refresh-token');
@@ -455,9 +458,37 @@ describe('AuthService', () => {
     const logoutArgs = refreshSessionUpdateMany.mock.calls[0]?.[0];
 
     expect(logoutArgs?.where).toEqual({
-      id: 'session-to-revoke',
+      userId: 'user-to-revoke',
+      familyId: 'family-to-revoke',
       revokedAt: null,
     });
     expect(logoutArgs?.data.revokedAt).toBeInstanceOf(Date);
+  });
+
+  it('handles malformed, unknown, and already-revoked logout tokens idempotently', async () => {
+    refreshSessionFindUnique.mockResolvedValue(null);
+
+    await expect(service.logout('not-a-jwt')).resolves.toBeUndefined();
+    expect(refreshSessionUpdateMany).not.toHaveBeenCalled();
+
+    refreshSessionFindUnique.mockResolvedValue({
+      userId: 'user-1',
+      familyId: 'already-revoked-family',
+    });
+    refreshSessionUpdateMany.mockResolvedValue({ count: 0 });
+    await expect(
+      service.logout('already-revoked-token'),
+    ).resolves.toBeUndefined();
+  });
+
+  it('still completes logout when session revocation storage is unavailable', async () => {
+    refreshSessionFindUnique.mockRejectedValue(
+      new Error('database unavailable'),
+    );
+
+    await expect(
+      service.logout('opaque-refresh-token'),
+    ).resolves.toBeUndefined();
+    expect(refreshSessionUpdateMany).not.toHaveBeenCalled();
   });
 });

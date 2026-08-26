@@ -3,6 +3,7 @@ import { RoleName } from '../../generated/prisma/client.js';
 import {
   assertAllowedRoleCombination,
   hasExactRoleSet,
+  isAllowedRoleCombination,
 } from '../roles/role-combination.policy';
 
 export const USER_MANAGEMENT_ACTIONS = [
@@ -16,6 +17,13 @@ export const USER_MANAGEMENT_ACTIONS = [
 ] as const;
 
 export type UserManagementAction = (typeof USER_MANAGEMENT_ACTIONS)[number];
+
+export type UserManagementDenialCategory =
+  | 'INVALID_ACTOR_ROLE_SET'
+  | 'INSUFFICIENT_ACTOR_ROLE'
+  | 'INVALID_TARGET_ROLE_SET'
+  | 'ACTOR_TARGET_SAME'
+  | 'ADMIN_TARGET_OUTSIDE_AUTHORITY';
 
 const DESTRUCTIVE_ACTIONS = new Set<UserManagementAction>([
   'CHANGE_STATUS',
@@ -45,32 +53,55 @@ export function canManageUser(
   targetRoles: readonly RoleName[],
   action: UserManagementAction,
 ): boolean {
+  return (
+    getUserManagementDenialCategory(
+      actorId,
+      actorRoles,
+      targetId,
+      targetRoles,
+      action,
+    ) === null
+  );
+}
+
+export function getUserManagementDenialCategory(
+  actorId: string,
+  actorRoles: readonly RoleName[],
+  targetId: string,
+  targetRoles: readonly RoleName[],
+  action: UserManagementAction,
+): UserManagementDenialCategory | null {
   let actorRole: typeof RoleName.ADMIN | typeof RoleName.DEVELOPER | null;
 
   try {
     actorRole = getManagementActorRole(actorRoles);
-    assertAllowedRoleCombination(targetRoles);
   } catch {
-    return false;
+    return 'INVALID_ACTOR_ROLE_SET';
   }
 
   if (!actorRole) {
-    return false;
+    return 'INSUFFICIENT_ACTOR_ROLE';
   }
-  if (DESTRUCTIVE_ACTIONS.has(action) && actorId === targetId) {
-    return false;
+  if (!isAllowedRoleCombination(targetRoles)) {
+    return 'INVALID_TARGET_ROLE_SET';
   }
 
   if (
     actorRole === RoleName.ADMIN &&
-    DESTRUCTIVE_ACTIONS.has(action) &&
-    (targetRoles.includes(RoleName.ADMIN) ||
-      targetRoles.includes(RoleName.DEVELOPER))
+    ![
+      [RoleName.CLIENT],
+      [RoleName.CLIENT, RoleName.OWNER],
+      [RoleName.REVIEWER],
+    ].some((allowedRoles) => hasExactRoleSet(targetRoles, allowedRoles))
   ) {
-    return false;
+    return 'ADMIN_TARGET_OUTSIDE_AUTHORITY';
   }
 
-  return true;
+  if (DESTRUCTIVE_ACTIONS.has(action) && actorId === targetId) {
+    return 'ACTOR_TARGET_SAME';
+  }
+
+  return null;
 }
 
 export function assertCanManageUser(

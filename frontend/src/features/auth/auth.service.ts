@@ -1,10 +1,8 @@
 import {
   apiClient,
-  beginLogout,
-  clearAccessToken,
-  finishLogout,
+  commitAccessToken,
+  getAuthenticationGeneration,
   requestTokenRefresh,
-  setAccessToken,
 } from "../../services/api";
 import {
   authResponseSchema,
@@ -36,10 +34,11 @@ export async function register(input: RegisterInput): Promise<CurrentUser> {
 }
 
 export async function login(input: LoginInput): Promise<AuthResponse> {
+  const generation = getAuthenticationGeneration();
   const response = await apiClient.post<unknown>("/auth/login", input);
   const authResponse = authResponseSchema.parse(response.data);
 
-  setAccessToken(authResponse.accessToken);
+  commitAccessToken(authResponse.accessToken, generation);
   return authResponse;
 }
 
@@ -47,28 +46,8 @@ export function refreshSession(): Promise<AuthResponse> {
   return requestTokenRefresh();
 }
 
-let logoutPromise: Promise<void> | null = null;
-
-export function logout(): Promise<void> {
-  if (logoutPromise) {
-    return logoutPromise;
-  }
-
-  const pendingRefresh = beginLogout();
-
-  logoutPromise = (async () => {
-    try {
-      await pendingRefresh;
-      await apiClient.post<void>("/auth/logout");
-    } finally {
-      clearAccessToken();
-      finishLogout();
-    }
-  })().finally(() => {
-    logoutPromise = null;
-  });
-
-  return logoutPromise;
+export async function requestLogout(): Promise<void> {
+  await apiClient.post<void>("/auth/logout");
 }
 
 export async function getCurrentUser(

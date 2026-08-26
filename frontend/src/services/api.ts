@@ -6,10 +6,15 @@ import axios, {
 import { authResponseSchema } from "../features/auth/schemas/auth-response.schema";
 import type { AuthResponse } from "../features/auth/types/auth.types";
 import { API_BASE_URL } from "./environment";
+import {
+  AuthenticationSupersededError,
+  authenticationCoordinator,
+} from "./authentication-coordinator";
 
 declare module "axios" {
   interface InternalAxiosRequestConfig {
     _authenticationRetry?: boolean;
+    _authenticationGeneration?: number;
   }
 }
 
@@ -24,17 +29,7 @@ const unauthenticatedPaths = [
   "/auth/reset-password",
 ] as const;
 
-let accessToken: string | null = null;
 let refreshPromise: Promise<AuthResponse> | null = null;
-let logoutInProgress = false;
-let authenticationGeneration = 0;
-
-class AuthenticationSupersededError extends Error {
-  constructor() {
-    super("Authentication refresh was superseded by logout");
-    this.name = "AuthenticationSupersededError";
-  }
-}
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,
@@ -55,41 +50,37 @@ const refreshClient = axios.create({
 });
 
 export function getAccessToken(): string | null {
-  return accessToken;
+  return authenticationCoordinator.getAccessToken();
 }
 
-export function setAccessToken(token: string): void {
-  accessToken = token;
+export function getAuthenticationGeneration(): number {
+  return authenticationCoordinator.getGeneration();
 }
 
-export function clearAccessToken(): void {
-  accessToken = null;
+export function isAuthenticationGenerationCurrent(generation: number): boolean {
+  return authenticationCoordinator.isCurrent(generation);
 }
 
 export function isLogoutInProgress(): boolean {
-  return logoutInProgress;
+  return authenticationCoordinator.isLogoutInProgress();
 }
 
-export function beginLogout(): Promise<void> {
-  logoutInProgress = true;
-  authenticationGeneration += 1;
-  clearAccessToken();
-
-  const pendingRefresh = refreshPromise;
-
-  if (!pendingRefresh) {
-    return Promise.resolve();
+export function commitAccessToken(token: string, generation: number): void {
+  if (!authenticationCoordinator.commitAccessToken(token, generation)) {
+    throw new AuthenticationSupersededError();
   }
-
-  return pendingRefresh.then(
-    () => undefined,
-    () => undefined,
-  );
 }
 
-export function finishLogout(): void {
-  clearAccessToken();
-  logoutInProgress = false;
+export function beginLogout(): number {
+  const generation = authenticationCoordinator.beginLogout();
+  const staleRefresh = refreshPromise;
+  refreshPromise = null;
+  void staleRefresh?.catch(() => undefined);
+  return generation;
+}
+
+export function finishLogout(generation: number): void {
+  authenticationCoordinator.finishLogout(generation);
 }
 
 export function subscribeToAuthenticationFailure(
@@ -108,7 +99,7 @@ function notifyAuthenticationFailure(): void {
   }
 }
 
-function isUnauthenticatedEndpoint(url: string | undefined): boolean {
+export function isUnauthenticatedEndpoint(url: string | undefined): boolean {
   if (!url) {
     return false;
   }
@@ -124,8 +115,26 @@ function requestHasBearerToken(config: InternalAxiosRequestConfig): boolean {
   );
 }
 
+export function shouldAttemptAuthenticationRefresh(
+  status: number | undefined,
+  originalRequest: InternalAxiosRequestConfig | undefined,
+): originalRequest is InternalAxiosRequestConfig & {
+  _authenticationGeneration: number;
+} {
+  return Boolean(
+    status === 401 &&
+    originalRequest &&
+    !originalRequest._authenticationRetry &&
+    !isUnauthenticatedEndpoint(originalRequest.url) &&
+    requestHasBearerToken(originalRequest) &&
+    !authenticationCoordinator.isLogoutInProgress() &&
+    originalRequest._authenticationGeneration ===
+      authenticationCoordinator.getGeneration(),
+  );
+}
+
 export function requestTokenRefresh(): Promise<AuthResponse> {
-  if (logoutInProgress) {
+  if (authenticationCoordinator.isLogoutInProgress()) {
     return Promise.reject(new AuthenticationSupersededError());
   }
 
@@ -133,33 +142,42 @@ export function requestTokenRefresh(): Promise<AuthResponse> {
     return refreshPromise;
   }
 
-  const refreshGeneration = authenticationGeneration;
+  const refreshGeneration = authenticationCoordinator.getGeneration();
+  const controller = new AbortController();
 
-  refreshPromise = refreshClient
-    .post<unknown>("/auth/refresh")
+  if (
+    !authenticationCoordinator.registerRefresh(controller, refreshGeneration)
+  ) {
+    return Promise.reject(new AuthenticationSupersededError());
+  }
+
+  const operation = refreshClient
+    .post<unknown>("/auth/refresh", undefined, { signal: controller.signal })
     .then((response) => authResponseSchema.parse(response.data))
     .then((authResponse) => {
-      if (logoutInProgress || refreshGeneration !== authenticationGeneration) {
-        throw new AuthenticationSupersededError();
-      }
-
-      setAccessToken(authResponse.accessToken);
+      commitAccessToken(authResponse.accessToken, refreshGeneration);
       return authResponse;
     })
     .catch((error: unknown) => {
-      clearAccessToken();
-      notifyAuthenticationFailure();
+      if (
+        authenticationCoordinator.markAuthenticationFailure(refreshGeneration)
+      ) {
+        notifyAuthenticationFailure();
+      }
       throw error;
     })
     .finally(() => {
-      refreshPromise = null;
+      authenticationCoordinator.clearRefresh(controller);
+      if (refreshPromise === operation) refreshPromise = null;
     });
 
-  return refreshPromise;
+  refreshPromise = operation;
+  return operation;
 }
 
 apiClient.interceptors.request.use((config) => {
   const token = getAccessToken();
+  config._authenticationGeneration = authenticationCoordinator.getGeneration();
 
   if (token && !isUnauthenticatedEndpoint(config.url)) {
     config.headers.set("Authorization", `Bearer ${token}`);
@@ -178,17 +196,20 @@ async function retryAfterUnauthorized(
   const originalRequest = error.config;
 
   if (
-    error.response?.status !== 401 ||
-    !originalRequest ||
-    originalRequest._authenticationRetry ||
-    isUnauthenticatedEndpoint(originalRequest.url) ||
-    !requestHasBearerToken(originalRequest)
+    !shouldAttemptAuthenticationRefresh(error.response?.status, originalRequest)
   ) {
     throw error;
   }
 
   originalRequest._authenticationRetry = true;
   const authResponse = await requestTokenRefresh();
+  if (
+    !authenticationCoordinator.isCurrent(
+      originalRequest._authenticationGeneration,
+    )
+  ) {
+    throw new AuthenticationSupersededError();
+  }
   originalRequest.headers.set(
     "Authorization",
     `Bearer ${authResponse.accessToken}`,

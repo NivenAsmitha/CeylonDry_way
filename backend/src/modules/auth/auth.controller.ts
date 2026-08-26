@@ -31,19 +31,23 @@ import { RegisterDto } from './dto/register.dto';
 import { CurrentUserResponseDto } from '../users/dto/current-user-response.dto';
 import { ResetPasswordDto } from '../password-reset/dto/reset-password.dto';
 import { PasswordResetService } from '../password-reset/password-reset.service';
+import { RefreshCookieService } from './refresh-cookie.service';
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null;
 }
 
-function getRefreshCookie(request: Request): string | undefined {
+function getRefreshCookie(
+  request: Request,
+  cookieName: string,
+): string | undefined {
   const cookies: unknown = request.cookies;
 
   if (!isRecord(cookies)) {
     return undefined;
   }
 
-  const refreshCookie = cookies[REFRESH_COOKIE_NAME];
+  const refreshCookie = cookies[cookieName];
 
   return typeof refreshCookie === 'string' && refreshCookie.length > 0
     ? refreshCookie
@@ -75,6 +79,7 @@ export class AuthController {
   constructor(
     private readonly authService: AuthService,
     private readonly passwordResetService: PasswordResetService,
+    private readonly refreshCookie: RefreshCookieService,
   ) {}
 
   @Post('register')
@@ -124,9 +129,9 @@ export class AuthController {
       getSessionMetadata(request),
     );
     response.cookie(
-      REFRESH_COOKIE_NAME,
+      this.refreshCookie.name,
       authSession.refreshToken,
-      this.authService.getRefreshCookieOptions(),
+      this.refreshCookie.getSetOptions(),
     );
 
     return toAuthResponse(authSession);
@@ -147,23 +152,31 @@ export class AuthController {
     @Req() request: Request,
     @Res({ passthrough: true }) response: Response,
   ): Promise<AuthResponse> {
-    const refreshToken = getRefreshCookie(request);
+    const refreshToken = getRefreshCookie(request, this.refreshCookie.name);
 
     if (!refreshToken) {
       throw new UnauthorizedException('Refresh token is invalid or expired');
     }
 
-    const authSession = await this.authService.refresh(
-      refreshToken,
-      getSessionMetadata(request),
-    );
-    response.cookie(
-      REFRESH_COOKIE_NAME,
-      authSession.refreshToken,
-      this.authService.getRefreshCookieOptions(),
-    );
+    try {
+      const authSession = await this.authService.refresh(
+        refreshToken,
+        getSessionMetadata(request),
+      );
+      response.cookie(
+        this.refreshCookie.name,
+        authSession.refreshToken,
+        this.refreshCookie.getSetOptions(),
+      );
 
-    return toAuthResponse(authSession);
+      return toAuthResponse(authSession);
+    } catch (error: unknown) {
+      response.clearCookie(
+        this.refreshCookie.name,
+        this.refreshCookie.getClearOptions(),
+      );
+      throw error;
+    }
   }
 
   @Post('logout')
@@ -175,11 +188,15 @@ export class AuthController {
     @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
     try {
-      await this.authService.logout(getRefreshCookie(request));
+      await this.authService.logout(
+        getRefreshCookie(request, this.refreshCookie.name),
+      );
+    } catch {
+      // The cookie is always cleared and logout remains idempotent.
     } finally {
       response.clearCookie(
-        REFRESH_COOKIE_NAME,
-        this.authService.getRefreshCookieClearOptions(),
+        this.refreshCookie.name,
+        this.refreshCookie.getClearOptions(),
       );
     }
   }

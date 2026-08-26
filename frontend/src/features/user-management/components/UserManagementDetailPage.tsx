@@ -10,6 +10,7 @@ import {
   USER_MANAGEMENT_QUERY_KEY,
   useManagedUser,
 } from "../hooks/useManagedUsers";
+import { isTargetVisibleToScope } from "../management-authority";
 import * as usersService from "../services/user-management.service";
 import type { ManagedProfileInput } from "../types/user-management.types";
 import { ManagementActionDialog } from "./ManagementActionDialog";
@@ -173,6 +174,17 @@ export function UserManagementDetailPage({
         <ErrorMessage
           title="User details could not be loaded"
           message={getApiErrorMessage(userQuery.error)}
+        />
+      </section>
+    );
+  }
+
+  if (!isTargetVisibleToScope(scope, user.roles)) {
+    return (
+      <section className="mx-auto max-w-4xl px-4 py-12">
+        <ErrorMessage
+          title="Account is not manageable"
+          message="This account is outside your user-management authority."
         />
       </section>
     );

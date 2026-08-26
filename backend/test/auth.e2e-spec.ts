@@ -1,6 +1,7 @@
 import {
   ConflictException,
   INestApplication,
+  UnauthorizedException,
   ValidationPipe,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -102,19 +103,6 @@ describe('Authentication and current user (e2e)', () => {
         login,
         refresh,
         logout,
-        getRefreshCookieOptions: () => ({
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax' as const,
-          path: '/api/v1/auth',
-          maxAge: 604_800_000,
-        }),
-        getRefreshCookieClearOptions: () => ({
-          httpOnly: true,
-          secure: false,
-          sameSite: 'lax' as const,
-          path: '/api/v1/auth',
-        }),
       })
       .compile();
 
@@ -297,6 +285,53 @@ describe('Authentication and current user (e2e)', () => {
     expect(logout).toHaveBeenNthCalledWith(1, 'logout-refresh-token');
     expect(logout).toHaveBeenNthCalledWith(2, undefined);
     expect(setCookies).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(
+          /^ceylon_dryway_refresh=; Path=\/api\/v1\/auth; Expires=.*HttpOnly; SameSite=Lax$/,
+        ),
+      ]),
+    );
+  });
+
+  it('clears malformed cookies and returns 204 even when revocation fails', async () => {
+    logout.mockRejectedValueOnce(new Error('database unavailable'));
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/auth/logout')
+      .set('Cookie', 'ceylon_dryway_refresh=malformed-cookie')
+      .expect(204);
+
+    expect(response.headers['set-cookie']).toEqual(
+      expect.arrayContaining([
+        expect.stringMatching(
+          /^ceylon_dryway_refresh=; Path=\/api\/v1\/auth; Expires=.*HttpOnly; SameSite=Lax$/,
+        ),
+      ]),
+    );
+  });
+
+  it('does not require a valid access token to log out', async () => {
+    const expiredAccessToken = await jwtService.signAsync(
+      { sub: safeUserRecord.id, type: 'access' },
+      { secret: ACCESS_SECRET, expiresIn: -1 },
+    );
+
+    await request(app.getHttpServer())
+      .post('/api/v1/auth/logout')
+      .set('Authorization', `Bearer ${expiredAccessToken}`)
+      .set('Cookie', 'ceylon_dryway_refresh=expired-access-logout')
+      .expect(204);
+  });
+
+  it('clears an expired or invalid refresh cookie when refresh fails', async () => {
+    refresh.mockRejectedValueOnce(
+      new UnauthorizedException('Refresh token is invalid or expired'),
+    );
+    const response = await request(app.getHttpServer())
+      .post('/api/v1/auth/refresh')
+      .set('Cookie', 'ceylon_dryway_refresh=expired-refresh-token')
+      .expect(401);
+
+    expect(response.headers['set-cookie']).toEqual(
       expect.arrayContaining([
         expect.stringMatching(
           /^ceylon_dryway_refresh=; Path=\/api\/v1\/auth; Expires=.*HttpOnly; SameSite=Lax$/,

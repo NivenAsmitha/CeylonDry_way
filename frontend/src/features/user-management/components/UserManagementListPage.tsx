@@ -11,6 +11,10 @@ import {
 import { getApiErrorMessage } from "../../../types/api.types";
 import { useManagedUsers } from "../hooks/useManagedUsers";
 import {
+  ADMIN_MANAGEABLE_ROLE_FILTERS,
+  isTargetVisibleToScope,
+} from "../management-authority";
+import {
   USER_SORT_VALUES,
   type UserListQuery,
   type UserSort,
@@ -64,6 +68,12 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
   };
   const users = useManagedUsers(query);
   const basePath = `/${scope}/users`;
+  const roleFilters =
+    scope === "admin" ? ADMIN_MANAGEABLE_ROLE_FILTERS : ROLE_NAMES;
+  const visibleUsers =
+    users.data?.items.filter((user) =>
+      isTargetVisibleToScope(scope, user.roles),
+    ) ?? [];
 
   function updateFilter(key: string, value: string): void {
     const next = new URLSearchParams(params);
@@ -140,7 +150,7 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
               onChange={(event) => updateFilter("role", event.target.value)}
             >
               <option value="">All roles</option>
-              {ROLE_NAMES.map((role) => (
+              {roleFilters.map((role) => (
                 <option key={role} value={role}>
                   {role}
                 </option>
@@ -203,7 +213,7 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
           />
         </div>
       ) : null}
-      {users.data?.items.length === 0 ? (
+      {users.data && visibleUsers.length === 0 ? (
         <div className="mt-8 rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
           <h2 className="text-xl font-black">No matching users</h2>
           <p className="mt-2 text-slate-600">
@@ -212,7 +222,7 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
         </div>
       ) : null}
 
-      {users.data?.items.length ? (
+      {visibleUsers.length ? (
         <div className="mt-8 overflow-x-auto rounded-3xl border border-slate-200 bg-white shadow-sm">
           <table className="min-w-[760px] w-full text-left text-sm">
             <thead className="bg-slate-50 text-xs uppercase tracking-wide text-slate-600">
@@ -225,7 +235,7 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200">
-              {users.data.items.map((user) => (
+              {visibleUsers.map((user) => (
                 <tr key={user.id} className="align-top">
                   <td className="px-5 py-4">
                     <p className="font-black text-slate-950">{user.name}</p>

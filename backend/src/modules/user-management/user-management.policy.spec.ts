@@ -3,6 +3,8 @@ import {
   canManageUser,
   getAllowedUserManagementActions,
   getManagementActorRole,
+  getUserManagementDenialCategory,
+  USER_MANAGEMENT_ACTIONS,
 } from './user-management.policy';
 
 describe('user-management hierarchy policy', () => {
@@ -17,29 +19,78 @@ describe('user-management hierarchy policy', () => {
     ).toThrow('Account role combination is not permitted');
   });
 
-  it('allows Admin safe operations on Developer but not authority-changing state actions', () => {
-    for (const action of [
-      'VIEW',
-      'EDIT_PROFILE',
-      'INITIATE_PASSWORD_RESET',
-      'REVOKE_SESSIONS',
-    ] as const) {
+  it.each([
+    [[RoleName.CLIENT]],
+    [[RoleName.CLIENT, RoleName.OWNER]],
+    [[RoleName.REVIEWER]],
+  ])('allows Admin every management action on the valid %j target', (roles) => {
+    for (const action of USER_MANAGEMENT_ACTIONS) {
+      expect(
+        canManageUser('admin', [RoleName.ADMIN], 'target', roles, action),
+      ).toBe(true);
+    }
+  });
+
+  it.each([[[RoleName.ADMIN]], [[RoleName.DEVELOPER]]])(
+    'denies Admin every operation on the %j target',
+    (roles) => {
+      for (const action of USER_MANAGEMENT_ACTIONS) {
+        expect(
+          canManageUser('admin', [RoleName.ADMIN], 'target', roles, action),
+        ).toBe(false);
+        expect(
+          getUserManagementDenialCategory(
+            'admin',
+            [RoleName.ADMIN],
+            'target',
+            roles,
+            action,
+          ),
+        ).toBe('ADMIN_TARGET_OUTSIDE_AUTHORITY');
+      }
+    },
+  );
+
+  it('denies every Admin management action on their own account', () => {
+    for (const action of USER_MANAGEMENT_ACTIONS) {
       expect(
         canManageUser(
           'admin',
           [RoleName.ADMIN],
+          'admin',
+          [RoleName.ADMIN],
+          action,
+        ),
+      ).toBe(false);
+    }
+  });
+
+  it.each([
+    [[RoleName.CLIENT]],
+    [[RoleName.CLIENT, RoleName.OWNER]],
+    [[RoleName.REVIEWER]],
+    [[RoleName.ADMIN]],
+    [[RoleName.DEVELOPER]],
+  ])('allows Developer to manage another valid %j target', (roles) => {
+    for (const action of USER_MANAGEMENT_ACTIONS) {
+      expect(
+        canManageUser(
           'developer',
           [RoleName.DEVELOPER],
+          'target',
+          roles,
           action,
         ),
       ).toBe(true);
     }
+  });
 
+  it('blocks Developer self status, deletion, and restore operations', () => {
     for (const action of ['CHANGE_STATUS', 'SOFT_DELETE', 'RESTORE'] as const) {
       expect(
         canManageUser(
-          'admin',
-          [RoleName.ADMIN],
+          'developer',
+          [RoleName.DEVELOPER],
           'developer',
           [RoleName.DEVELOPER],
           action,
@@ -48,69 +99,35 @@ describe('user-management hierarchy policy', () => {
     }
   });
 
-  it('reserves Admin state management for Developer while Admin manages client and reviewer states', () => {
+  it.each([
+    [[]],
+    [[RoleName.CLIENT, RoleName.REVIEWER]],
+    [[RoleName.ADMIN, RoleName.DEVELOPER]],
+  ])('denies invalid or ambiguous target roles %j', (roles) => {
     expect(
-      canManageUser(
-        'admin',
-        [RoleName.ADMIN],
-        'other-admin',
-        [RoleName.ADMIN],
-        'CHANGE_STATUS',
-      ),
+      canManageUser('developer', [RoleName.DEVELOPER], 'target', roles, 'VIEW'),
     ).toBe(false);
     expect(
-      canManageUser(
+      getUserManagementDenialCategory(
         'developer',
         [RoleName.DEVELOPER],
-        'admin',
-        [RoleName.ADMIN],
-        'CHANGE_STATUS',
+        'target',
+        roles,
+        'VIEW',
       ),
-    ).toBe(true);
-    expect(
-      canManageUser(
-        'admin',
-        [RoleName.ADMIN],
-        'owner',
-        [RoleName.CLIENT, RoleName.OWNER],
-        'SOFT_DELETE',
-      ),
-    ).toBe(true);
-    expect(
-      canManageUser(
-        'admin',
-        [RoleName.ADMIN],
-        'reviewer',
-        [RoleName.REVIEWER],
-        'RESTORE',
-      ),
-    ).toBe(true);
+    ).toBe('INVALID_TARGET_ROLE_SET');
   });
 
-  it('blocks privileged self-deactivation and deletion for both actor roles', () => {
-    for (const role of [RoleName.ADMIN, RoleName.DEVELOPER]) {
-      for (const action of [
-        'CHANGE_STATUS',
-        'SOFT_DELETE',
-        'RESTORE',
-      ] as const) {
-        expect(canManageUser('self', [role], 'self', [role], action)).toBe(
-          false,
-        );
-      }
-    }
-  });
-
-  it('returns only actions allowed for the actor and target', () => {
+  it('derives no Admin capabilities for Admin or Developer targets', () => {
+    expect(
+      getAllowedUserManagementActions('admin', [RoleName.ADMIN], 'other', [
+        RoleName.ADMIN,
+      ]),
+    ).toEqual([]);
     expect(
       getAllowedUserManagementActions('admin', [RoleName.ADMIN], 'developer', [
         RoleName.DEVELOPER,
       ]),
-    ).toEqual([
-      'VIEW',
-      'EDIT_PROFILE',
-      'INITIATE_PASSWORD_RESET',
-      'REVOKE_SESSIONS',
-    ]);
+    ).toEqual([]);
   });
 });

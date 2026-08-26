@@ -15,7 +15,11 @@ import type {
   UpdateProfileInput,
 } from "../features/auth/types/auth.types";
 import {
+  beginLogout,
+  finishLogout,
+  getAuthenticationGeneration,
   getAccessToken,
+  isAuthenticationGenerationCurrent,
   isLogoutInProgress,
   subscribeToAuthenticationFailure,
 } from "../services/api";
@@ -30,10 +34,25 @@ interface AuthProviderProps {
   children: ReactNode;
 }
 
+const AUTH_CHANNEL_NAME = "ceylon-dryway-auth";
+const LOGOUT_MESSAGE = { type: "logout" } as const;
+
+function isLogoutBroadcast(value: unknown): boolean {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "type" in value &&
+    value.type === LOGOUT_MESSAGE.type
+  );
+}
+
 export function AuthProvider({ children }: AuthProviderProps) {
   const queryClient = useQueryClient();
   const authenticationLifecycle = useRef(0);
+  const logoutOperation = useRef<Promise<void> | null>(null);
+  const authChannel = useRef<BroadcastChannel | null>(null);
   const [isInitializing, setIsInitializing] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
   const [initializationError, setInitializationError] = useState<string | null>(
     null,
   );
@@ -49,14 +68,47 @@ export function AuthProvider({ children }: AuthProviderProps) {
     queryClient.removeQueries({ queryKey: PRIVATE_QUERY_KEY });
   }, [queryClient]);
 
-  useEffect(
-    () => subscribeToAuthenticationFailure(removePrivateAuthenticationState),
-    [removePrivateAuthenticationState],
-  );
+  const cancelAndRemovePrivateState = useCallback(async () => {
+    await queryClient.cancelQueries({ queryKey: PRIVATE_QUERY_KEY });
+    removePrivateAuthenticationState();
+  }, [queryClient, removePrivateAuthenticationState]);
+
+  useEffect(() => {
+    return subscribeToAuthenticationFailure(() => {
+      authenticationLifecycle.current += 1;
+      void cancelAndRemovePrivateState();
+      setIsInitializing(false);
+    });
+  }, [cancelAndRemovePrivateState]);
+
+  useEffect(() => {
+    if (typeof BroadcastChannel === "undefined") return;
+    const channel = new BroadcastChannel(AUTH_CHANNEL_NAME);
+    authChannel.current = channel;
+    channel.onmessage = (event: MessageEvent<unknown>) => {
+      if (!isLogoutBroadcast(event.data)) return;
+      const generation = beginLogout();
+      authenticationLifecycle.current += 1;
+      setIsLoggingOut(true);
+      void cancelAndRemovePrivateState().finally(() => {
+        finishLogout(generation);
+        setInitializationError(null);
+        setIsInitializing(false);
+        setIsLoggingOut(false);
+      });
+    };
+
+    return () => {
+      channel.close();
+      if (authChannel.current === channel) authChannel.current = null;
+    };
+  }, [cancelAndRemovePrivateState]);
 
   useEffect(() => {
     let active = true;
-    const lifecycle = authenticationLifecycle.current;
+    const lifecycle = ++authenticationLifecycle.current;
+    const requestGeneration = getAuthenticationGeneration();
+    const controller = new AbortController();
 
     async function initializeAuthentication(): Promise<void> {
       try {
@@ -70,11 +122,17 @@ export function AuthProvider({ children }: AuthProviderProps) {
           return;
         }
 
-        await queryClient.fetchQuery({
-          queryKey: CURRENT_USER_QUERY_KEY,
-          queryFn: ({ signal }) => authService.getCurrentUser(signal),
-          staleTime: 0,
-        });
+        const currentUser = await authService.getCurrentUser(controller.signal);
+
+        if (
+          !active ||
+          lifecycle !== authenticationLifecycle.current ||
+          !isAuthenticationGenerationCurrent(requestGeneration)
+        ) {
+          return;
+        }
+
+        queryClient.setQueryData(CURRENT_USER_QUERY_KEY, currentUser);
       } catch (error: unknown) {
         removePrivateAuthenticationState();
 
@@ -97,13 +155,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     return () => {
       active = false;
+      controller.abort();
     };
   }, [queryClient, removePrivateAuthenticationState]);
 
   const login = useCallback(
     async (input: LoginInput): Promise<CurrentUser> => {
-      authenticationLifecycle.current += 1;
+      const lifecycle = ++authenticationLifecycle.current;
+      const requestGeneration = getAuthenticationGeneration();
       const authResponse = await authService.login(input);
+
+      if (
+        lifecycle !== authenticationLifecycle.current ||
+        !isAuthenticationGenerationCurrent(requestGeneration)
+      ) {
+        throw new Error("Login was superseded by another authentication event");
+      }
+
       queryClient.setQueryData(CURRENT_USER_QUERY_KEY, authResponse.user);
       await queryClient.invalidateQueries({
         queryKey: CURRENT_USER_QUERY_KEY,
@@ -121,34 +189,69 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const logout = useCallback(async (): Promise<void> => {
+    if (logoutOperation.current) return logoutOperation.current;
+
+    const generation = beginLogout();
     authenticationLifecycle.current += 1;
-    const logoutRequest = authService.logout();
+    setIsLoggingOut(true);
+    authChannel.current?.postMessage(LOGOUT_MESSAGE);
 
-    void logoutRequest.catch(() => undefined);
-
-    try {
-      await queryClient.cancelQueries({ queryKey: PRIVATE_QUERY_KEY });
-      removePrivateAuthenticationState();
-      await logoutRequest;
-    } finally {
-      await queryClient.cancelQueries({ queryKey: PRIVATE_QUERY_KEY });
-      removePrivateAuthenticationState();
-      setInitializationError(null);
-    }
-  }, [queryClient, removePrivateAuthenticationState]);
+    const operation = (async () => {
+      try {
+        await cancelAndRemovePrivateState();
+        await authService.requestLogout();
+      } finally {
+        await cancelAndRemovePrivateState();
+        finishLogout(generation);
+        setInitializationError(null);
+        setIsInitializing(false);
+        setIsLoggingOut(false);
+      }
+    })();
+    logoutOperation.current = operation;
+    void operation.then(
+      () => {
+        if (logoutOperation.current === operation)
+          logoutOperation.current = null;
+      },
+      () => {
+        if (logoutOperation.current === operation)
+          logoutOperation.current = null;
+      },
+    );
+    return operation;
+  }, [cancelAndRemovePrivateState]);
 
   const refreshSession = useCallback(async (): Promise<CurrentUser> => {
+    const lifecycle = authenticationLifecycle.current;
+    const requestGeneration = getAuthenticationGeneration();
     await authService.refreshSession();
-    return queryClient.fetchQuery({
-      queryKey: CURRENT_USER_QUERY_KEY,
-      queryFn: ({ signal }) => authService.getCurrentUser(signal),
-      staleTime: 0,
-    });
+    const currentUser = await authService.getCurrentUser();
+
+    if (
+      lifecycle !== authenticationLifecycle.current ||
+      !isAuthenticationGenerationCurrent(requestGeneration)
+    ) {
+      throw new Error("Refresh was superseded by another authentication event");
+    }
+
+    queryClient.setQueryData(CURRENT_USER_QUERY_KEY, currentUser);
+    return currentUser;
   }, [queryClient]);
 
   const updateProfile = useCallback(
     async (input: UpdateProfileInput): Promise<CurrentUser> => {
+      const lifecycle = authenticationLifecycle.current;
+      const requestGeneration = getAuthenticationGeneration();
       const updatedUser = await authService.updateProfile(input);
+
+      if (
+        lifecycle !== authenticationLifecycle.current ||
+        !isAuthenticationGenerationCurrent(requestGeneration)
+      ) {
+        throw new Error("Profile update was superseded by logout");
+      }
+
       queryClient.setQueryData(CURRENT_USER_QUERY_KEY, updatedUser);
       return updatedUser;
     },
@@ -156,15 +259,27 @@ export function AuthProvider({ children }: AuthProviderProps) {
   );
 
   const refetchUser = useCallback(async (): Promise<CurrentUser | null> => {
-    const result = await currentUserQuery.refetch();
-    return result.data ?? null;
-  }, [currentUserQuery]);
+    const lifecycle = authenticationLifecycle.current;
+    const requestGeneration = getAuthenticationGeneration();
+    const currentUser = await authService.getCurrentUser();
+
+    if (
+      lifecycle !== authenticationLifecycle.current ||
+      !isAuthenticationGenerationCurrent(requestGeneration)
+    ) {
+      return null;
+    }
+
+    queryClient.setQueryData(CURRENT_USER_QUERY_KEY, currentUser);
+    return currentUser;
+  }, [queryClient]);
 
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
       isAuthenticated: Boolean(user && getAccessToken()),
       isInitializing,
+      isLoggingOut,
       initializationError,
       login,
       register,
@@ -176,6 +291,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
     [
       initializationError,
       isInitializing,
+      isLoggingOut,
       login,
       logout,
       refetchUser,

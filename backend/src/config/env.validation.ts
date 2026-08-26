@@ -9,6 +9,7 @@ export interface EnvironmentVariables {
   JWT_REFRESH_SECRET: string;
   JWT_ACCESS_EXPIRES_IN: string;
   JWT_REFRESH_EXPIRES_IN: string;
+  REFRESH_COOKIE_DOMAIN?: string;
   CLOUDINARY_CLOUD_NAME?: string;
   CLOUDINARY_API_KEY?: string;
   CLOUDINARY_API_SECRET?: string;
@@ -45,6 +46,7 @@ export const environmentValidationSchema: Joi.ObjectSchema<EnvironmentVariables>
     JWT_REFRESH_EXPIRES_IN: Joi.string()
       .pattern(/^[1-9]\d*(?:s|m|h|d|w)$/)
       .default('7d'),
+    REFRESH_COOKIE_DOMAIN: optionalString,
     CLOUDINARY_CLOUD_NAME: optionalString,
     CLOUDINARY_API_KEY: optionalString,
     CLOUDINARY_API_SECRET: optionalString,
