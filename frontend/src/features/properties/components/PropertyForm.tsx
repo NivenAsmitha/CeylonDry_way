@@ -32,6 +32,7 @@ import {
 } from "../property.constants";
 import { PropertyStatusBadge } from "./PropertyStatusBadge";
 import { PropertyStepIndicator } from "./PropertyStepIndicator";
+import { PropertyPhotoStep } from "./PropertyPhotoStep";
 
 const WEEKDAYS = [
   "Monday",
@@ -148,6 +149,7 @@ function toDraftInput(values: PropertyFormValues): PropertyDraftInput {
 }
 
 function getFieldStep(field: string): number {
+  if (field === "photos") return 6;
   const rootField = field.split(".")[0] as keyof PropertyFormValues;
   return fieldSteps[rootField] ?? 7;
 }
@@ -274,6 +276,11 @@ export function PropertyForm({ property }: PropertyFormProps) {
     for (const detail of normalized.details) {
       const root = detail.field.split(".")[0];
 
+      if (root === "photos") {
+        earliestStep = Math.min(earliestStep, 6);
+        continue;
+      }
+
       if (root in fieldSteps) {
         setError(root as FieldPath<PropertyFormValues>, {
           type: "server",
@@ -396,6 +403,12 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
       if (!submissionConfirmed) {
         setServerError(["Confirm that the listing is ready for review."]);
+        return;
+      }
+
+      if (property.activeVersion.photos.length < 1) {
+        setCurrentStep(6);
+        setServerError(["Add at least one photo before submitting."]);
         return;
       }
 
@@ -830,13 +843,20 @@ export function PropertyForm({ property }: PropertyFormProps) {
             ) : null}
 
             {currentStep === 6 ? (
-              <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
-                <p className="text-lg font-black">Photos are coming next</p>
-                <p className="mx-auto mt-2 max-w-xl text-sm text-slate-600">
-                  This phase does not upload files or store browser-selected
-                  images. Cloud storage integration will be added later.
-                </p>
-              </div>
+              property ? (
+                <PropertyPhotoStep
+                  propertyId={property.id}
+                  propertyName={selectedName}
+                  photos={property.activeVersion.photos}
+                  editable={isEditable}
+                />
+              ) : (
+                <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">
+                  <p className="font-black">
+                    Save the draft before adding photos.
+                  </p>
+                </div>
+              )
             ) : null}
 
             {currentStep === 7 ? (
@@ -871,6 +891,10 @@ export function PropertyForm({ property }: PropertyFormProps) {
                     [
                       "Opening entries",
                       String(values.openingHours?.length ?? 0),
+                    ],
+                    [
+                      "Photos",
+                      `${property?.activeVersion.photos.length ?? 0} uploaded`,
                     ],
                   ].map(([label, value]) => (
                     <div className="rounded-2xl bg-slate-50 p-4" key={label}>

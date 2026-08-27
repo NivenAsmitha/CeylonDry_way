@@ -10,6 +10,9 @@ export interface EnvironmentVariables {
   JWT_ACCESS_EXPIRES_IN: string;
   JWT_REFRESH_EXPIRES_IN: string;
   REFRESH_COOKIE_DOMAIN?: string;
+  BACKEND_PUBLIC_URL?: string;
+  PROPERTY_PHOTO_STORAGE_PROVIDER?: 'local' | 'cloudinary';
+  PROPERTY_PHOTO_UPLOAD_DIR?: string;
   CLOUDINARY_CLOUD_NAME?: string;
   CLOUDINARY_API_KEY?: string;
   CLOUDINARY_API_SECRET?: string;
@@ -47,6 +50,13 @@ export const environmentValidationSchema: Joi.ObjectSchema<EnvironmentVariables>
       .pattern(/^[1-9]\d*(?:s|m|h|d|w)$/)
       .default('7d'),
     REFRESH_COOKIE_DOMAIN: optionalString,
+    BACKEND_PUBLIC_URL: Joi.string()
+      .uri({ scheme: ['http', 'https'] })
+      .optional(),
+    PROPERTY_PHOTO_STORAGE_PROVIDER: Joi.string()
+      .valid('local', 'cloudinary')
+      .optional(),
+    PROPERTY_PHOTO_UPLOAD_DIR: optionalString,
     CLOUDINARY_CLOUD_NAME: optionalString,
     CLOUDINARY_API_KEY: optionalString,
     CLOUDINARY_API_SECRET: optionalString,

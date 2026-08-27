@@ -89,6 +89,51 @@ export function ReviewerListingPage() {
       <div className="mt-8 grid gap-8 xl:grid-cols-[minmax(0,1fr)_24rem]">
         <div className="space-y-6">
           <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
+            <div className="flex flex-wrap items-center justify-between gap-2">
+              <h2 className="text-xl font-black">Submitted photos</h2>
+              <span className="text-sm font-semibold text-slate-500">
+                {version.photos.length} photo
+                {version.photos.length === 1 ? "" : "s"}
+              </span>
+            </div>
+            {version.photos.length ? (
+              <div className="mt-5 grid gap-4 sm:grid-cols-2">
+                {[...version.photos]
+                  .sort(
+                    (left, right) =>
+                      Number(right.isCover) - Number(left.isCover) ||
+                      left.sortOrder - right.sortOrder,
+                  )
+                  .map((photo) => (
+                    <figure
+                      className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"
+                      key={photo.id}
+                    >
+                      <img
+                        className="aspect-[4/3] w-full object-cover"
+                        src={photo.url}
+                        alt={
+                          photo.altText ??
+                          `Photo of ${version.name ?? "submitted property"}`
+                        }
+                      />
+                      <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-slate-600">
+                        <span>{photo.altText || "No custom alt text"}</span>
+                        {photo.isCover ? (
+                          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-black text-emerald-800">
+                            Cover
+                          </span>
+                        ) : null}
+                      </figcaption>
+                    </figure>
+                  ))}
+              </div>
+            ) : (
+              <p className="mt-3 text-slate-600">No photos were submitted.</p>
+            )}
+          </section>
+
+          <section className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
             <h2 className="text-xl font-black">Basic details</h2>
             <dl className="mt-5 grid gap-5 sm:grid-cols-2">
               <div>

@@ -79,7 +79,17 @@ function createPropertyRecord(
           ]
         : [],
       openingHours: [],
-      photos: [],
+      photos: complete
+        ? [
+            {
+              id: '33333333-3333-4333-8333-333333333333',
+              url: 'https://images.example.test/property.jpg',
+              sortOrder: 0,
+              isCover: true,
+              altText: 'Accessible entrance',
+            },
+          ]
+        : [],
     },
   };
 }
@@ -350,7 +360,12 @@ describe('PropertiesService', () => {
         )
       : [];
     expect(detailFields).toEqual(
-      expect.arrayContaining(['name', 'propertyType', 'amenityCodes']),
+      expect.arrayContaining([
+        'name',
+        'propertyType',
+        'amenityCodes',
+        'photos',
+      ]),
     );
     expect(transactionVersionUpdateMany).not.toHaveBeenCalled();
     expect(transactionPropertyUpdateMany).not.toHaveBeenCalled();
@@ -392,6 +407,32 @@ describe('PropertiesService', () => {
     },
   );
 
+  it('rejects an otherwise complete submission that has no photo', async () => {
+    const property = createPropertyRecord(PropertyStatus.DRAFT);
+    property.activeVersion!.photos = [];
+    transactionPropertyFindFirst.mockResolvedValue(property);
+
+    let submissionError: unknown;
+    try {
+      await service.submitOwnedProperty(USER_ID, PROPERTY_ID, {
+        confirm: true,
+      });
+    } catch (error: unknown) {
+      submissionError = error;
+    }
+
+    expect(submissionError).toBeInstanceOf(UnprocessableEntityException);
+    if (!(submissionError instanceof UnprocessableEntityException)) {
+      throw new Error('Expected photo-less submission to be rejected');
+    }
+    const response = submissionError.getResponse();
+    const details = isRecord(response) ? response.details : undefined;
+    expect(details).toEqual([
+      { field: 'photos', message: 'Add at least one property photo' },
+    ]);
+    expect(transactionVersionUpdateMany).not.toHaveBeenCalled();
+  });
+
   it.each([
     PropertyStatus.PENDING,
     PropertyStatus.APPROVED,
@@ -421,6 +462,15 @@ describe('PropertiesService', () => {
 
     expect(result).not.toHaveProperty('ownerUserId');
     expect(result).not.toHaveProperty('versions');
-    expect(result.activeVersion).not.toHaveProperty('storageKey');
+    expect(result.activeVersion.photos).toEqual([
+      {
+        id: '33333333-3333-4333-8333-333333333333',
+        url: 'https://images.example.test/property.jpg',
+        sortOrder: 0,
+        isCover: true,
+        altText: 'Accessible entrance',
+      },
+    ]);
+    expect(result.activeVersion.photos[0]).not.toHaveProperty('storageKey');
   });
 });

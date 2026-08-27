@@ -23,7 +23,8 @@ function hourText(hour: {
 }): string {
   if (hour.isClosed) return "Closed";
   if (hour.is24Hours) return "Open 24 hours";
-  if (hour.openTime && hour.closeTime) return `${hour.openTime} - ${hour.closeTime}`;
+  if (hour.openTime && hour.closeTime)
+    return `${hour.openTime} - ${hour.closeTime}`;
   return "Hours not specified";
 }
 
@@ -51,7 +52,10 @@ export function PlaceDetailsPage() {
               : getApiErrorMessage(query.error)
           }
         />
-        <Link className="mt-6 inline-flex min-h-11 items-center font-bold text-emerald-800" to="/explore">
+        <Link
+          className="mt-6 inline-flex min-h-11 items-center font-bold text-emerald-800"
+          to="/explore"
+        >
           &larr; Back to Explore
         </Link>
       </div>
@@ -63,7 +67,10 @@ export function PlaceDetailsPage() {
 
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-      <Link className="inline-flex min-h-11 items-center text-sm font-bold text-emerald-800" to="/explore">
+      <Link
+        className="inline-flex min-h-11 items-center text-sm font-bold text-emerald-800"
+        to="/explore"
+      >
         &larr; Back to Explore
       </Link>
 
@@ -74,21 +81,29 @@ export function PlaceDetailsPage() {
               className={`w-full bg-slate-100 object-cover ${index === 0 ? "aspect-[4/3] sm:row-span-2 sm:h-full" : "aspect-[16/9]"}`}
               key={`${photo.url}-${index}`}
               src={photo.url}
-              alt={photo.altText ?? ""}
+              alt={photo.altText ?? `Photo of ${place.name}`}
             />
           ))}
         </div>
-      ) : null}
+      ) : (
+        <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-emerald-100 to-sky-100 text-5xl font-black text-emerald-800/40">
+          CD
+        </div>
+      )}
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_20rem]">
         <article>
           <div className="flex flex-wrap items-center gap-2 text-xs font-black">
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">Verified</span>
+            <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">
+              Verified
+            </span>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
               {place.propertyType.replaceAll("_", " ")}
             </span>
             {place.wheelchairAccessible ? (
-              <span className="rounded-full bg-sky-100 px-3 py-1 text-sky-800">Wheelchair accessible</span>
+              <span className="rounded-full bg-sky-100 px-3 py-1 text-sky-800">
+                Wheelchair accessible
+              </span>
             ) : null}
           </div>
           <h1 className="mt-4 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
@@ -105,29 +120,46 @@ export function PlaceDetailsPage() {
 
           <section className="mt-8 border-t border-slate-200 pt-7">
             <h2 className="text-2xl font-black text-slate-950">Amenities</h2>
-            <div className="mt-4"><AmenityList amenities={place.amenities} /></div>
+            <div className="mt-4">
+              <AmenityList amenities={place.amenities} />
+            </div>
           </section>
 
           {place.accessNotes ? (
             <section className="mt-8 border-t border-slate-200 pt-7">
-              <h2 className="text-2xl font-black text-slate-950">Access notes</h2>
-              <p className="mt-3 leading-7 text-slate-700">{place.accessNotes}</p>
+              <h2 className="text-2xl font-black text-slate-950">
+                Access notes
+              </h2>
+              <p className="mt-3 leading-7 text-slate-700">
+                {place.accessNotes}
+              </p>
             </section>
           ) : null}
 
           <section className="mt-8 border-t border-slate-200 pt-7">
-            <h2 className="text-2xl font-black text-slate-950">Opening hours</h2>
+            <h2 className="text-2xl font-black text-slate-950">
+              Opening hours
+            </h2>
             {place.openingHours.length ? (
               <dl className="mt-4 max-w-lg divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white px-4">
                 {place.openingHours.map((hour) => (
-                  <div className="flex justify-between gap-4 py-3 text-sm" key={hour.weekday}>
-                    <dt className="font-bold text-slate-800">{weekdayNames[hour.weekday]}</dt>
-                    <dd className="text-right text-slate-600">{hourText(hour)}</dd>
+                  <div
+                    className="flex justify-between gap-4 py-3 text-sm"
+                    key={hour.weekday}
+                  >
+                    <dt className="font-bold text-slate-800">
+                      {weekdayNames[hour.weekday]}
+                    </dt>
+                    <dd className="text-right text-slate-600">
+                      {hourText(hour)}
+                    </dd>
                   </div>
                 ))}
               </dl>
             ) : (
-              <p className="mt-3 text-slate-600">Opening hours have not been provided.</p>
+              <p className="mt-3 text-slate-600">
+                Opening hours have not been provided.
+              </p>
             )}
           </section>
         </article>
@@ -142,9 +174,13 @@ export function PlaceDetailsPage() {
                 : `LKR ${place.feeLkr.toLocaleString()}`}
           </p>
           {place.distanceKm !== null ? (
-            <p className="mt-2 text-sm text-slate-600">{place.distanceKm} km away</p>
+            <p className="mt-2 text-sm text-slate-600">
+              {place.distanceKm} km away
+            </p>
           ) : null}
-          <div className="mt-5"><DirectionsButton url={place.directionsUrl} /></div>
+          <div className="mt-5">
+            <DirectionsButton url={place.directionsUrl} />
+          </div>
           <div className="mt-6 border-t border-slate-200 pt-5">
             <h2 className="font-black text-slate-950">Verified location</h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
@@ -153,13 +189,42 @@ export function PlaceDetailsPage() {
             </p>
           </div>
 
-          {(place.phone || place.email || place.website) ? (
+          {place.phone || place.email || place.website ? (
             <div className="mt-6 border-t border-slate-200 pt-5">
               <h2 className="font-black text-slate-950">Public contact</h2>
               <div className="mt-3 space-y-2 break-words text-sm text-slate-700">
-                {place.phone ? <p><a className="text-emerald-800 underline" href={`tel:${place.phone}`}>{place.phone}</a></p> : null}
-                {place.email ? <p><a className="text-emerald-800 underline" href={`mailto:${place.email}`}>{place.email}</a></p> : null}
-                {place.website ? <p><a className="text-emerald-800 underline" href={place.website} target="_blank" rel="noopener noreferrer">Visit website</a></p> : null}
+                {place.phone ? (
+                  <p>
+                    <a
+                      className="text-emerald-800 underline"
+                      href={`tel:${place.phone}`}
+                    >
+                      {place.phone}
+                    </a>
+                  </p>
+                ) : null}
+                {place.email ? (
+                  <p>
+                    <a
+                      className="text-emerald-800 underline"
+                      href={`mailto:${place.email}`}
+                    >
+                      {place.email}
+                    </a>
+                  </p>
+                ) : null}
+                {place.website ? (
+                  <p>
+                    <a
+                      className="text-emerald-800 underline"
+                      href={place.website}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit website
+                    </a>
+                  </p>
+                ) : null}
               </div>
             </div>
           ) : null}

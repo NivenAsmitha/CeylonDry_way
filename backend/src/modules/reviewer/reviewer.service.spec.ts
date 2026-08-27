@@ -16,6 +16,7 @@ const PROPERTY_ID = '11111111-1111-4111-8111-111111111111';
 const VERSION_ID = '22222222-2222-4222-8222-222222222222';
 const OWNER_ID = 'owner-user';
 const REVIEWER_ID = 'reviewer-user';
+const PHOTO_ID = '33333333-3333-4333-8333-333333333333';
 const submittedAt = new Date('2026-08-25T01:00:00.000Z');
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -68,7 +69,15 @@ function detailProperty(status: PropertyStatus) {
       submittedAt,
       amenities: [],
       openingHours: [],
-      photos: [],
+      photos: [
+        {
+          id: PHOTO_ID,
+          url: 'https://images.example.test/submitted.jpg',
+          sortOrder: 0,
+          isCover: true,
+          altText: 'Submitted accessible entrance',
+        },
+      ],
     },
     reviewDecisions: [],
   };
@@ -227,5 +236,21 @@ describe('ReviewerService', () => {
     expect(first.status).toBe('fulfilled');
     expect(second.status).toBe('rejected');
     expect(transaction.reviewDecision.create).toHaveBeenCalledTimes(1);
+  });
+
+  it('maps only safe submitted-version photo metadata for review', async () => {
+    const result = await service.getListing(REVIEWER_ID, PROPERTY_ID);
+
+    expect(result.submittedVersion.id).toBe(VERSION_ID);
+    expect(result.submittedVersion.photos).toEqual([
+      {
+        id: PHOTO_ID,
+        url: 'https://images.example.test/submitted.jpg',
+        sortOrder: 0,
+        isCover: true,
+        altText: 'Submitted accessible entrance',
+      },
+    ]);
+    expect(result.submittedVersion.photos[0]).not.toHaveProperty('storageKey');
   });
 });

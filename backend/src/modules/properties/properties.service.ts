@@ -15,6 +15,7 @@ import {
   UserStatus,
 } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../prisma/prisma.service';
+import { MAX_PROPERTY_PHOTOS } from '../property-photos/property-photo.constants';
 import {
   assertAllowedRoleCombination,
   hasExactRoleSet,
@@ -691,6 +692,32 @@ export class PropertiesService {
         field: 'amenityCodes',
         message: 'Select at least one active amenity',
       });
+    }
+    if (version.photos.length < 1) {
+      issues.push({
+        field: 'photos',
+        message: 'Add at least one property photo',
+      });
+    } else {
+      if (version.photos.length > MAX_PROPERTY_PHOTOS) {
+        issues.push({
+          field: 'photos',
+          message: `Keep no more than ${MAX_PROPERTY_PHOTOS} photos`,
+        });
+      }
+      if (version.photos.filter((photo) => photo.isCover).length !== 1) {
+        issues.push({
+          field: 'photos',
+          message: 'Exactly one photo must be the cover',
+        });
+      }
+      const sortOrders = version.photos.map((photo) => photo.sortOrder);
+      if (new Set(sortOrders).size !== sortOrders.length) {
+        issues.push({
+          field: 'photos',
+          message: 'Photo order must be unique',
+        });
+      }
     }
 
     return issues;

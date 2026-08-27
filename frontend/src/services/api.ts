@@ -12,6 +12,10 @@ import {
 } from "./authentication-coordinator";
 
 declare module "axios" {
+  interface AxiosRequestConfig {
+    _authenticationRetry?: boolean;
+  }
+
   interface InternalAxiosRequestConfig {
     _authenticationRetry?: boolean;
     _authenticationGeneration?: number;
@@ -35,7 +39,6 @@ export const apiClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
   },
 });
@@ -44,7 +47,6 @@ const refreshClient = axios.create({
   baseURL: API_BASE_URL,
   withCredentials: true,
   headers: {
-    "Content-Type": "application/json",
     Accept: "application/json",
   },
 });

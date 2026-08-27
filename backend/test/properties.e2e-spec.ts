@@ -12,6 +12,7 @@ import {
   UserStatus,
 } from '../src/generated/prisma/client.js';
 import { PropertiesService } from '../src/modules/properties/properties.service';
+import { PropertyPhotosService } from '../src/modules/property-photos/property-photos.service';
 import { PrismaService } from '../src/prisma/prisma.service';
 
 const ACCESS_SECRET =
@@ -63,6 +64,8 @@ describe('Owner properties (e2e)', () => {
   let currentRoles: RoleName[];
   let createDraft: jest.Mock;
   let listOwnedProperties: jest.Mock;
+  let uploadPhotos: jest.Mock;
+  let reorderPhotos: jest.Mock;
 
   beforeEach(async () => {
     currentRoles = [RoleName.CLIENT];
@@ -71,6 +74,27 @@ describe('Owner properties (e2e)', () => {
       items: [draftResponse],
       total: 1,
     });
+    uploadPhotos = jest
+      .fn()
+      .mockImplementation(
+        (
+          _ownerId: string,
+          _propertyId: string,
+          files: Express.Multer.File[],
+        ) =>
+          files.length
+            ? Promise.resolve([
+                {
+                  id: '33333333-3333-4333-8333-333333333333',
+                  url: 'http://localhost:3000/api/v1/media/property-photos/test.jpg',
+                  sortOrder: 0,
+                  isCover: true,
+                  altText: null,
+                },
+              ])
+            : Promise.reject(new Error('No files received')),
+      );
+    reorderPhotos = jest.fn().mockResolvedValue([]);
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
@@ -112,6 +136,14 @@ describe('Owner properties (e2e)', () => {
           canEdit: false,
           canSubmit: false,
         }),
+      })
+      .overrideProvider(PropertyPhotosService)
+      .useValue({
+        upload: uploadPhotos,
+        reorder: reorderPhotos,
+        setCover: jest.fn().mockResolvedValue([]),
+        updateAltText: jest.fn().mockResolvedValue([]),
+        remove: jest.fn().mockResolvedValue([]),
       })
       .compile();
 
@@ -197,5 +229,74 @@ describe('Owner properties (e2e)', () => {
     await request(app.getHttpServer())
       .get(`/api/v1/properties/${PROPERTY_ID}`)
       .expect(404);
+  });
+
+  it('requires authentication and OWNER before multipart photo upload', async () => {
+    await request(app.getHttpServer())
+      .post(`/api/v1/owner/properties/${PROPERTY_ID}/photos`)
+      .attach('photos', Buffer.from('fixture'), {
+        filename: 'fixture.jpg',
+        contentType: 'image/jpeg',
+      })
+      .expect(401);
+
+    const clientToken = await accessToken();
+    await request(app.getHttpServer())
+      .post(`/api/v1/owner/properties/${PROPERTY_ID}/photos`)
+      .set('Authorization', `Bearer ${clientToken}`)
+      .attach('photos', Buffer.from('fixture'), {
+        filename: 'fixture.jpg',
+        contentType: 'image/jpeg',
+      })
+      .expect(403);
+    expect(uploadPhotos).not.toHaveBeenCalled();
+  });
+
+  it('accepts the documented photos field for an authenticated owner', async () => {
+    currentRoles = [RoleName.CLIENT, RoleName.OWNER];
+    const response = await request(app.getHttpServer())
+      .post(`/api/v1/owner/properties/${PROPERTY_ID}/photos`)
+      .set('Authorization', `Bearer ${await accessToken()}`)
+      .attach('photos', Buffer.from('fixture'), {
+        filename: 'fixture.jpg',
+        contentType: 'image/jpeg',
+      })
+      .expect(201);
+
+    expect(uploadPhotos).toHaveBeenCalledWith(
+      USER_ID,
+      PROPERTY_ID,
+      expect.arrayContaining([
+        expect.objectContaining({
+          fieldname: 'photos',
+          mimetype: 'image/jpeg',
+        }),
+      ]),
+    );
+    expect(response.body).not.toHaveProperty('0.storageKey');
+  });
+
+  it('rejects an oversized multipart photo before the service', async () => {
+    currentRoles = [RoleName.CLIENT, RoleName.OWNER];
+    await request(app.getHttpServer())
+      .post(`/api/v1/owner/properties/${PROPERTY_ID}/photos`)
+      .set('Authorization', `Bearer ${await accessToken()}`)
+      .attach('photos', Buffer.alloc(5 * 1024 * 1024 + 1), {
+        filename: 'too-large.jpg',
+        contentType: 'image/jpeg',
+      })
+      .expect(413);
+    expect(uploadPhotos).not.toHaveBeenCalled();
+  });
+
+  it('rejects duplicate photo reorder IDs before the service', async () => {
+    currentRoles = [RoleName.CLIENT, RoleName.OWNER];
+    const duplicateId = '33333333-3333-4333-8333-333333333333';
+    await request(app.getHttpServer())
+      .patch(`/api/v1/owner/properties/${PROPERTY_ID}/photos/reorder`)
+      .set('Authorization', `Bearer ${await accessToken()}`)
+      .send({ photoIds: [duplicateId, duplicateId] })
+      .expect(400);
+    expect(reorderPhotos).not.toHaveBeenCalled();
   });
 });

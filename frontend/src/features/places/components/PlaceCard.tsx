@@ -17,7 +17,7 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
         <img
           className="aspect-[16/9] w-full bg-slate-100 object-cover"
           src={place.coverImage.url}
-          alt={place.coverImage.altText ?? ""}
+          alt={place.coverImage.altText ?? `Photo of ${place.name}`}
         />
       ) : (
         <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-emerald-100 to-sky-100 text-4xl font-black text-emerald-800/40">

@@ -30,6 +30,8 @@ export const propertyPhotoSchema = z.object({
   altText: z.string().nullable(),
 });
 
+export const propertyPhotoListSchema = z.array(propertyPhotoSchema);
+
 const propertyVersionSchema = z.object({
   id: z.uuid(),
   version: z.number().int().positive(),

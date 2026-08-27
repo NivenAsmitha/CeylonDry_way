@@ -2,7 +2,11 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { PRIVATE_QUERY_KEY } from "../../../services/queryClient";
 import * as propertiesService from "../services/properties.service";
-import type { PropertyDraftInput } from "../types/property.types";
+import type {
+  OwnerProperty,
+  PropertyDraftInput,
+  PropertyPhoto,
+} from "../types/property.types";
 
 export const OWNER_PROPERTIES_QUERY_KEY = [
   ...PRIVATE_QUERY_KEY,
@@ -66,9 +70,14 @@ export function useUpdatePropertyDraft(propertyId: string) {
       propertiesService.updatePropertyDraft(propertyId, input),
     onSuccess: async (property) => {
       queryClient.setQueryData(ownerPropertyQueryKey(property.id), property);
-      await queryClient.invalidateQueries({
-        queryKey: OWNER_PROPERTIES_QUERY_KEY,
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ownerPropertyQueryKey(propertyId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: OWNER_PROPERTIES_QUERY_KEY,
+        }),
+      ]);
     },
   });
 }
@@ -80,9 +89,109 @@ export function useSubmitPropertyDraft(propertyId: string) {
     mutationFn: () => propertiesService.submitPropertyDraft(propertyId),
     onSuccess: async (property) => {
       queryClient.setQueryData(ownerPropertyQueryKey(property.id), property);
-      await queryClient.invalidateQueries({
-        queryKey: OWNER_PROPERTIES_QUERY_KEY,
-      });
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ownerPropertyQueryKey(propertyId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: OWNER_PROPERTIES_QUERY_KEY,
+        }),
+      ]);
     },
   });
+}
+
+function usePhotoMutation<TInput>(
+  propertyId: string,
+  mutationFn: (input: TInput) => Promise<PropertyPhoto[]>,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn,
+    onSuccess: async (photos) => {
+      queryClient.setQueryData<OwnerProperty>(
+        ownerPropertyQueryKey(propertyId),
+        (property) =>
+          property
+            ? {
+                ...property,
+                activeVersion: { ...property.activeVersion, photos },
+              }
+            : property,
+      );
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ownerPropertyQueryKey(propertyId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: OWNER_PROPERTIES_QUERY_KEY,
+        }),
+      ]);
+    },
+  });
+}
+
+export function useUploadPropertyPhotos(propertyId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      files,
+      onProgress,
+    }: {
+      files: readonly File[];
+      onProgress?: (percentage: number) => void;
+    }) => propertiesService.uploadPropertyPhotos(propertyId, files, onProgress),
+    onSuccess: async (photos) => {
+      queryClient.setQueryData<OwnerProperty>(
+        ownerPropertyQueryKey(propertyId),
+        (property) =>
+          property
+            ? {
+                ...property,
+                activeVersion: { ...property.activeVersion, photos },
+              }
+            : property,
+      );
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ownerPropertyQueryKey(propertyId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: OWNER_PROPERTIES_QUERY_KEY,
+        }),
+      ]);
+    },
+    retry: false,
+  });
+}
+
+export function useReorderPropertyPhotos(propertyId: string) {
+  return usePhotoMutation<readonly string[]>(propertyId, (photoIds) =>
+    propertiesService.reorderPropertyPhotos(propertyId, photoIds),
+  );
+}
+
+export function useSetPropertyPhotoCover(propertyId: string) {
+  return usePhotoMutation<string>(propertyId, (photoId) =>
+    propertiesService.setPropertyPhotoCover(propertyId, photoId),
+  );
+}
+
+export function useUpdatePropertyPhotoAltText(propertyId: string) {
+  return usePhotoMutation<{ photoId: string; altText: string | null }>(
+    propertyId,
+    ({ photoId, altText }: { photoId: string; altText: string | null }) =>
+      propertiesService.updatePropertyPhotoAltText(
+        propertyId,
+        photoId,
+        altText,
+      ),
+  );
+}
+
+export function useRemovePropertyPhoto(propertyId: string) {
+  return usePhotoMutation<string>(propertyId, (photoId) =>
+    propertiesService.removePropertyPhoto(propertyId, photoId),
+  );
 }
