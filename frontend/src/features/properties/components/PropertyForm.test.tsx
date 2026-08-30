@@ -29,6 +29,32 @@ vi.mock("../hooks/useOwnerProperties", () => ({
   }),
   useRemovePropertyPhoto: () => ({ mutateAsync: vi.fn(), isPending: false }),
 }));
+vi.mock("../../maps/components/LocationPicker", () => ({
+  LocationPicker: ({
+    latitude,
+    longitude,
+    disabled,
+    onChange,
+  }: {
+    latitude: number | null;
+    longitude: number | null;
+    disabled: boolean;
+    onChange: (latitude: number, longitude: number) => void;
+  }) => (
+    <div>
+      <p>
+        Saved marker: {latitude}, {longitude}
+      </p>
+      <button
+        type="button"
+        disabled={disabled}
+        onClick={() => onChange(7.12345678, 80.87654321)}
+      >
+        Choose map location
+      </button>
+    </div>
+  ),
+}));
 
 const completeDraftWithoutPhotos: OwnerProperty = {
   id: "11111111-1111-4111-8111-111111111111",
@@ -79,9 +105,57 @@ describe("PropertyForm photo submission validation", () => {
       screen.getByRole("button", { name: "Submit for review" }),
     );
 
-    expect(await screen.findByText("Add at least one photo before submitting.")).toBeTruthy();
-    expect(screen.getByText("Photos")).toBeTruthy();
+    expect(
+      await screen.findByText("Add at least one photo before submitting."),
+    ).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { level: 2, name: "Photos" }),
+    ).toBeTruthy();
+    expect(
+      screen
+        .getByRole("button", { name: /6\s*Photos/i })
+        .getAttribute("aria-current"),
+    ).toBe("step");
     expect(hooks.update.mutateAsync).not.toHaveBeenCalled();
     expect(hooks.submit.mutateAsync).not.toHaveBeenCalled();
+  });
+
+  it("restores saved coordinates and synchronizes map selection with manual fields", async () => {
+    render(
+      <MemoryRouter initialEntries={["/owner/properties/test/edit?step=5"]}>
+        <PropertyForm property={completeDraftWithoutPhotos} />
+      </MemoryRouter>,
+    );
+
+    expect(await screen.findByText("Saved marker: 6.0329, 80.2168")).toBeTruthy();
+    const latitude = screen.getByLabelText("Latitude") as HTMLInputElement;
+    const longitude = screen.getByLabelText("Longitude") as HTMLInputElement;
+    expect(latitude.value).toBe("6.0329");
+    expect(longitude.value).toBe("80.2168");
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Choose map location" }),
+    );
+    expect(latitude.value).toBe("7.1234568");
+    expect(longitude.value).toBe("80.8765432");
+  });
+
+  it("keeps the saved location read-only for a pending property", async () => {
+    render(
+      <MemoryRouter initialEntries={["/owner/properties/test/edit?step=5"]}>
+        <PropertyForm
+          property={{
+            ...completeDraftWithoutPhotos,
+            lifecycleStatus: "PENDING",
+            canEdit: false,
+            canSubmit: false,
+          }}
+        />
+      </MemoryRouter>,
+    );
+    const picker = await screen.findByRole("button", {
+      name: "Choose map location",
+    });
+    expect(picker.hasAttribute("disabled")).toBe(true);
   });
 });

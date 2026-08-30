@@ -25,6 +25,18 @@ export function NearMeButton({
   const [message, setMessage] = useState<string | null>(null);
 
   function findNearMe(): void {
+    if (navigator.onLine === false) {
+      setMessage(
+        "You appear to be offline. Reconnect to use Near Me, or search by city or district.",
+      );
+      return;
+    }
+    if (window.isSecureContext === false) {
+      setMessage(
+        "Near Me requires a secure browser connection. Use the city or district filters instead.",
+      );
+      return;
+    }
     if (!("geolocation" in navigator)) {
       setMessage(
         "Location is not supported by this browser. Use the city or district filters instead.",
@@ -37,7 +49,21 @@ export function NearMeButton({
     navigator.geolocation.getCurrentPosition(
       (position) => {
         setIsLocating(false);
-        onLocated(position.coords.latitude, position.coords.longitude);
+        const { latitude, longitude } = position.coords;
+        if (
+          !Number.isFinite(latitude) ||
+          !Number.isFinite(longitude) ||
+          latitude < -90 ||
+          latitude > 90 ||
+          longitude < -180 ||
+          longitude > 180
+        ) {
+          setMessage(
+            "The browser returned an invalid location. Use the city or district filters instead.",
+          );
+          return;
+        }
+        onLocated(latitude, longitude);
       },
       (error) => {
         setIsLocating(false);

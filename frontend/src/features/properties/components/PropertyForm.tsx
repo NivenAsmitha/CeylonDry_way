@@ -1,5 +1,5 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useRef, useState } from "react";
 import {
   useFieldArray,
   useForm,
@@ -33,6 +33,12 @@ import {
 import { PropertyStatusBadge } from "./PropertyStatusBadge";
 import { PropertyStepIndicator } from "./PropertyStepIndicator";
 import { PropertyPhotoStep } from "./PropertyPhotoStep";
+
+const LocationPicker = lazy(() =>
+  import("../../maps/components/LocationPicker").then((module) => ({
+    default: module.LocationPicker,
+  })),
+);
 
 const WEEKDAYS = [
   "Monday",
@@ -236,6 +242,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
     handleSubmit,
     reset,
     setError,
+    setValue,
     getValues,
     trigger,
     formState: { errors, isDirty },
@@ -801,6 +808,42 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
             {currentStep === 5 ? (
               <div className="mt-6 grid gap-5 sm:grid-cols-2">
+                <Suspense
+                  fallback={
+                    <p
+                      className="sm:col-span-2 rounded-2xl bg-slate-100 p-5 text-sm font-semibold text-slate-600"
+                      role="status"
+                    >
+                      Loading location picker…
+                    </p>
+                  }
+                >
+                  <LocationPicker
+                    latitude={
+                      typeof values.latitude === "string"
+                        ? numberOrNull(values.latitude)
+                        : null
+                    }
+                    longitude={
+                      typeof values.longitude === "string"
+                        ? numberOrNull(values.longitude)
+                        : null
+                    }
+                    disabled={!isEditable}
+                    onChange={(latitude, longitude) => {
+                      setValue("latitude", latitude.toFixed(7), {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      });
+                      setValue("longitude", longitude.toFixed(7), {
+                        shouldDirty: true,
+                        shouldTouch: true,
+                        shouldValidate: true,
+                      });
+                    }}
+                  />
+                </Suspense>
                 <div className="sm:col-span-2">
                   <FormField
                     id="property-address"

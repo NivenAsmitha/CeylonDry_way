@@ -1,9 +1,16 @@
+import { lazy, Suspense } from "react";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { AmenityList } from "../../features/places/components/AmenityList";
 import { DirectionsButton } from "../../features/places/components/DirectionsButton";
 import { usePublicPlace } from "../../features/places/hooks/usePlaces";
 import { getApiErrorMessage, normalizeApiError } from "../../types/api.types";
+
+const LocationPreviewMap = lazy(() =>
+  import("../../features/maps/components/LocationPreviewMap").then((module) => ({
+    default: module.LocationPreviewMap,
+  })),
+);
 
 const weekdayNames = [
   "Sunday",
@@ -179,7 +186,10 @@ export function PlaceDetailsPage() {
             </p>
           ) : null}
           <div className="mt-5">
-            <DirectionsButton url={place.directionsUrl} />
+            <DirectionsButton
+              latitude={place.latitude}
+              longitude={place.longitude}
+            />
           </div>
           <div className="mt-6 border-t border-slate-200 pt-5">
             <h2 className="font-black text-slate-950">Verified location</h2>
@@ -187,6 +197,21 @@ export function PlaceDetailsPage() {
               {place.latitude.toFixed(6)}, {place.longitude.toFixed(6)}. The
               directions link uses these stored approved coordinates.
             </p>
+            <div className="mt-4">
+              <Suspense
+                fallback={
+                  <p className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-600" role="status">
+                    Loading location preview…
+                  </p>
+                }
+              >
+                <LocationPreviewMap
+                  latitude={place.latitude}
+                  longitude={place.longitude}
+                  title={place.name}
+                />
+              </Suspense>
+            </div>
           </div>
 
           {place.phone || place.email || place.website ? (

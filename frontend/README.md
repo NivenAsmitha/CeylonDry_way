@@ -30,3 +30,26 @@ If you are developing a production application, we recommend enabling type-aware
 ```
 
 See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+
+## Google Maps development setup
+
+Copy the Maps variable names from `.env.example` into the untracked
+`frontend/.env` file and restart Vite after changing them:
+
+```dotenv
+VITE_GOOGLE_MAPS_API_KEY=
+VITE_GOOGLE_MAPS_MAP_ID=
+```
+
+`VITE_GOOGLE_MAPS_API_KEY` is a browser key and is visible to site visitors; it
+must not be treated as a secret. Protect every deployed key in Google Cloud
+with Website/HTTP-referrer restrictions and an API restriction allowing only
+the Maps JavaScript API. The optional map ID enables Advanced Markers. This
+implementation does not use Places autocomplete or Geocoding, so do not enable
+the Places or Geocoding APIs for it.
+
+Use separate staging and production keys/referrer allowlists. Configure quotas
+and billing budget alerts before production traffic. Never commit real key
+values; `.env` files are Git-ignored. When the key is missing, rejected, or the
+browser is offline, the approved place list, manual owner coordinate fields,
+exact coordinates, and external Directions link remain usable.

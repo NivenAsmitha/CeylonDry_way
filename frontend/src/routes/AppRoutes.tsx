@@ -1,88 +1,115 @@
+import { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
+import { LoadingScreen } from "../components/common/LoadingScreen";
 import { AppLayout } from "../components/layout/AppLayout";
 import { ROLE_NAMES } from "../features/auth/types/auth.types";
-import { ProfilePage } from "../pages/account/ProfilePage";
-import { LoginPage } from "../pages/auth/LoginPage";
-import { RegisterPage } from "../pages/auth/RegisterPage";
-import { ResetPasswordPage } from "../pages/auth/ResetPasswordPage";
-import { AdminReviewersPage } from "../pages/admin/AdminReviewersPage";
-import { DeveloperAdminsPage } from "../pages/developer/DeveloperAdminsPage";
-import { UserManagementDetailPage } from "../features/user-management/components/UserManagementDetailPage";
-import { UserManagementListPage } from "../features/user-management/components/UserManagementListPage";
-import { EditPropertyPage } from "../pages/owner/EditPropertyPage";
-import { ListPropertyPage } from "../pages/owner/ListPropertyPage";
-import { OwnerPropertiesPage } from "../pages/owner/OwnerPropertiesPage";
-import { ExplorePage } from "../pages/public/ExplorePage";
-import { ForbiddenPage } from "../pages/public/ForbiddenPage";
 import { HomePage } from "../pages/public/HomePage";
-import { MapPage } from "../pages/public/MapPage";
-import { NotFoundPage } from "../pages/public/NotFoundPage";
-import { PlaceDetailsPage } from "../pages/public/PlaceDetailsPage";
-import { ReviewerListingPage } from "../pages/reviewer/ReviewerListingPage";
-import { ReviewerQueuePage } from "../pages/reviewer/ReviewerQueuePage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { RoleRoute } from "./RoleRoute";
 
+const LoginPage = lazy(() =>
+  import("../pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })),
+);
+const RegisterPage = lazy(() =>
+  import("../pages/auth/RegisterPage").then((module) => ({ default: module.RegisterPage })),
+);
+const ResetPasswordPage = lazy(() =>
+  import("../pages/auth/ResetPasswordPage").then((module) => ({ default: module.ResetPasswordPage })),
+);
+const ExplorePage = lazy(() =>
+  import("../pages/public/ExplorePage").then((module) => ({ default: module.ExplorePage })),
+);
+const MapPage = lazy(() =>
+  import("../pages/public/MapPage").then((module) => ({ default: module.MapPage })),
+);
+const PlaceDetailsPage = lazy(() =>
+  import("../pages/public/PlaceDetailsPage").then((module) => ({ default: module.PlaceDetailsPage })),
+);
+const ForbiddenPage = lazy(() =>
+  import("../pages/public/ForbiddenPage").then((module) => ({ default: module.ForbiddenPage })),
+);
+const NotFoundPage = lazy(() =>
+  import("../pages/public/NotFoundPage").then((module) => ({ default: module.NotFoundPage })),
+);
+const ProfilePage = lazy(() =>
+  import("../pages/account/ProfilePage").then((module) => ({ default: module.ProfilePage })),
+);
+const ListPropertyPage = lazy(() =>
+  import("../pages/owner/ListPropertyPage").then((module) => ({ default: module.ListPropertyPage })),
+);
+const OwnerPropertiesPage = lazy(() =>
+  import("../pages/owner/OwnerPropertiesPage").then((module) => ({ default: module.OwnerPropertiesPage })),
+);
+const EditPropertyPage = lazy(() =>
+  import("../pages/owner/EditPropertyPage").then((module) => ({ default: module.EditPropertyPage })),
+);
+const ReviewerQueuePage = lazy(() =>
+  import("../pages/reviewer/ReviewerQueuePage").then((module) => ({ default: module.ReviewerQueuePage })),
+);
+const ReviewerListingPage = lazy(() =>
+  import("../pages/reviewer/ReviewerListingPage").then((module) => ({ default: module.ReviewerListingPage })),
+);
+const UserManagementListPage = lazy(() =>
+  import("../features/user-management/components/UserManagementListPage").then((module) => ({
+    default: module.UserManagementListPage,
+  })),
+);
+const UserManagementDetailPage = lazy(() =>
+  import("../features/user-management/components/UserManagementDetailPage").then((module) => ({
+    default: module.UserManagementDetailPage,
+  })),
+);
+const AdminReviewersPage = lazy(() =>
+  import("../pages/admin/AdminReviewersPage").then((module) => ({ default: module.AdminReviewersPage })),
+);
+const DeveloperAdminsPage = lazy(() =>
+  import("../pages/developer/DeveloperAdminsPage").then((module) => ({ default: module.DeveloperAdminsPage })),
+);
+
 export function AppRoutes() {
   return (
-    <Routes>
-      <Route element={<AppLayout />}>
-        <Route index element={<HomePage />} />
-        <Route path="explore" element={<ExplorePage />} />
-        <Route path="map" element={<MapPage />} />
-        <Route path="places/:id" element={<PlaceDetailsPage />} />
-        <Route path="login" element={<LoginPage />} />
-        <Route path="register" element={<RegisterPage />} />
-        <Route path="reset-password" element={<ResetPasswordPage />} />
-        <Route path="403" element={<ForbiddenPage />} />
+    <Suspense fallback={<LoadingScreen message="Loading page…" />}>
+      <Routes>
+        <Route element={<AppLayout />}>
+          <Route index element={<HomePage />} />
+          <Route path="explore" element={<ExplorePage />} />
+          <Route path="map" element={<MapPage />} />
+          <Route path="places/:id" element={<PlaceDetailsPage />} />
+          <Route path="login" element={<LoginPage />} />
+          <Route path="register" element={<RegisterPage />} />
+          <Route path="reset-password" element={<ResetPasswordPage />} />
+          <Route path="403" element={<ForbiddenPage />} />
 
-        <Route element={<ProtectedRoute />}>
-          <Route element={<RoleRoute allowedRoles={["CLIENT"]} />}>
-            <Route path="list-property" element={<ListPropertyPage />} />
+          <Route element={<ProtectedRoute />}>
+            <Route element={<RoleRoute allowedRoles={["CLIENT"]} />}>
+              <Route path="list-property" element={<ListPropertyPage />} />
+            </Route>
+            <Route element={<RoleRoute allowedRoles={ROLE_NAMES} />}>
+              <Route path="profile" element={<ProfilePage />} />
+            </Route>
+            <Route element={<RoleRoute allowedRoles={["OWNER"]} />}>
+              <Route path="owner/properties" element={<OwnerPropertiesPage />} />
+              <Route path="owner/properties/:id/edit" element={<EditPropertyPage />} />
+            </Route>
+            <Route element={<RoleRoute allowedRoles={["REVIEWER"]} />}>
+              <Route path="reviewer" element={<ReviewerQueuePage />} />
+              <Route path="reviewer/listings/:id" element={<ReviewerListingPage />} />
+            </Route>
+            <Route element={<RoleRoute allowedRoles={["ADMIN"]} />}>
+              <Route path="admin/users" element={<UserManagementListPage scope="admin" />} />
+              <Route path="admin/users/:id" element={<UserManagementDetailPage scope="admin" />} />
+              <Route path="admin/reviewers" element={<AdminReviewersPage />} />
+            </Route>
+            <Route element={<RoleRoute allowedRoles={["DEVELOPER"]} />}>
+              <Route path="developer/users" element={<UserManagementListPage scope="developer" />} />
+              <Route path="developer/users/:id" element={<UserManagementDetailPage scope="developer" />} />
+              <Route path="developer/admins" element={<DeveloperAdminsPage />} />
+            </Route>
           </Route>
-          <Route element={<RoleRoute allowedRoles={ROLE_NAMES} />}>
-            <Route path="profile" element={<ProfilePage />} />
-          </Route>
-          <Route element={<RoleRoute allowedRoles={["OWNER"]} />}>
-            <Route path="owner/properties" element={<OwnerPropertiesPage />} />
-            <Route
-              path="owner/properties/:id/edit"
-              element={<EditPropertyPage />}
-            />
-          </Route>
-          <Route element={<RoleRoute allowedRoles={["REVIEWER"]} />}>
-            <Route path="reviewer" element={<ReviewerQueuePage />} />
-            <Route
-              path="reviewer/listings/:id"
-              element={<ReviewerListingPage />}
-            />
-          </Route>
-          <Route element={<RoleRoute allowedRoles={["ADMIN"]} />}>
-            <Route
-              path="admin/users"
-              element={<UserManagementListPage scope="admin" />}
-            />
-            <Route
-              path="admin/users/:id"
-              element={<UserManagementDetailPage scope="admin" />}
-            />
-            <Route path="admin/reviewers" element={<AdminReviewersPage />} />
-          </Route>
-          <Route element={<RoleRoute allowedRoles={["DEVELOPER"]} />}>
-            <Route
-              path="developer/users"
-              element={<UserManagementListPage scope="developer" />}
-            />
-            <Route
-              path="developer/users/:id"
-              element={<UserManagementDetailPage scope="developer" />}
-            />
-            <Route path="developer/admins" element={<DeveloperAdminsPage />} />
-          </Route>
+
+          <Route path="*" element={<NotFoundPage />} />
         </Route>
-
-        <Route path="*" element={<NotFoundPage />} />
-      </Route>
-    </Routes>
+      </Routes>
+    </Suspense>
   );
 }
