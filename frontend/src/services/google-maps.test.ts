@@ -12,10 +12,14 @@ describe("Google Maps loader", () => {
     vi.resetModules();
     loader.setOptions.mockReset();
     loader.importLibrary.mockReset();
+    delete window.gm_authFailure;
     document.documentElement.lang = "en-LK";
   });
 
-  afterEach(() => vi.unstubAllEnvs());
+  afterEach(() => {
+    delete window.gm_authFailure;
+    vi.unstubAllEnvs();
+  });
 
   it("returns a controlled unconfigured state when the browser key is missing", async () => {
     vi.stubEnv("VITE_GOOGLE_MAPS_API_KEY", "");
@@ -25,6 +29,21 @@ describe("Google Maps loader", () => {
       configured: false,
       mapId: undefined,
     });
+    await expect(maps.loadGoogleMapsLibraries()).rejects.toBeInstanceOf(
+      maps.GoogleMapsConfigurationError,
+    );
+    expect(loader.setOptions).not.toHaveBeenCalled();
+    expect(loader.importLibrary).not.toHaveBeenCalled();
+  });
+
+  it("treats the setup placeholder as unconfigured", async () => {
+    vi.stubEnv(
+      "VITE_GOOGLE_MAPS_API_KEY",
+      "AIzaSyDlW0e3ABeg54HrCPRUbu74_zizQH0yTTA",
+    );
+    const maps = await import("./google-maps");
+
+    expect(maps.getGoogleMapsConfiguration().configured).toBe(false);
     await expect(maps.loadGoogleMapsLibraries()).rejects.toBeInstanceOf(
       maps.GoogleMapsConfigurationError,
     );
@@ -69,11 +88,28 @@ describe("Google Maps loader", () => {
     expect(loader.importLibrary).toHaveBeenCalledTimes(3);
   });
 
+  it("turns the Google authentication callback into a safe load error", async () => {
+    vi.stubEnv("VITE_GOOGLE_MAPS_API_KEY", "browser-key-for-test");
+    loader.importLibrary.mockReturnValue(new Promise(() => undefined));
+    const maps = await import("./google-maps");
+
+    const load = maps.loadGoogleMapsLibraries();
+    window.gm_authFailure?.();
+
+    await expect(load).rejects.toBeInstanceOf(
+      maps.GoogleMapsAuthenticationError,
+    );
+  });
+
   it("converts loader rejection to a safe error without logging the key", async () => {
     vi.stubEnv("VITE_GOOGLE_MAPS_API_KEY", "never-log-this-key");
     loader.importLibrary.mockRejectedValue(new Error("provider details"));
-    const consoleError = vi.spyOn(console, "error").mockImplementation(() => undefined);
-    const consoleLog = vi.spyOn(console, "log").mockImplementation(() => undefined);
+    const consoleError = vi
+      .spyOn(console, "error")
+      .mockImplementation(() => undefined);
+    const consoleLog = vi
+      .spyOn(console, "log")
+      .mockImplementation(() => undefined);
     const maps = await import("./google-maps");
 
     await expect(maps.loadGoogleMapsLibraries()).rejects.toBeInstanceOf(

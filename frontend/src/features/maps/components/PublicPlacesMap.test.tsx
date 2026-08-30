@@ -110,6 +110,26 @@ describe("PublicPlacesMap", () => {
     );
   });
 
+  it("still renders an empty map centered on Sri Lanka", async () => {
+    render(
+      <PublicPlacesMap
+        places={[]}
+        selectedPropertyId={null}
+        onSelect={vi.fn()}
+      />,
+    );
+
+    await waitFor(() => expect(mapInstances).toHaveLength(1));
+    await waitFor(() =>
+      expect(mapInstances[0].setCenter).toHaveBeenCalledWith({
+        lat: 7.8731,
+        lng: 80.7718,
+      }),
+    );
+    expect(mapInstances[0].setZoom).toHaveBeenCalledWith(7);
+    expect(markerInstances).toHaveLength(0);
+  });
+
   it("pans to a result selected from the accessible list", async () => {
     const { rerender } = render(
       <PublicPlacesMap

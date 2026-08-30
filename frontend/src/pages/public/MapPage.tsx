@@ -206,7 +206,7 @@ export function MapPage() {
           <Suspense
             fallback={
               <div
-                className="grid min-h-80 place-items-center rounded-3xl bg-slate-100 text-sm font-semibold text-slate-600 lg:min-h-[38rem]"
+                className="grid min-h-[31.25rem] place-items-center rounded-3xl bg-slate-100 text-sm font-semibold text-slate-600 lg:min-h-[38rem]"
                 role="status"
               >
                 Loading map module…

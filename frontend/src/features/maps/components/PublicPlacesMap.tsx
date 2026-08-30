@@ -147,7 +147,7 @@ export function PublicPlacesMap({
 
   return (
     <section
-      className="relative min-h-80 overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-sm lg:min-h-[38rem]"
+      className="relative min-h-[31.25rem] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-sm lg:min-h-[38rem]"
       aria-label="Verified places map"
     >
       <div className="absolute inset-0" ref={containerRef} />
