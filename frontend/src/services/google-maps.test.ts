@@ -36,11 +36,8 @@ describe("Google Maps loader", () => {
     expect(loader.importLibrary).not.toHaveBeenCalled();
   });
 
-  it("treats the setup placeholder as unconfigured", async () => {
-    vi.stubEnv(
-      "VITE_GOOGLE_MAPS_API_KEY",
-      "AIzaSyDlW0e3ABeg54HrCPRUbu74_zizQH0yTTA",
-    );
+  it("treats documented setup placeholders as unconfigured", async () => {
+    vi.stubEnv("VITE_GOOGLE_MAPS_API_KEY", "PASTE_NEW_RESTRICTED_KEY_HERE");
     const maps = await import("./google-maps");
 
     expect(maps.getGoogleMapsConfiguration().configured).toBe(false);

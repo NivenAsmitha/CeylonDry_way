@@ -37,11 +37,15 @@ export class GoogleMapsAuthenticationError extends Error {
   }
 }
 
-const GOOGLE_MAPS_API_KEY_PLACEHOLDER =
-  "AIzaSyDlW0e3ABeg54HrCPRUbu74_zizQH0yTTA";
+const GOOGLE_MAPS_PLACEHOLDER_VALUES = new Set([
+  "YOUR_GOOGLE_MAPS_API_KEY",
+  "PASTE_NEW_RESTRICTED_KEY_HERE",
+  "your-google-maps-api-key",
+]);
 const configuredApiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY?.trim() ?? "";
-const apiKey =
-  configuredApiKey === GOOGLE_MAPS_API_KEY_PLACEHOLDER ? "" : configuredApiKey;
+const apiKey = GOOGLE_MAPS_PLACEHOLDER_VALUES.has(configuredApiKey)
+  ? ""
+  : configuredApiKey;
 const configuredMapId =
   import.meta.env.VITE_GOOGLE_MAPS_MAP_ID?.trim() || undefined;
 let optionsInitialized = false;
