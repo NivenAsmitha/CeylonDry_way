@@ -39,7 +39,7 @@ export function PlaceFilters({
       <div className="flex items-center justify-between gap-3">
         <h2 className="text-lg font-black text-slate-950">Filter places</h2>
         <button
-          className="min-h-11 text-sm font-bold text-emerald-800 hover:text-emerald-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          className="min-h-11 text-sm font-bold text-brand-800 hover:text-brand-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           type="button"
           onClick={() =>
             onChange({
@@ -61,7 +61,7 @@ export function PlaceFilters({
         <label className="text-sm font-bold text-slate-700">
           District
           <input
-            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.district ?? ""}
             maxLength={100}
             onChange={(event) =>
@@ -72,7 +72,7 @@ export function PlaceFilters({
         <label className="text-sm font-bold text-slate-700">
           City
           <input
-            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.city ?? ""}
             maxLength={100}
             onChange={(event) =>
@@ -83,7 +83,7 @@ export function PlaceFilters({
         <label className="text-sm font-bold text-slate-700">
           Place type
           <select
-            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.propertyType ?? ""}
             onChange={(event) =>
               onChange({
@@ -103,7 +103,7 @@ export function PlaceFilters({
         <label className="text-sm font-bold text-slate-700">
           Cost
           <select
-            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-emerald-700 focus:ring-2 focus:ring-emerald-100"
+            className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={
               query.isFree === undefined ? "" : query.isFree ? "true" : "false"
             }
@@ -120,7 +120,7 @@ export function PlaceFilters({
 
       <label className="mt-5 flex min-h-11 items-center gap-3 rounded-xl bg-slate-50 px-3 text-sm font-bold text-slate-800">
         <input
-          className="size-5 accent-emerald-700"
+          className="size-5 accent-brand-700"
           type="checkbox"
           checked={query.wheelchairAccessible === true}
           onChange={(event) =>
@@ -143,7 +143,7 @@ export function PlaceFilters({
                 key={amenity.code}
               >
                 <input
-                  className="size-4 accent-emerald-700"
+                  className="size-4 accent-brand-700"
                   type="checkbox"
                   checked={selectedAmenities.includes(amenity.code)}
                   onChange={() => toggleAmenity(amenity.code)}

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef } from "react";
-import { useSearchParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { NearMeButton } from "../../features/places/components/NearMeButton";
 import { PlaceFilters } from "../../features/places/components/PlaceFilters";
@@ -67,26 +67,37 @@ export function ExplorePage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-      <div className="max-w-3xl">
-        <p className="text-sm font-black uppercase tracking-[0.16em] text-emerald-700">
-          Verified public directory
-        </p>
-        <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
-          Explore accessible places
-        </h1>
-        <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-          Search approved facilities across Sri Lanka. Every result reflects
-          the latest version accepted by a reviewer.
-        </p>
+      <div className="flex flex-wrap items-end justify-between gap-6">
+        <div className="max-w-3xl">
+          <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
+            Verified public directory
+          </p>
+          <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
+            Explore accessible places
+          </h1>
+          <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+            Search approved facilities across Sri Lanka. Every result reflects
+            the latest version accepted by a reviewer.
+          </p>
+        </div>
+        <Link
+          className="inline-flex min-h-12 items-center rounded-xl border border-brand-200 bg-brand-50 px-5 font-black text-brand-900 transition hover:border-brand-300 hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+          to={`/map${searchParams.size ? `?${searchParams.toString()}` : ""}`}
+        >
+          View on map&nbsp; →
+        </Link>
       </div>
 
-      <div className="mt-8 rounded-3xl bg-emerald-950 p-4 shadow-lg sm:p-6">
-        <label className="block text-sm font-bold text-emerald-50" htmlFor="place-search">
+      <div className="mt-8 rounded-3xl border border-brand-100 bg-white p-4 shadow-lg shadow-brand-950/5 sm:p-6">
+        <label
+          className="block text-sm font-bold text-slate-700"
+          htmlFor="place-search"
+        >
           Search by place, city, district, address, or description
         </label>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row">
           <input
-            className="min-h-12 flex-1 rounded-xl border-0 bg-white px-4 text-slate-950 outline-none ring-2 ring-transparent focus:ring-amber-300"
+            className="min-h-12 flex-1 rounded-xl border border-slate-200 bg-slate-50 px-4 text-slate-950 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-2 focus:ring-brand-100"
             id="place-search"
             key={query.search ?? ""}
             type="search"
@@ -99,10 +110,12 @@ export function ExplorePage() {
             Sort places
           </label>
           <select
-            className="min-h-12 rounded-xl border-0 bg-white px-4 font-bold text-slate-800 outline-none focus:ring-2 focus:ring-amber-300"
+            className="min-h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 font-bold text-slate-800 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-2 focus:ring-brand-100"
             id="place-sort"
             value={query.sort}
-            onChange={(event) => updateFilters({ sort: event.target.value, page: 1 })}
+            onChange={(event) =>
+              updateFilters({ sort: event.target.value, page: 1 })
+            }
           >
             <option value="newest">Newest verified</option>
             <option value="name_asc">Name A-Z</option>
@@ -116,10 +129,10 @@ export function ExplorePage() {
       </div>
 
       <div
-        className="mt-6 rounded-2xl border border-sky-200 bg-sky-50 p-4"
+        className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-4"
         id="near-me"
       >
-        <p className="mb-3 max-w-2xl text-sm leading-6 text-sky-950">
+        <p className="mb-3 max-w-2xl text-sm leading-6 text-brand-950">
           Use your location once to sort verified places by distance. It is
           requested only when you click and is never stored or tracked.
         </p>
@@ -162,7 +175,9 @@ export function ExplorePage() {
                 {data ? `${data.pagination.total} places found` : "Places"}
               </h2>
               {placesQuery.isFetching && data ? (
-                <p className="mt-1 text-sm text-slate-500">Updating results...</p>
+                <p className="mt-1 text-sm text-slate-500">
+                  Updating results...
+                </p>
               ) : null}
             </div>
           </div>
@@ -201,18 +216,23 @@ export function ExplorePage() {
                   className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-40"
                   type="button"
                   disabled={data.pagination.page <= 1}
-                  onClick={() => updateFilters({ page: data.pagination.page - 1 })}
+                  onClick={() =>
+                    updateFilters({ page: data.pagination.page - 1 })
+                  }
                 >
                   Previous
                 </button>
                 <span className="text-sm font-semibold text-slate-600">
-                  Page {data.pagination.page} of {Math.max(data.pagination.totalPages, 1)}
+                  Page {data.pagination.page} of{" "}
+                  {Math.max(data.pagination.totalPages, 1)}
                 </span>
                 <button
                   className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-40"
                   type="button"
                   disabled={data.pagination.page >= data.pagination.totalPages}
-                  onClick={() => updateFilters({ page: data.pagination.page + 1 })}
+                  onClick={() =>
+                    updateFilters({ page: data.pagination.page + 1 })
+                  }
                 >
                   Next
                 </button>
@@ -220,10 +240,13 @@ export function ExplorePage() {
             </>
           ) : (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
-              <h2 className="text-xl font-black text-slate-950">No places match yet</h2>
+              <h2 className="text-xl font-black text-slate-950">
+                No places match yet
+              </h2>
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
                 Try a broader city or district, remove an amenity, or increase
-                the Near Me radius. Private and unapproved listings never appear here.
+                the Near Me radius. Private and unapproved listings never appear
+                here.
               </p>
             </div>
           )}

@@ -57,7 +57,7 @@ export function PropertyListingFab() {
   return (
     <>
       <button
-        className="group fixed bottom-5 right-5 z-30 grid size-14 place-items-center rounded-full bg-emerald-700 text-3xl font-light text-white shadow-[0_16px_45px_rgba(6,78,59,0.35)] transition hover:-translate-y-1 hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-700 sm:bottom-7 sm:right-7 sm:size-16"
+        className="group fixed bottom-5 right-5 z-30 grid size-14 place-items-center rounded-full bg-brand-700 text-3xl font-light text-white shadow-[0_16px_45px_rgba(6,78,59,0.35)] transition hover:-translate-y-1 hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-700 sm:bottom-7 sm:right-7 sm:size-16"
         type="button"
         aria-label="List a property"
         aria-haspopup="dialog"
@@ -89,7 +89,7 @@ export function PropertyListingFab() {
           >
             <div className="flex items-start justify-between gap-4">
               <div>
-                <p className="text-xs font-black uppercase tracking-[0.18em] text-emerald-700">
+                <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-700">
                   Help travellers plan better
                 </p>
                 <h2
@@ -100,7 +100,7 @@ export function PropertyListingFab() {
                 </h2>
               </div>
               <button
-                className="grid size-11 shrink-0 place-items-center rounded-full bg-slate-100 text-xl text-slate-700 hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+                className="grid size-11 shrink-0 place-items-center rounded-full bg-slate-100 text-xl text-slate-700 hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                 type="button"
                 aria-label="Close property listing dialog"
                 ref={closeRef}
@@ -118,7 +118,7 @@ export function PropertyListingFab() {
             {isAuthenticated && canList ? (
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 <Link
-                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-5 text-center font-black text-white hover:bg-emerald-800"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand-700 px-5 text-center font-black text-white hover:bg-brand-800"
                   to="/list-property"
                   onClick={() => setOpen(false)}
                 >
@@ -142,7 +142,7 @@ export function PropertyListingFab() {
             ) : (
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
                 <Link
-                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-5 font-black text-white"
+                  className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand-700 px-5 font-black text-white"
                   to="/login"
                   state={{ from: "/list-property" }}
                   onClick={() => setOpen(false)}

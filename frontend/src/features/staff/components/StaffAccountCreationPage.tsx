@@ -91,7 +91,7 @@ export function StaffAccountCreationPage({
           ) : null}
           {createdAccount ? (
             <div
-              className="mb-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-950"
+              className="mb-6 rounded-2xl border border-brand-200 bg-brand-50 p-4 text-sm text-brand-950"
               role="status"
             >
               <p className="font-black">Account created securely</p>
@@ -150,7 +150,7 @@ export function StaffAccountCreationPage({
               />
             </div>
             <button
-              className="min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 font-black text-white hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-60"
+              className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-black text-white hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"
               type="submit"
               disabled={mutation.isPending}
             >

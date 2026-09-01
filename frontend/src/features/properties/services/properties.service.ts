@@ -156,3 +156,7 @@ export async function removePropertyPhoto(
   );
   return propertyPhotoListSchema.parse(response.data);
 }
+
+export async function deleteOwnedProperty(propertyId: string): Promise<void> {
+  await apiClient.delete(`/owner/properties/${propertyId}`);
+}

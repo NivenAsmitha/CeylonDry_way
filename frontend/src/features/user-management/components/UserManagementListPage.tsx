@@ -111,7 +111,7 @@ export function UserManagementListPage({
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
             {scope === "admin" ? "Admin workspace" : "Developer workspace"}
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
@@ -123,7 +123,7 @@ export function UserManagementListPage({
         </div>
         {showCreateAction ? (
           <Link
-            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-700 px-5 font-bold text-emerald-800"
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-brand-700 px-5 font-bold text-brand-800"
             to={scope === "admin" ? "/admin/reviewers" : "/developer/admins"}
           >
             {scope === "admin" ? "Create reviewer" : "Create admin"}
@@ -140,7 +140,7 @@ export function UserManagementListPage({
             Search by name or email
           </label>
           <input
-            className="min-h-12 flex-1 rounded-xl border border-slate-300 px-4 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100"
+            className="min-h-12 flex-1 rounded-xl border border-slate-300 px-4 outline-none focus:border-brand-700 focus:ring-4 focus:ring-brand-100"
             defaultValue={query.search ?? ""}
             id="user-search"
             name="search"
@@ -203,7 +203,7 @@ export function UserManagementListPage({
           </label>
           <label className="flex min-h-11 items-end gap-3 pb-2 text-sm font-bold">
             <input
-              className="size-5 accent-emerald-700"
+              className="size-5 accent-brand-700"
               type="checkbox"
               checked={query.includeDeleted}
               onChange={(event) =>

@@ -4,7 +4,7 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function getSafeRedirectPath(
   locationState: unknown,
-  fallback = "/profile",
+  fallback = "/",
 ): string {
   if (!isRecord(locationState) || typeof locationState.from !== "string") {
     return fallback;
@@ -22,6 +22,13 @@ export function getSafeRedirectPath(
   }
 
   return destination;
+}
+
+export function getRoleLandingPath(roles: readonly string[]): string {
+  if (roles.includes("DEVELOPER")) return "/developer/operations";
+  if (roles.includes("ADMIN")) return "/admin/reports";
+  if (roles.includes("REVIEWER")) return "/reviewer";
+  return "/";
 }
 
 export function hasRegistrationSuccessNotice(locationState: unknown): boolean {

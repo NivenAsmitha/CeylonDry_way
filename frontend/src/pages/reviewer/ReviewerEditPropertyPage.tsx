@@ -20,7 +20,7 @@ export function ReviewerEditPropertyPage() {
           message={getApiErrorMessage(property.error)}
         />
         <Link
-          className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-emerald-700 px-5 font-bold text-white"
+          className="mt-6 inline-flex min-h-11 items-center rounded-xl bg-brand-700 px-5 font-bold text-white"
           to="/reviewer/properties"
         >
           Return to manually added properties
@@ -33,7 +33,7 @@ export function ReviewerEditPropertyPage() {
     <section className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
             Reviewer workspace
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">

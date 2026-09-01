@@ -1,5 +1,19 @@
 @import "tailwindcss";
 
+@theme {
+  --color-brand-50: #eef8ff;
+  --color-brand-100: #d9efff;
+  --color-brand-200: #bce3fa;
+  --color-brand-300: #85cef2;
+  --color-brand-400: #48b3e6;
+  --color-brand-500: #2097d2;
+  --color-brand-600: #147bb4;
+  --color-brand-700: #12628f;
+  --color-brand-800: #154f73;
+  --color-brand-900: #173f5a;
+  --color-brand-950: #0e283b;
+}
+
 :root {
   font-family:
     Inter,
@@ -9,8 +23,8 @@
     BlinkMacSystemFont,
     "Segoe UI",
     sans-serif;
-  color: #17202a;
-  background-color: #f8fafc;
+  color: #172033;
+  background-color: #f7fafc;
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 }
@@ -24,6 +38,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   overflow-x: hidden;
+  background-color: #f7fafc;
 }
 
 button,
@@ -33,6 +48,6 @@ select {
 }
 
 ::selection {
-  color: #022c22;
-  background: #fde68a;
+  color: #0e283b;
+  background: #fef3c7;
 }

@@ -47,6 +47,16 @@ function renderNavbar() {
 }
 
 describe("Navbar profile control", () => {
+  it("shows About instead of a separate Map tab in public navigation", () => {
+    renderNavbar();
+
+    expect(screen.getByRole("link", { name: "Home" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "Explore" })).toBeTruthy();
+    expect(screen.getByRole("link", { name: "About" })).toBeTruthy();
+    expect(screen.queryByRole("link", { name: "Map" })).toBeNull();
+    expect(screen.queryByRole("link", { name: "My Properties" })).toBeNull();
+  });
+
   it("opens the full profile page directly without a settings dropdown", async () => {
     renderNavbar();
 

@@ -245,3 +245,13 @@ export function useRemovePropertyPhoto(
     propertiesService.removePropertyPhoto(propertyId, photoId, workflow),
   );
 }
+
+export function useDeleteOwnedProperty() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (propertyId: string) =>
+      propertiesService.deleteOwnedProperty(propertyId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({ queryKey: OWNER_PROPERTIES_QUERY_KEY }),
+  });
+}

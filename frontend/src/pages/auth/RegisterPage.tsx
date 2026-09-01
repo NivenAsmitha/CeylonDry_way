@@ -57,18 +57,18 @@ export function RegisterPage() {
   return (
     <section className="px-4 py-10 sm:px-6 sm:py-14">
       <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="bg-emerald-950 p-7 text-white sm:p-10">
+        <aside className="bg-brand-950 p-7 text-white sm:p-10">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
             Join Ceylon DryWay
           </p>
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
             Create your account.
           </h1>
-          <p className="mt-4 leading-7 text-emerald-100">
+          <p className="mt-4 leading-7 text-brand-100">
             Your new account receives the safe Client role automatically.
             Additional roles are never selected during public registration.
           </p>
-          <ul className="mt-8 space-y-4 text-sm text-emerald-50">
+          <ul className="mt-8 space-y-4 text-sm text-brand-50">
             <li className="flex gap-3">
               <span aria-hidden="true" className="text-amber-300">
                 ✓
@@ -90,7 +90,7 @@ export function RegisterPage() {
             <p className="mt-2 text-sm text-slate-600">
               Already registered?{" "}
               <Link
-                className="font-bold text-emerald-700 underline decoration-emerald-300 underline-offset-4 hover:text-emerald-900"
+                className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
                 to="/login"
               >
                 Sign in
@@ -152,7 +152,7 @@ export function RegisterPage() {
               />
             </div>
             <button
-              className="min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 font-extrabold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-60"
+              className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-extrabold text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"
               type="submit"
               disabled={isSubmitting}
             >

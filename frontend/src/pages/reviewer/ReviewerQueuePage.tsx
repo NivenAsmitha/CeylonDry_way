@@ -67,7 +67,7 @@ export function ReviewerQueuePage() {
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
             Reviewer workspace
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
@@ -85,7 +85,7 @@ export function ReviewerQueuePage() {
             Queue status
           </label>
           <select
-            className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+            className="min-h-12 rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
             id="queue-status"
             value={status}
             onChange={(event) =>
@@ -103,7 +103,7 @@ export function ReviewerQueuePage() {
 
       {successMessage ? (
         <div
-          className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 font-semibold text-emerald-950"
+          className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-4 font-semibold text-brand-950"
           role="status"
         >
           {successMessage}
@@ -162,7 +162,7 @@ export function ReviewerQueuePage() {
                     </p>
                   </div>
                   <Link
-                    className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-slate-950 px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+                    className="inline-flex min-h-11 shrink-0 items-center justify-center rounded-xl bg-slate-950 px-5 text-sm font-bold text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                     to={`/reviewer/listings/${item.propertyId}`}
                   >
                     Open review

@@ -73,6 +73,11 @@ export function PublicPlacesMap({
           mapTypeControl: false,
           streetViewControl: false,
           fullscreenControl: true,
+          zoomControl: true,
+          scaleControl: true,
+          clickableIcons: false,
+          gestureHandling: "cooperative",
+          controlSize: 34,
         });
         setStatus("ready");
       })
@@ -147,7 +152,7 @@ export function PublicPlacesMap({
 
   return (
     <section
-      className="relative min-h-[31.25rem] overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-sm lg:min-h-[38rem]"
+      className="relative min-h-[34rem] overflow-hidden rounded-[1.4rem] bg-slate-100 lg:min-h-[44rem]"
       aria-label="Verified places map"
     >
       <div className="absolute inset-0" ref={containerRef} />
@@ -159,17 +164,28 @@ export function PublicPlacesMap({
           Loading Google Maps…
         </div>
       ) : null}
+      {status === "ready" ? (
+        <div className="pointer-events-none absolute left-4 top-4 rounded-full border border-white/70 bg-white/90 px-3.5 py-2 text-xs font-black text-slate-800 shadow-lg backdrop-blur">
+          {places.length} verified {places.length === 1 ? "place" : "places"}
+        </div>
+      ) : null}
       {status === "error" ? (
-        <div className="absolute inset-0 grid place-items-center bg-amber-50 p-6 text-center">
-          <div>
-            <p className="font-black text-amber-950" role="status">
+        <div className="absolute inset-0 grid place-items-center bg-[radial-gradient(circle_at_top,#ecfdf5,#f8fafc_55%)] p-6 text-center">
+          <div className="max-w-lg rounded-3xl border border-slate-200 bg-white p-8 shadow-xl">
+            <span
+              className="mx-auto grid size-12 place-items-center rounded-full bg-amber-100 text-xl"
+              aria-hidden="true"
+            >
+              !
+            </span>
+            <p className="mt-4 text-xl font-black text-slate-950" role="status">
               Map unavailable
             </p>
-            <p className="mt-2 max-w-md text-sm leading-6 text-amber-900">
+            <p className="mt-2 max-w-md text-sm leading-6 text-slate-600">
               {errorMessage}
             </p>
             <button
-              className="mt-4 min-h-11 rounded-xl border border-amber-300 bg-white px-4 text-sm font-bold text-amber-950"
+              className="mt-5 min-h-11 rounded-xl bg-slate-950 px-5 text-sm font-bold text-white"
               type="button"
               onClick={() => {
                 setStatus("loading");

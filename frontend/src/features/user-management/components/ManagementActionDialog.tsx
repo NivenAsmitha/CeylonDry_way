@@ -56,7 +56,7 @@ export function ManagementActionDialog({
         </label>
         <textarea
           autoFocus
-          className="mt-2 min-h-28 w-full rounded-xl border border-slate-300 p-3 outline-none focus:border-emerald-700 focus:ring-4 focus:ring-emerald-100"
+          className="mt-2 min-h-28 w-full rounded-xl border border-slate-300 p-3 outline-none focus:border-brand-700 focus:ring-4 focus:ring-brand-100"
           id="action-reason"
           maxLength={1000}
           minLength={5}
@@ -86,7 +86,7 @@ export function ManagementActionDialog({
             className={`min-h-11 rounded-xl px-5 font-black text-white disabled:opacity-50 ${
               tone === "danger"
                 ? "bg-red-700 hover:bg-red-800"
-                : "bg-emerald-700 hover:bg-emerald-800"
+                : "bg-brand-700 hover:bg-brand-800"
             }`}
             type="submit"
             disabled={isPending || reason.trim().length < 5}

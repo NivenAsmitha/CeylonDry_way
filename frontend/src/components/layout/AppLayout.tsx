@@ -9,9 +9,9 @@ export function AppLayout() {
   const { initializationError } = useAuth();
 
   return (
-    <div className="flex min-h-screen flex-col bg-stone-50 text-slate-900">
+    <div className="flex min-h-screen flex-col bg-[#f7fafc] text-slate-900">
       <a
-        className="sr-only z-50 rounded-md bg-white px-4 py-3 font-semibold text-emerald-900 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
+        className="sr-only z-50 rounded-md bg-white px-4 py-3 font-semibold text-brand-900 focus:not-sr-only focus:fixed focus:left-4 focus:top-4"
         href="#main-content"
       >
         Skip to content

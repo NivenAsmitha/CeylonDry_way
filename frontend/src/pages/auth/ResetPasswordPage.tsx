@@ -27,7 +27,7 @@ export function ResetPasswordPage() {
   return (
     <section className="mx-auto w-full max-w-xl px-4 py-12 sm:px-6 sm:py-16">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+        <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
           Account recovery
         </p>
         <h1 className="mt-2 text-3xl font-black text-slate-950">
@@ -47,7 +47,7 @@ export function ResetPasswordPage() {
           </div>
         ) : mutation.isSuccess ? (
           <div
-            className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-5 text-emerald-950"
+            className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-brand-950"
             role="status"
           >
             <p className="font-black">Password updated</p>
@@ -55,7 +55,7 @@ export function ResetPasswordPage() {
               Your old sessions are now invalid. Sign in with the new password.
             </p>
             <Link
-              className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-emerald-700 px-5 font-bold text-white"
+              className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-brand-700 px-5 font-bold text-white"
               to="/login"
             >
               Go to login
@@ -86,7 +86,7 @@ export function ResetPasswordPage() {
               <ErrorMessage message={getApiErrorMessage(mutation.error)} />
             ) : null}
             <button
-              className="min-h-12 w-full rounded-xl bg-emerald-700 px-5 font-black text-white disabled:opacity-50"
+              className="min-h-12 w-full rounded-xl bg-brand-700 px-5 font-black text-white disabled:opacity-50"
               type="submit"
               disabled={mutation.isPending}
             >

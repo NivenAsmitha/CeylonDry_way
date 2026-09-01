@@ -21,7 +21,7 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
           alt={place.coverImage.altText ?? `Photo of ${place.name}`}
         />
       ) : (
-        <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-emerald-100 to-sky-100 px-6 text-center font-black text-emerald-900/60">
+        <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-brand-100 to-brand-100 px-6 text-center font-black text-brand-900/60">
           No approved photo yet
         </div>
       )}
@@ -30,7 +30,7 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
           <span className="rounded-full bg-slate-100 px-2.5 py-1 text-slate-700">
             {displayType(place.propertyType)}
           </span>
-          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-emerald-800">
+          <span className="rounded-full bg-brand-100 px-2.5 py-1 text-brand-800">
             Verified
           </span>
           <span className="ml-auto text-slate-600">
@@ -43,7 +43,7 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
         </div>
         <h2 className="mt-4 text-xl font-black tracking-tight text-slate-950">
           <Link
-            className="rounded-sm outline-none after:absolute focus-visible:ring-2 focus-visible:ring-emerald-700"
+            className="rounded-sm outline-none after:absolute focus-visible:ring-2 focus-visible:ring-brand-700"
             to={`/places/${place.propertyId}`}
           >
             {place.name}
@@ -62,7 +62,7 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
           <AmenityList amenities={place.amenities.slice(0, 3)} />
         </div>
         <Link
-          className="mt-auto inline-flex min-h-11 items-center pt-5 text-sm font-extrabold text-emerald-800 hover:text-emerald-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          className="mt-auto inline-flex min-h-11 items-center pt-5 text-sm font-extrabold text-brand-800 hover:text-brand-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={`/places/${place.propertyId}`}
         >
           View place details <span aria-hidden="true">&nbsp;&rarr;</span>

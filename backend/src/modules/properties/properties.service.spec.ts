@@ -33,6 +33,9 @@ type PropertyVersionUpdateManyMock = jest.MockedFunction<
 type UserRoleUpsertMock = jest.MockedFunction<
   (args: Prisma.UserRoleUpsertArgs) => Promise<unknown>
 >;
+type AuditLogCreateMock = jest.MockedFunction<
+  (args: Prisma.AuditLogCreateArgs) => Promise<unknown>
+>;
 
 function createPropertyRecord(
   status: PropertyStatus,
@@ -104,7 +107,7 @@ describe('PropertiesService', () => {
   let transactionPropertyCreate: jest.Mock;
   let transactionVersionCreate: jest.Mock;
   let transactionUserFindFirst: jest.Mock;
-  let transactionAuditCreate: jest.Mock;
+  let transactionAuditCreate: AuditLogCreateMock;
   let transactionRunner: jest.Mock;
 
   beforeEach(() => {
@@ -124,7 +127,8 @@ describe('PropertiesService', () => {
       id: USER_ID,
       roles: [{ role: { name: RoleName.CLIENT } }],
     });
-    transactionAuditCreate = jest.fn().mockResolvedValue({ id: 'audit-id' });
+    transactionAuditCreate = jest.fn() as AuditLogCreateMock;
+    transactionAuditCreate.mockResolvedValue({ id: 'audit-id' });
 
     const transaction = {
       user: {
@@ -280,7 +284,11 @@ describe('PropertiesService', () => {
     ).rejects.toBeInstanceOf(NotFoundException);
     expect(mainPropertyFindFirst).toHaveBeenCalledWith(
       expect.objectContaining({
-        where: { id: PROPERTY_ID, ownerUserId: OTHER_USER_ID },
+        where: {
+          id: PROPERTY_ID,
+          ownerUserId: OTHER_USER_ID,
+          lifecycleStatus: { not: PropertyStatus.ARCHIVED },
+        },
       }),
     );
   });
@@ -451,6 +459,49 @@ describe('PropertiesService', () => {
       service.updateOwnedProperty(USER_ID, PROPERTY_ID, { name: 'Denied' }),
     ).rejects.toBeInstanceOf(ConflictException);
     expect(transactionVersionUpdateMany).not.toHaveBeenCalled();
+  });
+
+  it('soft-removes an owned property and records the original status', async () => {
+    transactionPropertyFindFirst.mockResolvedValue({
+      id: PROPERTY_ID,
+      lifecycleStatus: PropertyStatus.APPROVED,
+      activeVersionId: VERSION_ID,
+    });
+
+    await service.archiveOwnedProperty(USER_ID, PROPERTY_ID);
+
+    expect(transactionPropertyUpdateMany).toHaveBeenCalledWith({
+      where: {
+        id: PROPERTY_ID,
+        ownerUserId: USER_ID,
+        lifecycleStatus: PropertyStatus.APPROVED,
+      },
+      data: { lifecycleStatus: PropertyStatus.ARCHIVED },
+    });
+    const auditCall: unknown = transactionAuditCreate.mock.calls[0]?.[0];
+    const auditData =
+      isRecord(auditCall) && isRecord(auditCall.data)
+        ? auditCall.data
+        : undefined;
+    expect(auditData?.actorId).toBe(USER_ID);
+    expect(auditData?.action).toBe('OWNER_PROPERTY_REMOVED');
+    expect(auditData?.targetId).toBe(PROPERTY_ID);
+    expect(auditData?.beforeSummary).toEqual({
+      lifecycleStatus: PropertyStatus.APPROVED,
+      activeVersionId: VERSION_ID,
+    });
+    expect(auditData?.afterSummary).toEqual({
+      lifecycleStatus: PropertyStatus.ARCHIVED,
+    });
+  });
+
+  it('does not reveal whether another owner property exists during deletion', async () => {
+    transactionPropertyFindFirst.mockResolvedValue(null);
+
+    await expect(
+      service.archiveOwnedProperty(OTHER_USER_ID, PROPERTY_ID),
+    ).rejects.toBeInstanceOf(NotFoundException);
+    expect(transactionPropertyUpdateMany).not.toHaveBeenCalled();
   });
 
   it('maps only the active owner-safe version without private version history', async () => {

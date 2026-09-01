@@ -37,7 +37,7 @@ export const FormField = forwardRef<HTMLInputElement, FormFieldProps>(
           className={`min-h-12 w-full rounded-xl border bg-white px-4 py-3 text-slate-950 shadow-sm outline-none transition placeholder:text-slate-400 focus:ring-4 ${
             error
               ? "border-red-400 focus:border-red-500 focus:ring-red-100"
-              : "border-slate-300 focus:border-emerald-600 focus:ring-emerald-100"
+              : "border-slate-300 focus:border-brand-600 focus:ring-brand-100"
           } ${className}`}
         />
         {hint ? (

@@ -131,7 +131,7 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
           Decision
         </label>
         <select
-          className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           id="review-decision"
           {...register("decision", {
             onChange: () => {
@@ -161,7 +161,7 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
           className={`min-h-32 w-full rounded-xl border bg-white px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 ${
             errors.reason
               ? "border-red-400 focus-visible:outline-red-700"
-              : "border-slate-300 focus-visible:outline-emerald-700"
+              : "border-slate-300 focus-visible:outline-brand-700"
           }`}
           id="review-reason"
           maxLength={1000}
@@ -185,7 +185,7 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
 
       <label className="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 font-semibold text-amber-950">
         <input
-          className="mt-1 size-5 accent-emerald-700"
+          className="mt-1 size-5 accent-brand-700"
           type="checkbox"
           checked={confirmed}
           onChange={(event) => {
@@ -205,7 +205,7 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
       ) : null}
 
       <button
-        className="min-h-12 w-full rounded-xl bg-slate-950 px-5 font-extrabold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-50"
+        className="min-h-12 w-full rounded-xl bg-slate-950 px-5 font-extrabold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-50"
         type="submit"
         disabled={!confirmed || mutation.isPending}
       >

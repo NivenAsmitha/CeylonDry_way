@@ -12,6 +12,9 @@ vi.mock("../features/auth/hooks/useAuth", () => ({
 vi.mock("../pages/public/MapPage", () => ({
   MapPage: () => <h1>Lazy map route</h1>,
 }));
+vi.mock("../pages/public/AboutPage", () => ({
+  AboutPage: () => <h1>Lazy about route</h1>,
+}));
 vi.mock("../pages/auth/LoginPage", () => ({
   LoginPage: () => <h1>Lazy login route</h1>,
 }));
@@ -56,12 +59,23 @@ describe("lazy application routes", () => {
   it("loads a public lazy route during direct navigation with an accessible fallback", async () => {
     renderRoutes("/map");
     expect(screen.getByRole("status").textContent).toContain("Loading page");
-    expect(await screen.findByRole("heading", { name: "Lazy map route" })).toBeTruthy();
+    expect(
+      await screen.findByRole("heading", { name: "Lazy map route" }),
+    ).toBeTruthy();
+  });
+
+  it("loads the public About page during direct navigation", async () => {
+    renderRoutes("/about");
+    expect(
+      await screen.findByRole("heading", { name: "Lazy about route" }),
+    ).toBeTruthy();
   });
 
   it("preserves ProtectedRoute redirect behavior for a direct owner URL", async () => {
     renderRoutes("/owner/properties");
-    expect(await screen.findByRole("heading", { name: "Lazy login route" })).toBeTruthy();
+    expect(
+      await screen.findByRole("heading", { name: "Lazy login route" }),
+    ).toBeTruthy();
     await waitFor(() =>
       expect(screen.getByTestId("route-location").textContent).toBe("/login"),
     );

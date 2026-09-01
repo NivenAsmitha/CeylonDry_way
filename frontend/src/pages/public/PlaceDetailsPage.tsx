@@ -6,11 +6,14 @@ import { DirectionsButton } from "../../features/places/components/DirectionsBut
 import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import { usePublicPlace } from "../../features/places/hooks/usePlaces";
 import { getApiErrorMessage, normalizeApiError } from "../../types/api.types";
+import { ReportPlaceButton } from "../../features/reports/ReportPlaceButton";
 
 const LocationPreviewMap = lazy(() =>
-  import("../../features/maps/components/LocationPreviewMap").then((module) => ({
-    default: module.LocationPreviewMap,
-  })),
+  import("../../features/maps/components/LocationPreviewMap").then(
+    (module) => ({
+      default: module.LocationPreviewMap,
+    }),
+  ),
 );
 
 const weekdayNames = [
@@ -61,7 +64,7 @@ export function PlaceDetailsPage() {
           }
         />
         <Link
-          className="mt-6 inline-flex min-h-11 items-center font-bold text-emerald-800"
+          className="mt-6 inline-flex min-h-11 items-center font-bold text-brand-800"
           to="/explore"
         >
           &larr; Back to Explore
@@ -76,7 +79,7 @@ export function PlaceDetailsPage() {
   return (
     <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
       <Link
-        className="inline-flex min-h-11 items-center text-sm font-bold text-emerald-800"
+        className="inline-flex min-h-11 items-center text-sm font-bold text-brand-800"
         to="/explore"
       >
         &larr; Back to Explore
@@ -94,7 +97,7 @@ export function PlaceDetailsPage() {
           ))}
         </div>
       ) : (
-        <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-emerald-100 to-sky-100 px-6 text-center text-xl font-black text-emerald-900/60">
+        <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-brand-100 to-brand-100 px-6 text-center text-xl font-black text-brand-900/60">
           No approved photos are available for this place yet
         </div>
       )}
@@ -102,14 +105,14 @@ export function PlaceDetailsPage() {
       <div className="mt-8 grid gap-8 lg:grid-cols-[1fr_20rem]">
         <article>
           <div className="flex flex-wrap items-center gap-2 text-xs font-black">
-            <span className="rounded-full bg-emerald-100 px-3 py-1 text-emerald-800">
+            <span className="rounded-full bg-brand-100 px-3 py-1 text-brand-800">
               Verified
             </span>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
               {place.propertyType.replaceAll("_", " ")}
             </span>
             {place.wheelchairAccessible ? (
-              <span className="rounded-full bg-sky-100 px-3 py-1 text-sky-800">
+              <span className="rounded-full bg-brand-100 px-3 py-1 text-brand-800">
                 Wheelchair accessible
               </span>
             ) : null}
@@ -201,7 +204,10 @@ export function PlaceDetailsPage() {
             <div className="mt-4">
               <Suspense
                 fallback={
-                  <p className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-600" role="status">
+                  <p
+                    className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-600"
+                    role="status"
+                  >
                     Loading location preview…
                   </p>
                 }
@@ -222,7 +228,7 @@ export function PlaceDetailsPage() {
                 {place.phone ? (
                   <p>
                     <a
-                      className="text-emerald-800 underline"
+                      className="text-brand-800 underline"
                       href={`tel:${place.phone}`}
                     >
                       {place.phone}
@@ -232,7 +238,7 @@ export function PlaceDetailsPage() {
                 {place.email ? (
                   <p>
                     <a
-                      className="text-emerald-800 underline"
+                      className="text-brand-800 underline"
                       href={`mailto:${place.email}`}
                     >
                       {place.email}
@@ -242,7 +248,7 @@ export function PlaceDetailsPage() {
                 {place.website ? (
                   <p>
                     <a
-                      className="text-emerald-800 underline"
+                      className="text-brand-800 underline"
                       href={place.website}
                       target="_blank"
                       rel="noopener noreferrer"
@@ -255,8 +261,8 @@ export function PlaceDetailsPage() {
             </div>
           ) : null}
 
-          <div className="mt-6 border-t border-slate-200 pt-5 text-sm text-slate-500">
-            Report a problem will be available in a future phase.
+          <div className="mt-6 border-t border-slate-200 pt-5">
+            <ReportPlaceButton propertyId={place.propertyId} />
           </div>
         </aside>
       </div>

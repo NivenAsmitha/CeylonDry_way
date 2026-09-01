@@ -8,71 +8,128 @@ import { ProtectedRoute } from "./ProtectedRoute";
 import { RoleRoute } from "./RoleRoute";
 
 const LoginPage = lazy(() =>
-  import("../pages/auth/LoginPage").then((module) => ({ default: module.LoginPage })),
+  import("../pages/auth/LoginPage").then((module) => ({
+    default: module.LoginPage,
+  })),
 );
 const RegisterPage = lazy(() =>
-  import("../pages/auth/RegisterPage").then((module) => ({ default: module.RegisterPage })),
+  import("../pages/auth/RegisterPage").then((module) => ({
+    default: module.RegisterPage,
+  })),
 );
 const ResetPasswordPage = lazy(() =>
-  import("../pages/auth/ResetPasswordPage").then((module) => ({ default: module.ResetPasswordPage })),
+  import("../pages/auth/ResetPasswordPage").then((module) => ({
+    default: module.ResetPasswordPage,
+  })),
 );
 const ExplorePage = lazy(() =>
-  import("../pages/public/ExplorePage").then((module) => ({ default: module.ExplorePage })),
+  import("../pages/public/ExplorePage").then((module) => ({
+    default: module.ExplorePage,
+  })),
+);
+const AboutPage = lazy(() =>
+  import("../pages/public/AboutPage").then((module) => ({
+    default: module.AboutPage,
+  })),
 );
 const MapPage = lazy(() =>
-  import("../pages/public/MapPage").then((module) => ({ default: module.MapPage })),
+  import("../pages/public/MapPage").then((module) => ({
+    default: module.MapPage,
+  })),
 );
 const PlaceDetailsPage = lazy(() =>
-  import("../pages/public/PlaceDetailsPage").then((module) => ({ default: module.PlaceDetailsPage })),
+  import("../pages/public/PlaceDetailsPage").then((module) => ({
+    default: module.PlaceDetailsPage,
+  })),
 );
 const ForbiddenPage = lazy(() =>
-  import("../pages/public/ForbiddenPage").then((module) => ({ default: module.ForbiddenPage })),
+  import("../pages/public/ForbiddenPage").then((module) => ({
+    default: module.ForbiddenPage,
+  })),
 );
 const NotFoundPage = lazy(() =>
-  import("../pages/public/NotFoundPage").then((module) => ({ default: module.NotFoundPage })),
+  import("../pages/public/NotFoundPage").then((module) => ({
+    default: module.NotFoundPage,
+  })),
 );
 const ProfilePage = lazy(() =>
-  import("../pages/account/ProfilePage").then((module) => ({ default: module.ProfilePage })),
+  import("../pages/account/ProfilePage").then((module) => ({
+    default: module.ProfilePage,
+  })),
 );
 const ListPropertyPage = lazy(() =>
-  import("../pages/owner/ListPropertyPage").then((module) => ({ default: module.ListPropertyPage })),
+  import("../pages/owner/ListPropertyPage").then((module) => ({
+    default: module.ListPropertyPage,
+  })),
 );
 const OwnerPropertiesPage = lazy(() =>
-  import("../pages/owner/OwnerPropertiesPage").then((module) => ({ default: module.OwnerPropertiesPage })),
+  import("../pages/owner/OwnerPropertiesPage").then((module) => ({
+    default: module.OwnerPropertiesPage,
+  })),
 );
 const EditPropertyPage = lazy(() =>
-  import("../pages/owner/EditPropertyPage").then((module) => ({ default: module.EditPropertyPage })),
+  import("../pages/owner/EditPropertyPage").then((module) => ({
+    default: module.EditPropertyPage,
+  })),
 );
 const ReviewerQueuePage = lazy(() =>
-  import("../pages/reviewer/ReviewerQueuePage").then((module) => ({ default: module.ReviewerQueuePage })),
+  import("../pages/reviewer/ReviewerQueuePage").then((module) => ({
+    default: module.ReviewerQueuePage,
+  })),
 );
 const ReviewerListingPage = lazy(() =>
-  import("../pages/reviewer/ReviewerListingPage").then((module) => ({ default: module.ReviewerListingPage })),
+  import("../pages/reviewer/ReviewerListingPage").then((module) => ({
+    default: module.ReviewerListingPage,
+  })),
 );
 const ReviewerCreatePropertyPage = lazy(() =>
-  import("../pages/reviewer/ReviewerCreatePropertyPage").then((module) => ({ default: module.ReviewerCreatePropertyPage })),
+  import("../pages/reviewer/ReviewerCreatePropertyPage").then((module) => ({
+    default: module.ReviewerCreatePropertyPage,
+  })),
 );
 const ReviewerEditPropertyPage = lazy(() =>
-  import("../pages/reviewer/ReviewerEditPropertyPage").then((module) => ({ default: module.ReviewerEditPropertyPage })),
+  import("../pages/reviewer/ReviewerEditPropertyPage").then((module) => ({
+    default: module.ReviewerEditPropertyPage,
+  })),
 );
 const UserManagementListPage = lazy(() =>
-  import("../features/user-management/components/UserManagementListPage").then((module) => ({
-    default: module.UserManagementListPage,
-  })),
+  import("../features/user-management/components/UserManagementListPage").then(
+    (module) => ({
+      default: module.UserManagementListPage,
+    }),
+  ),
 );
 const UserManagementDetailPage = lazy(() =>
-  import("../features/user-management/components/UserManagementDetailPage").then((module) => ({
-    default: module.UserManagementDetailPage,
-  })),
+  import("../features/user-management/components/UserManagementDetailPage").then(
+    (module) => ({
+      default: module.UserManagementDetailPage,
+    }),
+  ),
 );
 const AdminReviewersPage = lazy(() =>
-  import("../pages/admin/AdminReviewersPage").then((module) => ({ default: module.AdminReviewersPage })),
+  import("../pages/admin/AdminReviewersPage").then((module) => ({
+    default: module.AdminReviewersPage,
+  })),
 );
 const AdminPropertiesPage = lazy(() =>
-  import("../pages/admin/AdminPropertiesPage").then((module) => ({ default: module.AdminPropertiesPage })),
+  import("../pages/admin/AdminPropertiesPage").then((module) => ({
+    default: module.AdminPropertiesPage,
+  })),
+);
+const AdminReportsPage = lazy(() =>
+  import("../pages/admin/AdminReportsPage").then((module) => ({
+    default: module.AdminReportsPage,
+  })),
 );
 const DeveloperAdminsPage = lazy(() =>
-  import("../pages/developer/DeveloperAdminsPage").then((module) => ({ default: module.DeveloperAdminsPage })),
+  import("../pages/developer/DeveloperAdminsPage").then((module) => ({
+    default: module.DeveloperAdminsPage,
+  })),
+);
+const DeveloperOperationsPage = lazy(() =>
+  import("../pages/developer/DeveloperOperationsPage").then((module) => ({
+    default: module.DeveloperOperationsPage,
+  })),
 );
 
 export function AppRoutes() {
@@ -82,6 +139,7 @@ export function AppRoutes() {
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
           <Route path="explore" element={<ExplorePage />} />
+          <Route path="about" element={<AboutPage />} />
           <Route path="map" element={<MapPage />} />
           <Route path="places/:id" element={<PlaceDetailsPage />} />
           <Route path="login" element={<LoginPage />} />
@@ -97,26 +155,67 @@ export function AppRoutes() {
               <Route path="profile" element={<ProfilePage />} />
             </Route>
             <Route element={<RoleRoute allowedRoles={["OWNER"]} />}>
-              <Route path="owner/properties" element={<OwnerPropertiesPage />} />
-              <Route path="owner/properties/:id/edit" element={<EditPropertyPage />} />
+              <Route
+                path="owner/properties"
+                element={<OwnerPropertiesPage />}
+              />
+              <Route
+                path="owner/properties/:id/edit"
+                element={<EditPropertyPage />}
+              />
             </Route>
             <Route element={<RoleRoute allowedRoles={["REVIEWER"]} />}>
               <Route path="reviewer" element={<ReviewerQueuePage />} />
-              <Route path="reviewer/listings/:id" element={<ReviewerListingPage />} />
-              <Route path="reviewer/properties" element={<OwnerPropertiesPage workflow="reviewer" />} />
-              <Route path="reviewer/properties/new" element={<ReviewerCreatePropertyPage />} />
-              <Route path="reviewer/properties/:id/edit" element={<ReviewerEditPropertyPage />} />
+              <Route
+                path="reviewer/listings/:id"
+                element={<ReviewerListingPage />}
+              />
+              <Route
+                path="reviewer/properties"
+                element={<OwnerPropertiesPage workflow="reviewer" />}
+              />
+              <Route
+                path="reviewer/properties/new"
+                element={<ReviewerCreatePropertyPage />}
+              />
+              <Route
+                path="reviewer/properties/:id/edit"
+                element={<ReviewerEditPropertyPage />}
+              />
             </Route>
             <Route element={<RoleRoute allowedRoles={["ADMIN"]} />}>
-              <Route path="admin/users" element={<UserManagementListPage scope="admin" />} />
-              <Route path="admin/users/:id" element={<UserManagementDetailPage scope="admin" />} />
+              <Route
+                path="admin/users"
+                element={<UserManagementListPage scope="admin" />}
+              />
+              <Route
+                path="admin/users/:id"
+                element={<UserManagementDetailPage scope="admin" />}
+              />
               <Route path="admin/reviewers" element={<AdminReviewersPage />} />
-              <Route path="admin/properties" element={<AdminPropertiesPage />} />
+              <Route
+                path="admin/properties"
+                element={<AdminPropertiesPage />}
+              />
+              <Route path="admin/reports" element={<AdminReportsPage />} />
             </Route>
             <Route element={<RoleRoute allowedRoles={["DEVELOPER"]} />}>
-              <Route path="developer/users" element={<UserManagementListPage scope="developer" />} />
-              <Route path="developer/users/:id" element={<UserManagementDetailPage scope="developer" />} />
-              <Route path="developer/admins" element={<DeveloperAdminsPage />} />
+              <Route
+                path="developer/users"
+                element={<UserManagementListPage scope="developer" />}
+              />
+              <Route
+                path="developer/users/:id"
+                element={<UserManagementDetailPage scope="developer" />}
+              />
+              <Route
+                path="developer/admins"
+                element={<DeveloperAdminsPage />}
+              />
+              <Route
+                path="developer/operations"
+                element={<DeveloperOperationsPage />}
+              />
             </Route>
           </Route>
 

@@ -1,7 +1,7 @@
 import type { UserStatus } from "../../auth/types/auth.types";
 
 const statusStyles: Record<UserStatus, string> = {
-  ACTIVE: "border-emerald-200 bg-emerald-50 text-emerald-800",
+  ACTIVE: "border-green-200 bg-green-50 text-green-800",
   SUSPENDED: "border-amber-200 bg-amber-50 text-amber-900",
   DISABLED: "border-slate-300 bg-slate-100 text-slate-700",
 };

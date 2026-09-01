@@ -12,15 +12,19 @@ import {
 import { normalizeApiError } from "../../types/api.types";
 import {
   getSafeRedirectPath,
+  getRoleLandingPath,
   hasRegistrationSuccessNotice,
 } from "../../utils/navigation";
 
 export function LoginPage() {
-  const { login, isAuthenticated } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
   const locationState: unknown = location.state;
-  const destination = getSafeRedirectPath(locationState);
+  const destination = getSafeRedirectPath(
+    locationState,
+    getRoleLandingPath(user?.roles ?? []),
+  );
   const registrationSucceeded = hasRegistrationSuccessNotice(locationState);
   const passwordChanged =
     typeof locationState === "object" &&
@@ -45,8 +49,14 @@ export function LoginPage() {
     setServerError(null);
 
     try {
-      await login(values);
-      navigate(destination, { replace: true });
+      const authenticatedUser = await login(values);
+      navigate(
+        getSafeRedirectPath(
+          locationState,
+          getRoleLandingPath(authenticatedUser.roles),
+        ),
+        { replace: true },
+      );
     } catch (error: unknown) {
       const normalizedError = normalizeApiError(error);
       setServerError(
@@ -60,7 +70,7 @@ export function LoginPage() {
   return (
     <section className="px-4 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-md rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl sm:p-9">
-        <p className="text-xs font-bold uppercase tracking-[0.18em] text-emerald-700">
+        <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
           Welcome back
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
@@ -69,7 +79,7 @@ export function LoginPage() {
         <p className="mt-3 text-sm leading-6 text-slate-600">
           New to Ceylon DryWay?{" "}
           <Link
-            className="font-bold text-emerald-700 underline decoration-emerald-300 underline-offset-4 hover:text-emerald-900"
+            className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
             to="/register"
           >
             Create an account
@@ -78,7 +88,7 @@ export function LoginPage() {
 
         {registrationSucceeded ? (
           <div
-            className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900"
+            className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900"
             role="status"
           >
             Account created successfully. Sign in with your new credentials.
@@ -87,7 +97,7 @@ export function LoginPage() {
 
         {passwordChanged ? (
           <div
-            className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900"
+            className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900"
             role="status"
           >
             Password changed successfully. Sign in with your new password.
@@ -125,7 +135,7 @@ export function LoginPage() {
             Forgot password? Recovery is coming in a later phase.
           </p>
           <button
-            className="min-h-12 w-full rounded-xl bg-emerald-700 px-5 py-3 font-extrabold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-60"
+            className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-extrabold text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"
             type="submit"
             disabled={isSubmitting}
           >

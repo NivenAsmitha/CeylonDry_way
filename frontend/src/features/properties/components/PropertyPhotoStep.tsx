@@ -70,7 +70,7 @@ function PhotoCard({
           alt={photo.altText || `Photo of ${propertyName}`}
         />
         {photo.isCover ? (
-          <span className="absolute left-3 top-3 rounded-full bg-emerald-700 px-3 py-1 text-xs font-black text-white">
+          <span className="absolute left-3 top-3 rounded-full bg-brand-700 px-3 py-1 text-xs font-black text-white">
             Cover photo
           </span>
         ) : null}
@@ -112,7 +112,7 @@ function PhotoCard({
             Move later
           </button>
           <button
-            className="min-h-10 rounded-lg border border-emerald-700 px-2 text-sm font-bold text-emerald-800 disabled:opacity-40"
+            className="min-h-10 rounded-lg border border-brand-700 px-2 text-sm font-bold text-brand-800 disabled:opacity-40"
             type="button"
             disabled={disabled || photo.isCover}
             onClick={onCover}
@@ -304,7 +304,7 @@ export function PropertyPhotoStep({
           </div>
           <div className="mt-4 flex flex-wrap gap-3">
             <button
-              className="min-h-11 rounded-xl bg-emerald-700 px-5 font-black text-white disabled:opacity-50"
+              className="min-h-11 rounded-xl bg-brand-700 px-5 font-black text-white disabled:opacity-50"
               type="button"
               disabled={isBusy}
               onClick={() => void uploadSelected()}

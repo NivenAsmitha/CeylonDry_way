@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   HttpCode,
   HttpStatus,
@@ -131,6 +132,24 @@ export class PropertiesController {
       currentUser.id,
       propertyId,
       submitPropertyDto,
+    );
+  }
+
+  @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Roles(RoleName.OWNER)
+  @ApiOperation({
+    summary: 'Remove an owned property from the active workspace',
+  })
+  @ApiNotFoundResponse({ description: 'Property not found' })
+  @ApiConflictResponse({ description: 'Property is already removed' })
+  async deleteOwnedProperty(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) propertyId: string,
+  ): Promise<void> {
+    await this.propertiesService.archiveOwnedProperty(
+      currentUser.id,
+      propertyId,
     );
   }
 }

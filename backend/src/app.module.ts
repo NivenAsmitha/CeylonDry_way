@@ -9,6 +9,7 @@ import { DeveloperModule } from './modules/developer/developer.module';
 import { PlacesModule } from './modules/places/places.module';
 import { PropertiesModule } from './modules/properties/properties.module';
 import { ReviewerModule } from './modules/reviewer/reviewer.module';
+import { ReportsModule } from './modules/reports/reports.module';
 import { UsersModule } from './modules/users/users.module';
 import { UserManagementModule } from './modules/user-management/user-management.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -33,6 +34,7 @@ import { PrismaModule } from './prisma/prisma.module';
     UserManagementModule,
     PropertiesModule,
     ReviewerModule,
+    ReportsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

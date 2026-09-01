@@ -191,7 +191,7 @@ function TextAreaField({
         className={`w-full rounded-xl border bg-white px-4 py-3 shadow-sm outline-none focus:ring-4 ${
           error
             ? "border-red-400 focus:ring-red-100"
-            : "border-slate-300 focus:border-emerald-600 focus:ring-emerald-100"
+            : "border-slate-300 focus:border-brand-600 focus:ring-brand-100"
         }`}
         id={id}
         rows={rows}
@@ -503,7 +503,7 @@ export function PropertyForm({
       ) : null}
       {isDirty && isEditable ? (
         <div
-          className="rounded-2xl border border-sky-200 bg-sky-50 p-3 text-sm font-semibold text-sky-950"
+          className="rounded-2xl border border-brand-200 bg-brand-50 p-3 text-sm font-semibold text-brand-950"
           role="status"
         >
           You have unsaved changes. Save before leaving this page.
@@ -517,7 +517,7 @@ export function PropertyForm({
       ) : null}
       {saveSucceeded ? (
         <div
-          className="rounded-2xl border border-emerald-200 bg-emerald-50 p-3 text-sm font-semibold text-emerald-950"
+          className="rounded-2xl border border-brand-200 bg-brand-50 p-3 text-sm font-semibold text-brand-950"
           role="status"
         >
           Draft saved to your account.
@@ -535,7 +535,7 @@ export function PropertyForm({
           className="space-y-6 disabled:opacity-75"
         >
           <div className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm sm:p-8">
-            <p className="text-sm font-bold text-emerald-700">
+            <p className="text-sm font-bold text-brand-700">
               Step {currentStep} of 7
             </p>
             <h2 className="mt-1 text-2xl font-black text-slate-950">
@@ -552,7 +552,7 @@ export function PropertyForm({
                     Property type
                   </label>
                   <select
-                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 focus:border-emerald-600 focus:outline-none focus:ring-4 focus:ring-emerald-100"
+                    className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 py-3 focus:border-brand-600 focus:outline-none focus:ring-4 focus:ring-brand-100"
                     id="property-type"
                     aria-invalid={Boolean(errors.propertyType)}
                     {...register("propertyType")}
@@ -610,11 +610,11 @@ export function PropertyForm({
                   <div className="mt-5 grid gap-3 sm:grid-cols-2">
                     {amenitiesQuery.data?.map((amenity) => (
                       <label
-                        className="flex min-h-14 items-start gap-3 rounded-xl border border-slate-200 p-4 hover:border-emerald-400"
+                        className="flex min-h-14 items-start gap-3 rounded-xl border border-slate-200 p-4 hover:border-brand-400"
                         key={amenity.code}
                       >
                         <input
-                          className="mt-1 size-5 accent-emerald-700"
+                          className="mt-1 size-5 accent-brand-700"
                           type="checkbox"
                           value={amenity.code}
                           {...register("amenityCodes")}
@@ -646,7 +646,7 @@ export function PropertyForm({
                 <div className="rounded-2xl bg-slate-50 p-4">
                   <label className="flex items-center gap-3 font-bold">
                     <input
-                      className="size-5 accent-emerald-700"
+                      className="size-5 accent-brand-700"
                       type="checkbox"
                       {...register("isFree")}
                     />
@@ -681,7 +681,7 @@ export function PropertyForm({
                       </p>
                     </div>
                     <button
-                      className="min-h-11 rounded-xl border border-emerald-700 px-4 py-2 text-sm font-bold text-emerald-800"
+                      className="min-h-11 rounded-xl border border-brand-700 px-4 py-2 text-sm font-bold text-brand-800"
                       type="button"
                       disabled={openingHours.fields.length >= 7}
                       onClick={() =>
@@ -969,7 +969,7 @@ export function PropertyForm({
                 {property?.canSubmit ? (
                   <label className="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 font-semibold text-amber-950">
                     <input
-                      className="mt-1 size-5 accent-emerald-700"
+                      className="mt-1 size-5 accent-brand-700"
                       type="checkbox"
                       checked={submissionConfirmed}
                       onChange={(event) =>
@@ -999,7 +999,7 @@ export function PropertyForm({
           <div className="flex flex-col gap-3 sm:flex-row">
             {isEditable ? (
               <button
-                className="min-h-12 rounded-xl border border-emerald-700 px-5 py-3 font-extrabold text-emerald-800 disabled:cursor-wait disabled:opacity-60"
+                className="min-h-12 rounded-xl border border-brand-700 px-5 py-3 font-extrabold text-brand-800 disabled:cursor-wait disabled:opacity-60"
                 type="submit"
                 disabled={isSaving || submitMutation.isPending}
               >
@@ -1012,7 +1012,7 @@ export function PropertyForm({
             ) : null}
             {currentStep < 7 && isEditable ? (
               <button
-                className="min-h-12 rounded-xl bg-emerald-700 px-6 py-3 font-extrabold text-white disabled:cursor-wait disabled:opacity-60"
+                className="min-h-12 rounded-xl bg-brand-700 px-6 py-3 font-extrabold text-white disabled:cursor-wait disabled:opacity-60"
                 type="button"
                 disabled={isSaving}
                 onClick={() => void goToNextStep()}

@@ -197,7 +197,7 @@ export function UserManagementDetailPage({
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <Link
-        className="inline-flex min-h-11 items-center font-bold text-emerald-800"
+        className="inline-flex min-h-11 items-center font-bold text-brand-800"
         to={`/${scope}/users`}
       >
         ← Back to users
@@ -205,7 +205,7 @@ export function UserManagementDetailPage({
 
       <div className="mt-4 flex flex-col gap-5 rounded-3xl bg-slate-950 p-6 text-white sm:p-8 lg:flex-row lg:items-start lg:justify-between">
         <div className="min-w-0">
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-300">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-300">
             Account details
           </p>
           <h1 className="mt-2 break-words text-3xl font-black">{user.name}</h1>
@@ -233,7 +233,7 @@ export function UserManagementDetailPage({
 
       {success ? (
         <div
-          className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 font-semibold text-emerald-950"
+          className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-4 font-semibold text-brand-950"
           role="status"
         >
           {success}
@@ -294,7 +294,7 @@ export function UserManagementDetailPage({
                 />
               ) : null}
               <button
-                className="min-h-12 rounded-xl bg-emerald-700 px-6 font-black text-white disabled:opacity-50"
+                className="min-h-12 rounded-xl bg-brand-700 px-6 font-black text-white disabled:opacity-50"
                 type="submit"
                 disabled={profileMutation.isPending || !can("EDIT_PROFILE")}
               >
@@ -309,7 +309,7 @@ export function UserManagementDetailPage({
               <ol className="mt-5 space-y-4">
                 {user.auditHistory.map((event) => (
                   <li
-                    className="border-l-2 border-emerald-200 pl-4"
+                    className="border-l-2 border-brand-200 pl-4"
                     key={event.id}
                   >
                     <p className="font-black capitalize">
@@ -406,7 +406,7 @@ export function UserManagementDetailPage({
               ) : null}
               {can("RESTORE") ? (
                 <button
-                  className="min-h-11 rounded-xl bg-emerald-700 px-4 font-bold text-white"
+                  className="min-h-11 rounded-xl bg-brand-700 px-4 font-bold text-white"
                   type="button"
                   onClick={() => setDialogAction("restore")}
                 >

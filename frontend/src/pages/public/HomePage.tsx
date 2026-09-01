@@ -8,18 +8,47 @@ import { usePublicPlaces } from "../../features/places/hooks/usePlaces";
 const discoveryHighlights = [
   {
     number: "01",
-    title: "Verified before publishing",
-    text: "Trained reviewers check listing details and locations before travellers see them.",
+    title: "Search nearby",
+    text: "Search by city, district or your current location to find restrooms along your route.",
+    tone: "border-brand-100 bg-brand-50",
+    badge: "bg-brand-600",
   },
   {
     number: "02",
-    title: "Useful accessibility detail",
-    text: "Compare facilities, access notes, opening hours and practical amenities in one place.",
+    title: "Check the details",
+    text: "Compare opening hours, cost, accessibility, amenities and recent photos before you go.",
+    tone: "border-amber-100 bg-amber-50",
+    badge: "bg-amber-500",
   },
   {
     number: "03",
-    title: "Built around real journeys",
-    text: "Use the live map, nearby search and exact directions to plan with more confidence.",
+    title: "Get directions",
+    text: "Open the exact location on the map and continue your journey with greater confidence.",
+    tone: "border-cyan-100 bg-cyan-50",
+    badge: "bg-cyan-600",
+  },
+] as const;
+
+const projectBenefits = [
+  {
+    label: "For locals",
+    title: "Make everyday journeys easier",
+    text: "Quickly find a nearby restroom while commuting, shopping or travelling between towns.",
+  },
+  {
+    label: "For tourists",
+    title: "Explore Sri Lanka with confidence",
+    text: "Find reliable restroom information even when the area and local facilities are unfamiliar.",
+  },
+  {
+    label: "For families",
+    title: "Choose the right facilities",
+    text: "Check for baby-changing areas, handwashing facilities, parking and other useful amenities.",
+  },
+  {
+    label: "For accessible travel",
+    title: "Know before you arrive",
+    text: "Use wheelchair-access information and detailed access notes to plan with fewer surprises.",
   },
 ] as const;
 
@@ -41,47 +70,35 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative isolate min-h-[calc(100svh-4.25rem)] overflow-hidden bg-emerald-950 text-white">
-        <video
-          className="absolute inset-0 -z-30 size-full object-cover"
-          autoPlay
-          loop
-          muted
-          playsInline
-          preload="metadata"
-          poster={heroImage}
-          aria-hidden="true"
-        >
-          <source src="/videos/home-hero-demo.mp4" type="video/mp4" />
-        </video>
-        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,44,34,0.96)_0%,rgba(2,44,34,0.82)_43%,rgba(2,44,34,0.28)_100%)]" />
-        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_20%,rgba(253,224,71,0.18),transparent_32%)]" />
-
-        <div className="mx-auto flex min-h-[calc(100svh-4.25rem)] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
-          <div className="max-w-4xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-50 backdrop-blur-md">
-              <span className="size-2 rounded-full bg-amber-300 shadow-[0_0_0_5px_rgba(253,224,71,0.15)]" />
-              Reviewer-verified across Sri Lanka
+      <section className="relative isolate overflow-hidden bg-gradient-to-br from-white via-brand-50 to-amber-50">
+        <div className="absolute -left-36 top-24 -z-10 size-80 rounded-full bg-brand-200/55 blur-3xl" />
+        <div className="absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-amber-200/50 blur-3xl" />
+        <div className="mx-auto grid min-h-[46rem] max-w-7xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8">
+          <div>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-brand-200 bg-white/85 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-brand-900 shadow-sm backdrop-blur">
+              <span className="size-2 rounded-full bg-brand-500 shadow-[0_0_0_5px_rgba(14,165,233,0.12)]" />
+              Sri Lanka&apos;s restroom finder
             </div>
 
-            <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-8xl">
-              Travel with fewer
-              <span className="block text-amber-300">unknowns.</span>
+            <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
+              Find a restroom.
+              <span className="block text-brand-700">Continue the journey.</span>
             </h1>
-            <p className="mt-7 max-w-2xl text-base leading-8 text-emerald-50/90 sm:text-xl">
-              Find verified facilities, accessibility information and precise
-              locations for journeys that feel easier from the start.
+            <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl">
+              Ceylon DryWay helps locals and tourists across Sri Lanka quickly
+              find nearby restroom facilities for a more comfortable and
+              convenient journey.
             </p>
 
             <form
-              className="mt-9 max-w-3xl rounded-[1.5rem] border border-white/20 bg-white/95 p-2 shadow-2xl shadow-slate-950/30 backdrop-blur-xl sm:flex"
+              className="mt-9 max-w-2xl rounded-2xl border border-slate-200 bg-white p-2 shadow-xl shadow-slate-900/8 sm:flex"
               onSubmit={submitSearch}
             >
               <label className="sr-only" htmlFor="home-place-search">
                 Search places
               </label>
               <div className="flex min-h-14 flex-1 items-center gap-3 px-4">
-                <span className="text-xl text-emerald-700" aria-hidden="true">
+                <span className="text-xl text-brand-700" aria-hidden="true">
                   ⌕
                 </span>
                 <input
@@ -95,10 +112,10 @@ export function HomePage() {
                 />
               </div>
               <button
-                className="min-h-14 w-full rounded-[1.1rem] bg-emerald-700 px-7 font-black text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 sm:w-auto"
+                className="min-h-14 w-full rounded-xl bg-brand-700 px-7 font-black text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 sm:w-auto"
                 type="submit"
               >
-                Explore places
+                Find a facility
               </button>
             </form>
 
@@ -117,52 +134,100 @@ export function HomePage() {
                 }}
               />
               <Link
-                className="inline-flex min-h-11 items-center rounded-xl border border-white/25 bg-white/10 px-4 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+                className="inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-black text-brand-800 transition hover:bg-white"
                 to="/map"
               >
-                Open live map&nbsp; →
+                Explore the live map&nbsp; →
               </Link>
             </div>
+          </div>
 
-            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/20 pt-6 text-sm text-emerald-50/85">
-              <span>✓ Approved active listings only</span>
-              <span>✓ Exact map coordinates</span>
-              <span>✓ Accessibility-first details</span>
+          <div className="relative mx-auto w-full max-w-xl lg:justify-self-end">
+            <div className="overflow-hidden rounded-[2.25rem] border-[10px] border-white bg-slate-100 shadow-2xl shadow-brand-950/15">
+              <video
+                className="aspect-[4/5] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="metadata"
+                poster={heroImage}
+                aria-label="A journey across Sri Lanka"
+              >
+                <source src="/videos/home-hero-demo.mp4" type="video/mp4" />
+              </video>
+              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/80 bg-white/90 p-5 text-slate-950 shadow-xl backdrop-blur-md">
+                <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
+                  Travel with confidence
+                </p>
+                <p className="mt-2 text-lg font-black">
+                  Nearby restrooms, useful details and clear directions.
+                </p>
+              </div>
             </div>
+            <div className="absolute -left-5 top-8 hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:block">
+              <p className="text-xs font-bold text-slate-500">Coverage</p>
+              <p className="mt-1 font-black text-slate-950">
+                Island-wide discovery
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="border-y border-brand-100 bg-white/75 py-5 backdrop-blur">
+          <div className="mx-auto grid max-w-7xl gap-3 px-4 sm:grid-cols-3 sm:px-6 lg:px-8">
+            <p className="rounded-2xl border border-brand-100 bg-brand-50 px-4 py-4 text-center text-sm font-bold text-slate-700">
+              <span className="mr-2 text-brand-600" aria-hidden="true">
+                ●
+              </span>
+              Reviewer-checked listings
+            </p>
+            <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-4 text-center text-sm font-bold text-slate-700">
+              <span className="mr-2 text-amber-500" aria-hidden="true">
+                ●
+              </span>
+              Exact locations and directions
+            </p>
+            <p className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-4 text-center text-sm font-bold text-slate-700">
+              <span className="mr-2 text-cyan-600" aria-hidden="true">
+                ●
+              </span>
+              Helpful community reports
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="bg-white py-16 sm:py-20">
+      <section className="bg-white py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
-            <div>
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">
-                Confidence by design
-              </p>
-              <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.035em] text-slate-950 sm:text-5xl">
-                Better information makes better journeys.
-              </h2>
-            </div>
-            <p className="max-w-2xl text-lg leading-8 text-slate-600 lg:justify-self-end">
-              Ceylon DryWay brings trustworthy facility information into a
-              single calm experience—from discovery to directions.
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
+              Easy to use wherever you are
+            </p>
+            <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.04em] text-slate-950 sm:text-5xl">
+              Find the right restroom in three simple steps.
+            </h2>
+            <p className="mt-5 text-lg leading-8 text-slate-600">
+              Search trusted local information, compare the details that matter
+              and open directions—all in one place.
             </p>
           </div>
 
-          <div className="mt-11 grid overflow-hidden rounded-[2rem] border border-slate-200 bg-stone-50 md:grid-cols-3">
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
             {discoveryHighlights.map((highlight) => (
               <article
-                className="border-b border-slate-200 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-8"
+                className={`rounded-3xl border p-7 transition hover:-translate-y-1 hover:shadow-lg sm:p-8 ${highlight.tone}`}
                 key={highlight.number}
               >
-                <span className="text-sm font-black text-emerald-700">
+                <span
+                  className={`grid size-11 place-items-center rounded-full text-sm font-black text-white ${highlight.badge}`}
+                >
                   {highlight.number}
                 </span>
-                <h3 className="mt-8 text-xl font-black text-slate-950">
+                <h3 className="mt-7 text-2xl font-black text-slate-950">
                   {highlight.title}
                 </h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">
+                <p className="mt-3 leading-7 text-slate-600">
                   {highlight.text}
                 </p>
               </article>
@@ -171,26 +236,62 @@ export function HomePage() {
         </div>
       </section>
 
-      <section className="bg-stone-100 py-16 sm:py-20">
+      <section className="border-y border-brand-100 bg-[#f6fbff] py-20 sm:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:px-8">
+          <div className="lg:sticky lg:top-28">
+            <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
+              Made for everyone on the road
+            </p>
+            <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.04em] text-slate-950 sm:text-5xl">
+              A more comfortable journey for locals and visitors.
+            </h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
+              Whether you are on a familiar daily route or discovering Sri Lanka
+              for the first time, dependable restroom information should be easy
+              to find.
+            </p>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            {projectBenefits.map((benefit) => (
+              <article
+                className="rounded-3xl border border-brand-100 bg-white p-7 shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                key={benefit.label}
+              >
+                <p className="text-xs font-black uppercase tracking-[0.14em] text-brand-700">
+                  {benefit.label}
+                </p>
+                <h3 className="mt-4 text-xl font-black text-slate-950">
+                  {benefit.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">
+                  {benefit.text}
+                </p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-[#fffaf1] py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
-              <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">
-                Recently verified
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
+                Ready for your journey
               </p>
-              <h2 className="mt-3 text-4xl font-black tracking-[-0.035em] text-slate-950">
+              <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
                 Places ready to explore
               </h2>
             </div>
             <Link
-              className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 bg-white px-5 font-black text-slate-800 transition hover:border-emerald-300 hover:text-emerald-800"
+              className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 bg-white px-5 font-black text-slate-800 transition hover:border-brand-300 hover:text-brand-800"
               to="/explore"
             >
               View all places&nbsp; →
             </Link>
           </div>
 
-          <div className="mt-8">
+          <div className="mt-9">
             {featuredQuery.isPending ? (
               <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                 {[0, 1, 2].map((item) => (
@@ -208,10 +309,39 @@ export function HomePage() {
                   Verified places are on the way
                 </h3>
                 <p className="mt-2 text-slate-600">
-                  Check Explore for newly approved public facilities.
+                  Newly approved public facilities will appear here.
                 </p>
               </div>
             )}
+          </div>
+        </div>
+      </section>
+
+      <section className="bg-white py-20 sm:py-24">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative overflow-hidden rounded-[2rem] border border-brand-200 bg-gradient-to-r from-brand-50 to-amber-50 px-6 py-12 text-slate-950 shadow-lg shadow-brand-950/5 sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-14">
+            <div
+              className="absolute -right-20 -top-24 size-72 rounded-full border-[40px] border-brand-200/40"
+              aria-hidden="true"
+            />
+            <div className="relative max-w-3xl">
+              <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
+                Help more people travel comfortably
+              </p>
+              <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] sm:text-4xl">
+                Know a restroom that should be on the map?
+              </h2>
+              <p className="mt-4 max-w-2xl leading-7 text-slate-600">
+                Property owners can share accurate details and photos. Every
+                submission is reviewed before it becomes publicly visible.
+              </p>
+            </div>
+            <Link
+              className="relative mt-7 inline-flex min-h-12 shrink-0 items-center rounded-xl bg-brand-700 px-6 font-black text-white shadow-sm transition hover:bg-brand-800 lg:mt-0"
+              to="/list-property"
+            >
+              List a property&nbsp; →
+            </Link>
           </div>
         </div>
       </section>

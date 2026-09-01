@@ -291,14 +291,18 @@ export class PropertiesService {
   async listOwnedProperties(
     userId: string,
   ): Promise<OwnerPropertyListResponseDto> {
+    const where: Prisma.PropertyWhereInput = {
+      ownerUserId: userId,
+      lifecycleStatus: { not: PropertyStatus.ARCHIVED },
+    };
     const [records, total] = await this.prisma.$transaction([
       this.prisma.property.findMany({
-        where: { ownerUserId: userId },
+        where,
         orderBy: { updatedAt: 'desc' },
         take: OWNER_LIST_LIMIT,
         select: ownerPropertySelect,
       }),
-      this.prisma.property.count({ where: { ownerUserId: userId } }),
+      this.prisma.property.count({ where }),
     ]);
 
     return {
@@ -456,6 +460,49 @@ export class PropertiesService {
     return this.getOwnedProperty(userId, propertyId);
   }
 
+  async archiveOwnedProperty(
+    userId: string,
+    propertyId: string,
+  ): Promise<void> {
+    await this.prisma.$transaction(async (transaction) => {
+      const property = await transaction.property.findFirst({
+        where: { id: propertyId, ownerUserId: userId },
+        select: { id: true, lifecycleStatus: true, activeVersionId: true },
+      });
+      if (!property) throw new NotFoundException('Property not found');
+      if (property.lifecycleStatus === PropertyStatus.ARCHIVED) {
+        throw new ConflictException('Property is already removed');
+      }
+
+      const archived = await transaction.property.updateMany({
+        where: {
+          id: property.id,
+          ownerUserId: userId,
+          lifecycleStatus: property.lifecycleStatus,
+        },
+        data: { lifecycleStatus: PropertyStatus.ARCHIVED },
+      });
+      if (archived.count !== 1) {
+        throw new ConflictException(
+          'Property status changed before deletion completed',
+        );
+      }
+      await transaction.auditLog.create({
+        data: {
+          actorId: userId,
+          action: 'OWNER_PROPERTY_REMOVED',
+          targetType: 'PROPERTY',
+          targetId: property.id,
+          beforeSummary: {
+            lifecycleStatus: property.lifecycleStatus,
+            activeVersionId: property.activeVersionId,
+          },
+          afterSummary: { lifecycleStatus: PropertyStatus.ARCHIVED },
+        },
+      });
+    });
+  }
+
   async listActiveAmenities(): Promise<AmenityResponseDto[]> {
     return this.prisma.amenity.findMany({
       where: { isActive: true },
@@ -473,7 +520,11 @@ export class PropertiesService {
     propertyId: string,
   ): Promise<OwnerPropertyRecord | null> {
     return this.prisma.property.findFirst({
-      where: { id: propertyId, ownerUserId: userId },
+      where: {
+        id: propertyId,
+        ownerUserId: userId,
+        lifecycleStatus: { not: PropertyStatus.ARCHIVED },
+      },
       select: ownerPropertySelect,
     });
   }

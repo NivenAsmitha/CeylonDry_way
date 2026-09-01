@@ -1,9 +1,13 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingScreen } from "../../components/common/LoadingScreen";
 import { PropertyStatusBadge } from "../../features/properties/components/PropertyStatusBadge";
 import { PlacePhoto } from "../../features/places/components/PlacePhoto";
-import { useOwnerProperties } from "../../features/properties/hooks/useOwnerProperties";
+import {
+  useDeleteOwnedProperty,
+  useOwnerProperties,
+} from "../../features/properties/hooks/useOwnerProperties";
 import { getPropertyStatusLabel } from "../../features/properties/property.constants";
 import { getApiErrorMessage } from "../../types/api.types";
 import type { PropertyWorkflow } from "../../features/properties/services/properties.service";
@@ -33,6 +37,12 @@ export function OwnerPropertiesPage({
   workflow?: PropertyWorkflow;
 }) {
   const propertiesQuery = useOwnerProperties(workflow);
+  const deleteProperty = useDeleteOwnedProperty();
+  const [propertyToDelete, setPropertyToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const isReviewer = workflow === "reviewer";
   const createPath = isReviewer ? "/reviewer/properties/new" : "/list-property";
   const collectionPath = isReviewer ? "/reviewer/properties" : "/owner/properties";
@@ -45,7 +55,7 @@ export function OwnerPropertiesPage({
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
             {isReviewer ? "Reviewer workspace" : "Owner workspace"}
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
@@ -58,7 +68,7 @@ export function OwnerPropertiesPage({
           </p>
         </div>
         <Link
-          className="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-5 font-extrabold text-white"
+          className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand-700 px-5 font-extrabold text-white"
           to={createPath}
         >
           {isReviewer ? "Add property manually" : "List another property"}
@@ -81,7 +91,7 @@ export function OwnerPropertiesPage({
             Start a private draft and complete it at your own pace.
           </p>
           <Link
-            className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-emerald-700 px-6 font-extrabold text-white"
+            className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-brand-700 px-6 font-extrabold text-white"
             to={createPath}
           >
             {isReviewer ? "Add property manually" : "List Your Property"}
@@ -173,9 +183,100 @@ export function OwnerPropertiesPage({
                     Review and submit
                   </Link>
                 ) : null}
+                {!isReviewer ? (
+                  <button
+                    className="ml-auto inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-bold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                    type="button"
+                    onClick={() => {
+                      setPropertyToDelete({
+                        id: property.id,
+                        name: property.activeVersion.name || "Untitled property",
+                      });
+                      setDeleteConfirmation("");
+                      deleteProperty.reset();
+                    }}
+                  >
+                    Delete property
+                  </button>
+                ) : null}
               </div>
             </article>
           ))}
+        </div>
+      ) : null}
+
+      {propertyToDelete ? (
+        <div
+          className="fixed inset-0 z-50 grid place-items-center bg-slate-950/60 p-4"
+          role="presentation"
+          onMouseDown={(event) => {
+            if (
+              event.target === event.currentTarget &&
+              !deleteProperty.isPending
+            ) {
+              setPropertyToDelete(null);
+            }
+          }}
+        >
+          <div
+            className="w-full max-w-lg rounded-2xl bg-white p-6 shadow-2xl sm:p-7"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="delete-property-title"
+          >
+            <p className="text-sm font-bold text-red-700">Remove property</p>
+            <h2 className="mt-1 text-2xl font-black text-slate-950" id="delete-property-title">
+              Delete {propertyToDelete.name}?
+            </h2>
+            <p className="mt-3 text-sm leading-6 text-slate-600">
+              The listing will immediately disappear from your workspace and
+              from all public results. Its audit record is retained.
+            </p>
+            {deleteProperty.isError ? (
+              <div className="mt-5">
+                <ErrorMessage
+                  title="Property could not be deleted"
+                  message={getApiErrorMessage(deleteProperty.error)}
+                />
+              </div>
+            ) : null}
+            <label className="mt-5 block text-sm font-bold" htmlFor="delete-property-confirmation">
+              Type <span className="text-slate-950">{propertyToDelete.name}</span> to confirm
+            </label>
+            <input
+              className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100"
+              id="delete-property-confirmation"
+              value={deleteConfirmation}
+              autoComplete="off"
+              onChange={(event) => setDeleteConfirmation(event.target.value)}
+            />
+            <div className="mt-6 flex flex-col-reverse gap-3 sm:flex-row sm:justify-end">
+              <button
+                className="min-h-11 rounded-xl border border-slate-300 px-5 font-bold text-slate-700"
+                type="button"
+                disabled={deleteProperty.isPending}
+                onClick={() => setPropertyToDelete(null)}
+              >
+                Cancel
+              </button>
+              <button
+                className="min-h-11 rounded-xl bg-red-700 px-5 font-bold text-white disabled:cursor-not-allowed disabled:opacity-50"
+                type="button"
+                disabled={
+                  deleteProperty.isPending ||
+                  deleteConfirmation !== propertyToDelete.name
+                }
+                onClick={() =>
+                  void deleteProperty
+                    .mutateAsync(propertyToDelete.id)
+                    .then(() => setPropertyToDelete(null))
+                    .catch(() => undefined)
+                }
+              >
+                {deleteProperty.isPending ? "Deleting..." : "Delete property"}
+              </button>
+            </div>
+          </div>
         </div>
       ) : null}
     </section>

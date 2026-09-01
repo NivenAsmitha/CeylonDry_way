@@ -60,6 +60,23 @@ enum NotificationType {
   PASSWORD_CHANGED
 }
 
+enum PropertyReportCategory {
+  INCORRECT_DETAILS
+  CLOSED_OR_MISSING
+  ACCESSIBILITY_ISSUE
+  SAFETY_OR_CLEANLINESS
+  DUPLICATE
+  INAPPROPRIATE_CONTENT
+  OTHER
+}
+
+enum PropertyReportStatus {
+  OPEN
+  IN_REVIEW
+  RESOLVED
+  DISMISSED
+}
+
 model User {
   id              String     @id @default(uuid())
   email           String     @unique
@@ -82,6 +99,7 @@ model User {
   auditLogs           AuditLog[]           @relation("AuditLogActor")
   notifications       Notification[]       @relation("NotificationRecipient")
   passwordResetTokens PasswordResetToken[]
+  moderatedReports    PropertyReport[]     @relation("PropertyReportModerator")
 
   @@index([status])
   @@index([deletedAt])
@@ -163,6 +181,7 @@ model Property {
   versions        PropertyVersion[] @relation("PropertyVersions")
   activeVersion   PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
   reviewDecisions ReviewDecision[]
+  reports         PropertyReport[]
 
   @@index([ownerUserId])
   @@index([lifecycleStatus])
@@ -199,6 +218,7 @@ model PropertyVersion {
   amenities         PropertyAmenity[]
   openingHours      OpeningHour[]
   reviewDecisions   ReviewDecision[]
+  reports           PropertyReport[]
 
   @@unique([propertyId, version])
   @@index([propertyId])
@@ -242,6 +262,29 @@ model AuditLog {
 
   @@index([actorId, createdAt])
   @@index([targetType, targetId, createdAt])
+}
+
+model PropertyReport {
+  id                String                 @id @default(uuid())
+  propertyId        String
+  propertyVersionId String
+  category          PropertyReportCategory
+  description       String                 @db.VarChar(1500)
+  reporterEmail     String?                @db.VarChar(254)
+  status            PropertyReportStatus   @default(OPEN)
+  moderatorId       String?
+  moderatorNote     String?                @db.VarChar(1500)
+  resolvedAt        DateTime?
+  createdAt         DateTime               @default(now())
+  updatedAt         DateTime               @updatedAt
+
+  property        Property        @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  propertyVersion PropertyVersion @relation(fields: [propertyVersionId], references: [id], onDelete: Restrict)
+  moderator       User?           @relation("PropertyReportModerator", fields: [moderatorId], references: [id], onDelete: SetNull)
+
+  @@index([status, createdAt])
+  @@index([propertyId, createdAt])
+  @@index([moderatorId, updatedAt])
 }
 
 model Notification {

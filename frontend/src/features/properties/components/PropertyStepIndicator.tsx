@@ -20,13 +20,13 @@ export function PropertyStepIndicator({
           const available = step <= visitedStep;
 
           return (
-            <li key={label}>
+            <li className="h-full" key={label}>
               <button
-                className={`flex min-h-14 w-full items-center gap-3 rounded-xl border px-3 py-2 text-left text-xs font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 ${
+                className={`flex h-full min-h-16 w-full items-center gap-3 rounded-xl border px-3 py-3 text-left text-xs font-bold leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${
                   active
-                    ? "border-emerald-700 bg-emerald-700 text-white"
+                    ? "border-brand-700 bg-brand-700 text-white"
                     : available
-                      ? "border-emerald-200 bg-emerald-50 text-emerald-950 hover:border-emerald-400"
+                      ? "border-brand-200 bg-brand-50 text-brand-950 hover:border-brand-400"
                       : "cursor-not-allowed border-slate-200 bg-slate-50 text-slate-400"
                 }`}
                 type="button"
@@ -36,7 +36,7 @@ export function PropertyStepIndicator({
               >
                 <span
                   className={`grid size-7 shrink-0 place-items-center rounded-full ${
-                    active ? "bg-white text-emerald-800" : "bg-white"
+                    active ? "bg-white text-brand-800" : "bg-white"
                   }`}
                 >
                   {step}

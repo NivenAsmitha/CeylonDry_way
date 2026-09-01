@@ -1,6 +1,7 @@
 import {
   Controller,
   Get,
+  Header,
   Inject,
   NotFoundException,
   Param,
@@ -19,6 +20,8 @@ export class PropertyPhotoMediaController {
   ) {}
 
   @Get(':storageKey')
+  @Header('Cross-Origin-Resource-Policy', 'cross-origin')
+  @Header('Cache-Control', 'public, max-age=31536000, immutable')
   @ApiOkResponse({ description: 'Development property-photo image' })
   @ApiNotFoundResponse({ description: 'Photo not found' })
   async getLocalPhoto(

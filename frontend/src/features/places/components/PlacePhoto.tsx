@@ -16,7 +16,7 @@ export function PlacePhoto({
   if (failedSource === normalizedSource) {
     return (
       <div
-        className={`grid place-items-center bg-gradient-to-br from-emerald-100 to-sky-100 text-center text-sm font-black text-emerald-900 ${className}`}
+        className={`grid place-items-center bg-gradient-to-br from-brand-100 to-brand-100 text-center text-sm font-black text-brand-900 ${className}`}
         role="img"
         aria-label={`${alt}. Image unavailable.`}
       >

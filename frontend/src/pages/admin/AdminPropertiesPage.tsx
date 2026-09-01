@@ -57,7 +57,7 @@ export function AdminPropertiesPage() {
   return (
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div>
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">Admin workspace</p>
+        <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">Admin workspace</p>
         <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">Property management</h1>
         <p className="mt-2 max-w-2xl text-slate-600">
           Monitor every property lifecycle and apply audited suspension,

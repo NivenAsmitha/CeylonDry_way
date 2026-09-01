@@ -65,7 +65,7 @@ export function ReviewerListingPage() {
     <section className="mx-auto max-w-7xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+          <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
             Reviewer workspace
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
@@ -80,7 +80,7 @@ export function ReviewerListingPage() {
           </div>
         </div>
         <Link
-          className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 px-4 font-bold text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
+          className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 px-4 font-bold text-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to="/reviewer"
         >
           Reviewer queue
@@ -121,7 +121,7 @@ export function ReviewerListingPage() {
                       <figcaption className="flex items-center justify-between gap-3 px-4 py-3 text-sm text-slate-600">
                         <span>{photo.altText || "No custom alt text"}</span>
                         {photo.isCover ? (
-                          <span className="rounded-full bg-emerald-100 px-2.5 py-1 text-xs font-black text-emerald-800">
+                          <span className="rounded-full bg-brand-100 px-2.5 py-1 text-xs font-black text-brand-800">
                             Cover
                           </span>
                         ) : null}
@@ -174,7 +174,7 @@ export function ReviewerListingPage() {
               <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                 {version.amenities.map((amenity) => (
                   <li
-                    className="rounded-xl bg-emerald-50 px-4 py-3 font-semibold text-emerald-950"
+                    className="rounded-xl bg-brand-50 px-4 py-3 font-semibold text-brand-950"
                     key={amenity.code}
                   >
                     {amenity.name}

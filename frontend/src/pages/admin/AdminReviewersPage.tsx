@@ -10,7 +10,7 @@ export function AdminReviewersPage() {
   return (
     <>
       <section className="mx-auto max-w-7xl px-4 pt-10 sm:px-6 sm:pt-14 lg:px-8">
-        <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
+        <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
           Admin workspace
         </p>
         <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
@@ -26,7 +26,7 @@ export function AdminReviewersPage() {
           aria-label="Reviewer management sections"
         >
           <button
-            className={`min-h-12 border-b-2 px-1 text-sm font-bold ${activeTab === "reviewers" ? "border-emerald-700 text-emerald-800" : "border-transparent text-slate-500"}`}
+            className={`min-h-12 border-b-2 px-1 text-sm font-bold ${activeTab === "reviewers" ? "border-brand-700 text-brand-800" : "border-transparent text-slate-500"}`}
             type="button"
             role="tab"
             aria-selected={activeTab === "reviewers"}
@@ -35,7 +35,7 @@ export function AdminReviewersPage() {
             All reviewers
           </button>
           <button
-            className={`min-h-12 border-b-2 px-1 text-sm font-bold ${activeTab === "create" ? "border-emerald-700 text-emerald-800" : "border-transparent text-slate-500"}`}
+            className={`min-h-12 border-b-2 px-1 text-sm font-bold ${activeTab === "create" ? "border-brand-700 text-brand-800" : "border-transparent text-slate-500"}`}
             type="button"
             role="tab"
             aria-selected={activeTab === "create"}
