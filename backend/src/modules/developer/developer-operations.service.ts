@@ -67,7 +67,7 @@ export class DeveloperOperationsService {
 
     return {
       status: 'operational' as const,
-      service: 'ceylon-dryway-api',
+      service: 'comfortgo-api',
       checkedAt: now.toISOString(),
       serviceStartedAt: serviceStartedAt.toISOString(),
       uptimeSeconds: Math.floor(process.uptime()),

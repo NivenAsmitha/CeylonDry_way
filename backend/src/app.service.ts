@@ -4,7 +4,7 @@ import { PrismaService } from './prisma/prisma.service';
 
 export interface HealthResponse {
   status: 'ok';
-  service: 'ceylon-dryway-api';
+  service: 'comfortgo-api';
   database: {
     status: 'connected';
     seededRoleCount: number;
@@ -35,7 +35,7 @@ export class AppService {
 
     return {
       status: 'ok',
-      service: 'ceylon-dryway-api',
+      service: 'comfortgo-api',
       database: {
         status: 'connected',
         seededRoleCount,

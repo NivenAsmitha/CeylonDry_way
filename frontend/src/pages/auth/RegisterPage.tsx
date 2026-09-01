@@ -59,7 +59,7 @@ export function RegisterPage() {
       <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl lg:grid-cols-[0.8fr_1.2fr]">
         <aside className="bg-brand-950 p-7 text-white sm:p-10">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
-            Join Ceylon DryWay
+            Join ComfortGo
           </p>
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
             Create your account.

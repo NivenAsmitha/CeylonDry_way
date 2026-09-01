@@ -1,6 +1,6 @@
 import type { GoogleMapsLibraries } from "../../services/google-maps";
 
-export type CeylonMapMarker = google.maps.Marker;
+export type ComfortGoMapMarker = google.maps.Marker;
 
 interface CreateMarkerOptions {
   map: google.maps.Map;
@@ -12,7 +12,7 @@ interface CreateMarkerOptions {
 export function createMapMarker(
   libraries: GoogleMapsLibraries,
   options: CreateMarkerOptions,
-): CeylonMapMarker {
+): ComfortGoMapMarker {
   return new libraries.marker.Marker({
     map: options.map,
     position: options.position,
@@ -22,26 +22,26 @@ export function createMapMarker(
   });
 }
 
-export function removeMapMarker(marker: CeylonMapMarker): void {
+export function removeMapMarker(marker: ComfortGoMapMarker): void {
   marker.setMap(null);
 }
 
 export function setMapMarkerPosition(
-  marker: CeylonMapMarker,
+  marker: ComfortGoMapMarker,
   position: google.maps.LatLngLiteral,
 ): void {
   marker.setPosition(position);
 }
 
 export function setMapMarkerDraggable(
-  marker: CeylonMapMarker,
+  marker: ComfortGoMapMarker,
   draggable: boolean,
 ): void {
   marker.setDraggable(draggable);
 }
 
 export function getMapMarkerPosition(
-  marker: CeylonMapMarker,
+  marker: ComfortGoMapMarker,
 ): google.maps.LatLng | google.maps.LatLngLiteral | null | undefined {
   return marker.getPosition();
 }

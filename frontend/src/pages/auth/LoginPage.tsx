@@ -77,7 +77,7 @@ export function LoginPage() {
           Sign in to your account
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
-          New to Ceylon DryWay?{" "}
+          New to ComfortGo?{" "}
           <Link
             className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
             to="/register"

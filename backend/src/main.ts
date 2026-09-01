@@ -39,8 +39,8 @@ async function bootstrap(): Promise<void> {
 
   if (nodeEnvironment !== 'production') {
     const swaggerConfig = new DocumentBuilder()
-      .setTitle('Ceylon DryWay API')
-      .setDescription('Ceylon DryWay REST API documentation')
+      .setTitle('ComfortGo API')
+      .setDescription('ComfortGo REST API documentation')
       .setVersion('1.0')
       .addBearerAuth()
       .addCookieAuth(REFRESH_COOKIE_NAME, {

@@ -10,7 +10,7 @@ import { isValidCoordinatePair } from "../map-coordinates";
 import {
   createMapMarker,
   removeMapMarker,
-  type CeylonMapMarker,
+  type ComfortGoMapMarker,
 } from "../map-markers";
 
 interface PublicPlacesMapProps {
@@ -20,7 +20,7 @@ interface PublicPlacesMapProps {
 }
 
 interface MarkerRecord {
-  marker: CeylonMapMarker;
+  marker: ComfortGoMapMarker;
   listener: google.maps.MapsEventListener;
   position: google.maps.LatLngLiteral;
 }

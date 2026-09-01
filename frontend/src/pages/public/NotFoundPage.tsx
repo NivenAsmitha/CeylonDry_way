@@ -11,8 +11,8 @@ export function NotFoundPage() {
           That route is not on the map.
         </h1>
         <p className="mt-4 leading-7 text-slate-600">
-          The address may be incorrect, or the feature may belong to a future
-          Ceylon DryWay phase.
+          The address may be incorrect, or this feature may not be available in
+          ComfortGo yet.
         </p>
         <Link
           className="mt-7 inline-flex min-h-12 items-center rounded-xl bg-brand-700 px-6 py-3 font-bold text-white hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"

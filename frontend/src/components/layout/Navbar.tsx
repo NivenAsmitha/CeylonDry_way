@@ -43,7 +43,7 @@ export function Navbar() {
         <Link
           className="group flex min-h-12 items-center rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={workspaceHome}
-          aria-label="Ceylon DryWay home"
+          aria-label="ComfortGo home"
           onClick={closeMenu}
         >
           <img

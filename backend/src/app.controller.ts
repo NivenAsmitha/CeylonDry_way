@@ -14,7 +14,7 @@ export class AppController {
     schema: {
       example: {
         status: 'ok',
-        service: 'ceylon-dryway-api',
+        service: 'comfortgo-api',
         database: {
           status: 'connected',
           seededRoleCount: 5,

@@ -29,7 +29,7 @@ describe('AppController', () => {
     it('should report API and database health', async () => {
       await expect(appController.getHealth()).resolves.toMatchObject({
         status: 'ok',
-        service: 'ceylon-dryway-api',
+        service: 'comfortgo-api',
         database: {
           status: 'connected',
           seededRoleCount: 5,

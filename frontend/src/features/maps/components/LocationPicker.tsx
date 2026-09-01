@@ -15,7 +15,7 @@ import {
   removeMapMarker,
   setMapMarkerDraggable,
   setMapMarkerPosition,
-  type CeylonMapMarker,
+  type ComfortGoMapMarker,
 } from "../map-markers";
 
 interface LocationPickerProps {
@@ -34,7 +34,7 @@ export function LocationPicker({
   const containerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
   const librariesRef = useRef<GoogleMapsLibraries | null>(null);
-  const markerRef = useRef<CeylonMapMarker | null>(null);
+  const markerRef = useRef<ComfortGoMapMarker | null>(null);
   const markerListenerRef = useRef<google.maps.MapsEventListener | null>(null);
   const changeRef = useRef(onChange);
   const disabledRef = useRef(disabled);
@@ -54,31 +54,37 @@ export function LocationPicker({
     }
   }, [disabled]);
 
-  const placeMarker = useCallback((position: google.maps.LatLngLiteral): void => {
-    const map = mapRef.current;
-    const libraries = librariesRef.current;
-    if (!map || !libraries) return;
+  const placeMarker = useCallback(
+    (position: google.maps.LatLngLiteral): void => {
+      const map = mapRef.current;
+      const libraries = librariesRef.current;
+      if (!map || !libraries) return;
 
-    if (!markerRef.current) {
-      markerRef.current = createMapMarker(libraries, {
-        map,
-        position,
-        title: "Selected property location",
-        draggable: !disabledRef.current,
-      });
-      markerListenerRef.current = markerRef.current.addListener("dragend", () => {
-        if (disabledRef.current || !markerRef.current) return;
-        const coordinates = markerPositionToCoordinates(
-          getMapMarkerPosition(markerRef.current),
+      if (!markerRef.current) {
+        markerRef.current = createMapMarker(libraries, {
+          map,
+          position,
+          title: "Selected property location",
+          draggable: !disabledRef.current,
+        });
+        markerListenerRef.current = markerRef.current.addListener(
+          "dragend",
+          () => {
+            if (disabledRef.current || !markerRef.current) return;
+            const coordinates = markerPositionToCoordinates(
+              getMapMarkerPosition(markerRef.current),
+            );
+            if (coordinates) {
+              changeRef.current(coordinates.latitude, coordinates.longitude);
+            }
+          },
         );
-        if (coordinates) {
-          changeRef.current(coordinates.latitude, coordinates.longitude);
-        }
-      });
-    } else {
-      setMapMarkerPosition(markerRef.current, position);
-    }
-  }, []);
+      } else {
+        setMapMarkerPosition(markerRef.current, position);
+      }
+    },
+    [],
+  );
 
   useEffect(() => {
     let cancelled = false;
@@ -169,15 +175,23 @@ export function LocationPicker({
       <div className="relative mt-3 min-h-80 overflow-hidden rounded-2xl border border-slate-300 bg-slate-100">
         <div className="absolute inset-0" ref={containerRef} />
         {status === "loading" ? (
-          <div className="absolute inset-0 grid place-items-center p-6 text-sm font-semibold text-slate-600" role="status">
+          <div
+            className="absolute inset-0 grid place-items-center p-6 text-sm font-semibold text-slate-600"
+            role="status"
+          >
             Loading location map…
           </div>
         ) : null}
         {status === "error" ? (
           <div className="absolute inset-0 grid place-items-center bg-amber-50 p-6 text-center">
             <div>
-              <p className="font-black text-amber-950">Map picker unavailable</p>
-              <p className="mt-2 max-w-md text-sm leading-6 text-amber-900" role="status">
+              <p className="font-black text-amber-950">
+                Map picker unavailable
+              </p>
+              <p
+                className="mt-2 max-w-md text-sm leading-6 text-amber-900"
+                role="status"
+              >
                 {errorMessage} Enter latitude and longitude manually below.
               </p>
             </div>

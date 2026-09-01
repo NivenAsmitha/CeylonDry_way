@@ -87,9 +87,9 @@ export function HomePage() {
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl">
-              Ceylon DryWay helps locals and tourists across Sri Lanka quickly
-              find nearby restroom facilities for a more comfortable and
-              convenient journey.
+              ComfortGo helps locals and tourists across Sri Lanka quickly find
+              nearby restroom facilities for a more comfortable and convenient
+              journey.
             </p>
 
             <form

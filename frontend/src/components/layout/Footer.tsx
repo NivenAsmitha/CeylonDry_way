@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import logo from "../../assets/logo.png";
 
 const footerLinkClass =
   "inline-flex min-h-10 items-center rounded-md text-sm font-medium text-slate-600 transition hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500";
@@ -10,21 +11,19 @@ export function Footer() {
         <div className="grid gap-10 border-b border-brand-100 pb-12 md:grid-cols-2 lg:grid-cols-[1.45fr_0.75fr_0.75fr_1fr]">
           <div>
             <Link
-              className="inline-flex items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500"
+              className="inline-flex rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500"
               to="/"
+              aria-label="ComfortGo home"
             >
-              <span className="grid size-11 place-items-center rounded-xl bg-brand-700 text-lg font-black text-white shadow-sm">
-                CD
-              </span>
-              <span>
-                <span className="block font-black text-slate-950">
-                  Ceylon DryWay
-                </span>
-                <span className="text-xs text-slate-500">
-                  Find your nearest clean stop
-                </span>
-              </span>
+              <img
+                className="h-24 w-auto max-w-[13rem] object-contain sm:h-28 sm:max-w-[15rem]"
+                src={logo}
+                alt=""
+              />
             </Link>
+            <p className="mt-1 text-sm font-bold text-brand-800">
+              Find your nearest clean stop
+            </p>
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-600">
               Helping locals and tourists across Sri Lanka find nearby restroom
               facilities, useful amenities and clear directions when they need
@@ -93,8 +92,8 @@ export function Footer() {
 
         <div className="flex flex-col gap-3 pt-7 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} Ceylon DryWay. Built for more
-            comfortable journeys across Sri Lanka.
+            © {new Date().getFullYear()} ComfortGo. Built for more comfortable
+            journeys across Sri Lanka.
           </p>
           <p>
             Facility details can change. Confirm critical access needs directly

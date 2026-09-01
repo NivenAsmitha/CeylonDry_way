@@ -70,7 +70,7 @@ export function AboutPage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-brand-800 shadow-sm backdrop-blur">
               <span className="size-2 rounded-full bg-amber-400" />
-              About Ceylon DryWay
+              About ComfortGo
             </div>
             <h1 className="mt-6 text-5xl font-black leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
               Comfort and confidence,
@@ -79,10 +79,10 @@ export function AboutPage() {
               </span>
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 sm:text-xl">
-              Ceylon DryWay helps locals and tourists across Sri Lanka easily
-              find nearby restroom facilities. We bring location, access and
-              amenity information together so every journey can feel more
-              convenient and prepared.
+              ComfortGo helps locals and tourists across Sri Lanka easily find
+              nearby restroom facilities. We bring location, access and amenity
+              information together so every journey can feel more convenient and
+              prepared.
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
@@ -269,7 +269,7 @@ export function AboutPage() {
                 Own or manage a facility?
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-slate-950">
-                Add a restroom to Ceylon DryWay.
+                Add a restroom to ComfortGo.
               </h2>
               <p className="mt-4 leading-7 text-slate-600">
                 Create a listing with accurate details and photos, then manage
