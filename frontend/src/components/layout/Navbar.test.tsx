@@ -1,11 +1,10 @@
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useLocation } from "react-router-dom";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi } from "vitest";
 import type { AuthContextValue } from "../../context/auth-context";
 import { Navbar } from "./Navbar";
 
-const logout = vi.fn<() => Promise<void>>();
 const authValue: AuthContextValue = {
   user: {
     id: "user-1",
@@ -23,9 +22,10 @@ const authValue: AuthContextValue = {
   initializationError: null,
   login: vi.fn(),
   register: vi.fn(),
-  logout,
+  logout: vi.fn(),
   refreshSession: vi.fn(),
   updateProfile: vi.fn(),
+  changePassword: vi.fn(),
   refetchUser: vi.fn(),
 };
 
@@ -39,30 +39,29 @@ function LocationProbe() {
 
 function renderNavbar() {
   return render(
-    <MemoryRouter initialEntries={["/profile"]}>
+    <MemoryRouter initialEntries={["/"]}>
       <Navbar />
       <LocationProbe />
     </MemoryRouter>,
   );
 }
 
-describe("Navbar logout controls", () => {
-  beforeEach(() => logout.mockResolvedValue(undefined));
-
-  it("uses a non-submit desktop logout button and replaces the route", async () => {
+describe("Navbar profile control", () => {
+  it("opens the full profile page directly without a settings dropdown", async () => {
     renderNavbar();
-    const logoutButton = screen.getByRole("button", { name: "Logout" });
 
-    expect(logoutButton.getAttribute("type")).toBe("button");
-    await userEvent.click(logoutButton);
+    expect(screen.queryByText("Change password")).toBeNull();
+    expect(screen.queryByRole("button", { name: "Logout" })).toBeNull();
+    await userEvent.click(
+      screen.getByRole("link", { name: "Open your profile" }),
+    );
 
-    expect(logout).toHaveBeenCalledTimes(1);
     await waitFor(() =>
-      expect(screen.getByTestId("location").textContent).toBe("/login"),
+      expect(screen.getByTestId("location").textContent).toBe("/profile"),
     );
   });
 
-  it("closes the mobile menu immediately when logout starts", async () => {
+  it("closes the mobile navigation when the profile is opened", async () => {
     renderNavbar();
     const menuButton = screen.getByRole("button", {
       name: "Open navigation menu",
@@ -70,9 +69,10 @@ describe("Navbar logout controls", () => {
     await userEvent.click(menuButton);
     expect(menuButton.getAttribute("aria-expanded")).toBe("true");
 
-    await userEvent.click(screen.getByRole("button", { name: "Logout" }));
+    await userEvent.click(
+      screen.getByRole("link", { name: "Open your profile" }),
+    );
 
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
-    expect(logout).toHaveBeenCalledTimes(1);
   });
 });

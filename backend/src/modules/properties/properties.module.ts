@@ -10,6 +10,6 @@ import { PropertiesService } from './properties.service';
   imports: [AuthModule, PropertyPhotoStorageModule],
   controllers: [PropertiesController, PropertyPhotosController],
   providers: [PropertiesService, PropertyPhotosService],
-  exports: [PropertiesService],
+  exports: [PropertiesService, PropertyPhotosService],
 })
 export class PropertiesModule {}

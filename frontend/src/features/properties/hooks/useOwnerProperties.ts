@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../auth/hooks/useAuth";
 import { PRIVATE_QUERY_KEY } from "../../../services/queryClient";
 import * as propertiesService from "../services/properties.service";
+import type { PropertyWorkflow } from "../services/properties.service";
 import type {
   OwnerProperty,
   PropertyDraftInput,
@@ -17,8 +18,11 @@ export const PROPERTY_AMENITIES_QUERY_KEY = [
   "property-amenities",
 ] as const;
 
-export function ownerPropertyQueryKey(propertyId: string) {
-  return [...OWNER_PROPERTIES_QUERY_KEY, propertyId] as const;
+export function ownerPropertyQueryKey(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
+  return [...OWNER_PROPERTIES_QUERY_KEY, workflow, propertyId] as const;
 }
 
 export function usePropertyAmenities() {
@@ -29,31 +33,40 @@ export function usePropertyAmenities() {
   });
 }
 
-export function useOwnerProperties() {
+export function useOwnerProperties(workflow: PropertyWorkflow = "owner") {
   return useQuery({
-    queryKey: OWNER_PROPERTIES_QUERY_KEY,
-    queryFn: ({ signal }) => propertiesService.listOwnerProperties(signal),
+    queryKey: [...OWNER_PROPERTIES_QUERY_KEY, workflow],
+    queryFn: ({ signal }) =>
+      propertiesService.listOwnerProperties(signal, workflow),
   });
 }
 
-export function useOwnerProperty(propertyId: string | undefined) {
+export function useOwnerProperty(
+  propertyId: string | undefined,
+  workflow: PropertyWorkflow = "owner",
+) {
   return useQuery({
-    queryKey: ownerPropertyQueryKey(propertyId ?? "missing"),
+    queryKey: ownerPropertyQueryKey(propertyId ?? "missing", workflow),
     queryFn: ({ signal }) =>
-      propertiesService.getOwnerProperty(propertyId ?? "", signal),
+      propertiesService.getOwnerProperty(propertyId ?? "", signal, workflow),
     enabled: Boolean(propertyId),
   });
 }
 
-export function useCreatePropertyDraft() {
+export function useCreatePropertyDraft(
+  workflow: PropertyWorkflow = "owner",
+) {
   const queryClient = useQueryClient();
   const { refetchUser } = useAuth();
 
   return useMutation({
     mutationFn: (input: PropertyDraftInput) =>
-      propertiesService.createPropertyDraft(input),
+      propertiesService.createPropertyDraft(input, workflow),
     onSuccess: async (property) => {
-      queryClient.setQueryData(ownerPropertyQueryKey(property.id), property);
+      queryClient.setQueryData(
+        ownerPropertyQueryKey(property.id, workflow),
+        property,
+      );
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: OWNER_PROPERTIES_QUERY_KEY }),
         refetchUser(),
@@ -62,17 +75,23 @@ export function useCreatePropertyDraft() {
   });
 }
 
-export function useUpdatePropertyDraft(propertyId: string) {
+export function useUpdatePropertyDraft(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (input: PropertyDraftInput) =>
-      propertiesService.updatePropertyDraft(propertyId, input),
+      propertiesService.updatePropertyDraft(propertyId, input, workflow),
     onSuccess: async (property) => {
-      queryClient.setQueryData(ownerPropertyQueryKey(property.id), property);
+      queryClient.setQueryData(
+        ownerPropertyQueryKey(property.id, workflow),
+        property,
+      );
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ownerPropertyQueryKey(propertyId),
+          queryKey: ownerPropertyQueryKey(propertyId, workflow),
         }),
         queryClient.invalidateQueries({
           queryKey: OWNER_PROPERTIES_QUERY_KEY,
@@ -82,16 +101,23 @@ export function useUpdatePropertyDraft(propertyId: string) {
   });
 }
 
-export function useSubmitPropertyDraft(propertyId: string) {
+export function useSubmitPropertyDraft(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: () => propertiesService.submitPropertyDraft(propertyId),
+    mutationFn: () =>
+      propertiesService.submitPropertyDraft(propertyId, workflow),
     onSuccess: async (property) => {
-      queryClient.setQueryData(ownerPropertyQueryKey(property.id), property);
+      queryClient.setQueryData(
+        ownerPropertyQueryKey(property.id, workflow),
+        property,
+      );
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ownerPropertyQueryKey(propertyId),
+          queryKey: ownerPropertyQueryKey(propertyId, workflow),
         }),
         queryClient.invalidateQueries({
           queryKey: OWNER_PROPERTIES_QUERY_KEY,
@@ -103,6 +129,7 @@ export function useSubmitPropertyDraft(propertyId: string) {
 
 function usePhotoMutation<TInput>(
   propertyId: string,
+  workflow: PropertyWorkflow,
   mutationFn: (input: TInput) => Promise<PropertyPhoto[]>,
 ) {
   const queryClient = useQueryClient();
@@ -111,7 +138,7 @@ function usePhotoMutation<TInput>(
     mutationFn,
     onSuccess: async (photos) => {
       queryClient.setQueryData<OwnerProperty>(
-        ownerPropertyQueryKey(propertyId),
+        ownerPropertyQueryKey(propertyId, workflow),
         (property) =>
           property
             ? {
@@ -122,7 +149,7 @@ function usePhotoMutation<TInput>(
       );
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ownerPropertyQueryKey(propertyId),
+          queryKey: ownerPropertyQueryKey(propertyId, workflow),
         }),
         queryClient.invalidateQueries({
           queryKey: OWNER_PROPERTIES_QUERY_KEY,
@@ -132,7 +159,10 @@ function usePhotoMutation<TInput>(
   });
 }
 
-export function useUploadPropertyPhotos(propertyId: string) {
+export function useUploadPropertyPhotos(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: ({
@@ -141,10 +171,16 @@ export function useUploadPropertyPhotos(propertyId: string) {
     }: {
       files: readonly File[];
       onProgress?: (percentage: number) => void;
-    }) => propertiesService.uploadPropertyPhotos(propertyId, files, onProgress),
+    }) =>
+      propertiesService.uploadPropertyPhotos(
+        propertyId,
+        files,
+        onProgress,
+        workflow,
+      ),
     onSuccess: async (photos) => {
       queryClient.setQueryData<OwnerProperty>(
-        ownerPropertyQueryKey(propertyId),
+        ownerPropertyQueryKey(propertyId, workflow),
         (property) =>
           property
             ? {
@@ -155,7 +191,7 @@ export function useUploadPropertyPhotos(propertyId: string) {
       );
       await Promise.all([
         queryClient.invalidateQueries({
-          queryKey: ownerPropertyQueryKey(propertyId),
+          queryKey: ownerPropertyQueryKey(propertyId, workflow),
         }),
         queryClient.invalidateQueries({
           queryKey: OWNER_PROPERTIES_QUERY_KEY,
@@ -166,32 +202,46 @@ export function useUploadPropertyPhotos(propertyId: string) {
   });
 }
 
-export function useReorderPropertyPhotos(propertyId: string) {
-  return usePhotoMutation<readonly string[]>(propertyId, (photoIds) =>
-    propertiesService.reorderPropertyPhotos(propertyId, photoIds),
+export function useReorderPropertyPhotos(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
+  return usePhotoMutation<readonly string[]>(propertyId, workflow, (photoIds) =>
+    propertiesService.reorderPropertyPhotos(propertyId, photoIds, workflow),
   );
 }
 
-export function useSetPropertyPhotoCover(propertyId: string) {
-  return usePhotoMutation<string>(propertyId, (photoId) =>
-    propertiesService.setPropertyPhotoCover(propertyId, photoId),
+export function useSetPropertyPhotoCover(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
+  return usePhotoMutation<string>(propertyId, workflow, (photoId) =>
+    propertiesService.setPropertyPhotoCover(propertyId, photoId, workflow),
   );
 }
 
-export function useUpdatePropertyPhotoAltText(propertyId: string) {
+export function useUpdatePropertyPhotoAltText(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
   return usePhotoMutation<{ photoId: string; altText: string | null }>(
     propertyId,
+    workflow,
     ({ photoId, altText }: { photoId: string; altText: string | null }) =>
       propertiesService.updatePropertyPhotoAltText(
         propertyId,
         photoId,
         altText,
+        workflow,
       ),
   );
 }
 
-export function useRemovePropertyPhoto(propertyId: string) {
-  return usePhotoMutation<string>(propertyId, (photoId) =>
-    propertiesService.removePropertyPhoto(propertyId, photoId),
+export function useRemovePropertyPhoto(
+  propertyId: string,
+  workflow: PropertyWorkflow = "owner",
+) {
+  return usePhotoMutation<string>(propertyId, workflow, (photoId) =>
+    propertiesService.removePropertyPhoto(propertyId, photoId, workflow),
   );
 }

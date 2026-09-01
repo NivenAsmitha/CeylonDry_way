@@ -52,6 +52,18 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
       return;
     }
 
+    if (!listing.allowedDecisions.includes(values.decision)) {
+      setError("decision", {
+        type: "validate",
+        message: "This decision is no longer available for the current status.",
+      });
+      setServerError(
+        "The listing status changed. Review the available decision and try again.",
+      );
+      setConfirmed(false);
+      return;
+    }
+
     const operation = (async () => {
       setServerError(null);
       setConfirmationError(null);
@@ -134,6 +146,11 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
             </option>
           ))}
         </select>
+        {errors.decision?.message ? (
+          <p className="mt-2 text-sm font-semibold text-red-700" role="alert">
+            {errors.decision.message}
+          </p>
+        ) : null}
       </div>
 
       <div>

@@ -12,6 +12,7 @@ import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { CurrentUserResponseDto } from './dto/current-user-response.dto';
+import { ChangePasswordDto } from './dto/change-password.dto';
 import { UpdateProfileDto } from './dto/update-profile.dto';
 import { UsersService } from './users.service';
 
@@ -43,5 +44,17 @@ export class UsersController {
       currentUser.id,
       updateProfileDto,
     );
+  }
+
+  @Patch('password')
+  @ApiOkResponse({
+    schema: { example: { message: 'Password changed successfully' } },
+  })
+  @ApiBadRequestResponse({ description: 'Password validation failed' })
+  changePassword(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Body() input: ChangePasswordDto,
+  ): Promise<{ message: string }> {
+    return this.usersService.changePassword(currentUser.id, input);
   }
 }

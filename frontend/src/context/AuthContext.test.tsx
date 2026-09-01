@@ -16,6 +16,7 @@ const authMocks = vi.hoisted(() => ({
   login: vi.fn(),
   register: vi.fn(),
   updateProfile: vi.fn(),
+  changePassword: vi.fn(),
 }));
 
 vi.mock("../features/auth/auth.service", () => authMocks);

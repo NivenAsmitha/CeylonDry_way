@@ -3,6 +3,7 @@ import { useAuth } from "../../features/auth/hooks/useAuth";
 import { ErrorMessage } from "../common/ErrorMessage";
 import { Footer } from "./Footer";
 import { Navbar } from "./Navbar";
+import { PropertyListingFab } from "./PropertyListingFab";
 
 export function AppLayout() {
   const { initializationError } = useAuth();
@@ -27,6 +28,7 @@ export function AppLayout() {
         ) : null}
         <Outlet />
       </main>
+      <PropertyListingFab />
       <Footer />
     </div>
   );

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { AmenityList } from "../../features/places/components/AmenityList";
 import { DirectionsButton } from "../../features/places/components/DirectionsButton";
+import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import { usePublicPlace } from "../../features/places/hooks/usePlaces";
 import { getApiErrorMessage, normalizeApiError } from "../../types/api.types";
 
@@ -84,7 +85,7 @@ export function PlaceDetailsPage() {
       {place.photos.length ? (
         <div className="mt-3 grid gap-3 overflow-hidden rounded-3xl sm:grid-cols-2">
           {place.photos.slice(0, 3).map((photo, index) => (
-            <img
+            <PlacePhoto
               className={`w-full bg-slate-100 object-cover ${index === 0 ? "aspect-[4/3] sm:row-span-2 sm:h-full" : "aspect-[16/9]"}`}
               key={`${photo.url}-${index}`}
               src={photo.url}
@@ -93,8 +94,8 @@ export function PlaceDetailsPage() {
           ))}
         </div>
       ) : (
-        <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-emerald-100 to-sky-100 text-5xl font-black text-emerald-800/40">
-          CD
+        <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-emerald-100 to-sky-100 px-6 text-center text-xl font-black text-emerald-900/60">
+          No approved photos are available for this place yet
         </div>
       )}
 

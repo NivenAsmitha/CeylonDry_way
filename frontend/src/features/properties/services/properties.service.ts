@@ -13,6 +13,12 @@ import type {
   PropertyPhoto,
 } from "../types/property.types";
 
+export type PropertyWorkflow = "owner" | "reviewer";
+
+function propertyPath(workflow: PropertyWorkflow): string {
+  return workflow === "reviewer" ? "/reviewer/properties" : "/owner/properties";
+}
+
 export async function listAmenities(signal?: AbortSignal): Promise<Amenity[]> {
   const response = await apiClient.get<unknown>("/owner/properties/amenities", {
     signal,
@@ -23,16 +29,18 @@ export async function listAmenities(signal?: AbortSignal): Promise<Amenity[]> {
 
 export async function createPropertyDraft(
   input: PropertyDraftInput,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<OwnerProperty> {
-  const response = await apiClient.post<unknown>("/owner/properties", input);
+  const response = await apiClient.post<unknown>(propertyPath(workflow), input);
 
   return ownerPropertySchema.parse(response.data);
 }
 
 export async function listOwnerProperties(
   signal?: AbortSignal,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<OwnerPropertyList> {
-  const response = await apiClient.get<unknown>("/owner/properties", {
+  const response = await apiClient.get<unknown>(propertyPath(workflow), {
     signal,
   });
 
@@ -42,9 +50,10 @@ export async function listOwnerProperties(
 export async function getOwnerProperty(
   propertyId: string,
   signal?: AbortSignal,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<OwnerProperty> {
   const response = await apiClient.get<unknown>(
-    `/owner/properties/${propertyId}`,
+    `${propertyPath(workflow)}/${propertyId}`,
     { signal },
   );
 
@@ -54,9 +63,10 @@ export async function getOwnerProperty(
 export async function updatePropertyDraft(
   propertyId: string,
   input: PropertyDraftInput,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<OwnerProperty> {
   const response = await apiClient.patch<unknown>(
-    `/owner/properties/${propertyId}`,
+    `${propertyPath(workflow)}/${propertyId}`,
     input,
   );
 
@@ -65,9 +75,10 @@ export async function updatePropertyDraft(
 
 export async function submitPropertyDraft(
   propertyId: string,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<OwnerProperty> {
   const response = await apiClient.post<unknown>(
-    `/owner/properties/${propertyId}/submit`,
+    `${propertyPath(workflow)}/${propertyId}/submit`,
     { confirm: true },
   );
 
@@ -78,12 +89,13 @@ export async function uploadPropertyPhotos(
   propertyId: string,
   files: readonly File[],
   onProgress?: (percentage: number) => void,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<PropertyPhoto[]> {
   const formData = new FormData();
   for (const file of files) formData.append("photos", file);
 
   const response = await apiClient.post<unknown>(
-    `/owner/properties/${propertyId}/photos`,
+    `${propertyPath(workflow)}/${propertyId}/photos`,
     formData,
     {
       _authenticationRetry: true,
@@ -101,9 +113,10 @@ export async function uploadPropertyPhotos(
 export async function reorderPropertyPhotos(
   propertyId: string,
   photoIds: readonly string[],
+  workflow: PropertyWorkflow = "owner",
 ): Promise<PropertyPhoto[]> {
   const response = await apiClient.patch<unknown>(
-    `/owner/properties/${propertyId}/photos/reorder`,
+    `${propertyPath(workflow)}/${propertyId}/photos/reorder`,
     { photoIds },
   );
   return propertyPhotoListSchema.parse(response.data);
@@ -112,9 +125,10 @@ export async function reorderPropertyPhotos(
 export async function setPropertyPhotoCover(
   propertyId: string,
   photoId: string,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<PropertyPhoto[]> {
   const response = await apiClient.patch<unknown>(
-    `/owner/properties/${propertyId}/photos/${photoId}/cover`,
+    `${propertyPath(workflow)}/${propertyId}/photos/${photoId}/cover`,
   );
   return propertyPhotoListSchema.parse(response.data);
 }
@@ -123,9 +137,10 @@ export async function updatePropertyPhotoAltText(
   propertyId: string,
   photoId: string,
   altText: string | null,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<PropertyPhoto[]> {
   const response = await apiClient.patch<unknown>(
-    `/owner/properties/${propertyId}/photos/${photoId}`,
+    `${propertyPath(workflow)}/${propertyId}/photos/${photoId}`,
     { altText },
   );
   return propertyPhotoListSchema.parse(response.data);
@@ -134,9 +149,10 @@ export async function updatePropertyPhotoAltText(
 export async function removePropertyPhoto(
   propertyId: string,
   photoId: string,
+  workflow: PropertyWorkflow = "owner",
 ): Promise<PropertyPhoto[]> {
   const response = await apiClient.delete<unknown>(
-    `/owner/properties/${propertyId}/photos/${photoId}`,
+    `${propertyPath(workflow)}/${propertyId}/photos/${photoId}`,
   );
   return propertyPhotoListSchema.parse(response.data);
 }

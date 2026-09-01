@@ -49,6 +49,12 @@ const ReviewerQueuePage = lazy(() =>
 const ReviewerListingPage = lazy(() =>
   import("../pages/reviewer/ReviewerListingPage").then((module) => ({ default: module.ReviewerListingPage })),
 );
+const ReviewerCreatePropertyPage = lazy(() =>
+  import("../pages/reviewer/ReviewerCreatePropertyPage").then((module) => ({ default: module.ReviewerCreatePropertyPage })),
+);
+const ReviewerEditPropertyPage = lazy(() =>
+  import("../pages/reviewer/ReviewerEditPropertyPage").then((module) => ({ default: module.ReviewerEditPropertyPage })),
+);
 const UserManagementListPage = lazy(() =>
   import("../features/user-management/components/UserManagementListPage").then((module) => ({
     default: module.UserManagementListPage,
@@ -61,6 +67,9 @@ const UserManagementDetailPage = lazy(() =>
 );
 const AdminReviewersPage = lazy(() =>
   import("../pages/admin/AdminReviewersPage").then((module) => ({ default: module.AdminReviewersPage })),
+);
+const AdminPropertiesPage = lazy(() =>
+  import("../pages/admin/AdminPropertiesPage").then((module) => ({ default: module.AdminPropertiesPage })),
 );
 const DeveloperAdminsPage = lazy(() =>
   import("../pages/developer/DeveloperAdminsPage").then((module) => ({ default: module.DeveloperAdminsPage })),
@@ -94,11 +103,15 @@ export function AppRoutes() {
             <Route element={<RoleRoute allowedRoles={["REVIEWER"]} />}>
               <Route path="reviewer" element={<ReviewerQueuePage />} />
               <Route path="reviewer/listings/:id" element={<ReviewerListingPage />} />
+              <Route path="reviewer/properties" element={<OwnerPropertiesPage workflow="reviewer" />} />
+              <Route path="reviewer/properties/new" element={<ReviewerCreatePropertyPage />} />
+              <Route path="reviewer/properties/:id/edit" element={<ReviewerEditPropertyPage />} />
             </Route>
             <Route element={<RoleRoute allowedRoles={["ADMIN"]} />}>
               <Route path="admin/users" element={<UserManagementListPage scope="admin" />} />
               <Route path="admin/users/:id" element={<UserManagementDetailPage scope="admin" />} />
               <Route path="admin/reviewers" element={<AdminReviewersPage />} />
+              <Route path="admin/properties" element={<AdminPropertiesPage />} />
             </Route>
             <Route element={<RoleRoute allowedRoles={["DEVELOPER"]} />}>
               <Route path="developer/users" element={<UserManagementListPage scope="developer" />} />

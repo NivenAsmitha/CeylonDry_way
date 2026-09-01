@@ -30,6 +30,7 @@ import {
   PROPERTY_FORM_STEPS,
   PROPERTY_TYPE_LABELS,
 } from "../property.constants";
+import type { PropertyWorkflow } from "../services/properties.service";
 import { PropertyStatusBadge } from "./PropertyStatusBadge";
 import { PropertyStepIndicator } from "./PropertyStepIndicator";
 import { PropertyPhotoStep } from "./PropertyPhotoStep";
@@ -213,9 +214,13 @@ function TextAreaField({
 
 interface PropertyFormProps {
   property?: OwnerProperty;
+  workflow?: PropertyWorkflow;
 }
 
-export function PropertyForm({ property }: PropertyFormProps) {
+export function PropertyForm({
+  property,
+  workflow = "owner",
+}: PropertyFormProps) {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const requestedStep = Number(searchParams.get("step"));
@@ -230,9 +235,15 @@ export function PropertyForm({ property }: PropertyFormProps) {
   const [serverError, setServerError] = useState<string[] | null>(null);
   const [saveSucceeded, setSaveSucceeded] = useState(false);
   const [submissionConfirmed, setSubmissionConfirmed] = useState(false);
-  const createMutation = useCreatePropertyDraft();
-  const updateMutation = useUpdatePropertyDraft(property?.id ?? "new");
-  const submitMutation = useSubmitPropertyDraft(property?.id ?? "new");
+  const createMutation = useCreatePropertyDraft(workflow);
+  const updateMutation = useUpdatePropertyDraft(
+    property?.id ?? "new",
+    workflow,
+  );
+  const submitMutation = useSubmitPropertyDraft(
+    property?.id ?? "new",
+    workflow,
+  );
   const amenitiesQuery = usePropertyAmenities();
   const saveInFlight = useRef<Promise<OwnerProperty | null> | null>(null);
   const submissionInFlight = useRef<Promise<void> | null>(null);
@@ -322,7 +333,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
         if (!property) {
           navigate(
-            `/owner/properties/${savedProperty.id}/edit${
+            `/${workflow}/properties/${savedProperty.id}/edit${
               nextStep ? `?step=${nextStep}` : ""
             }`,
             { replace: true },
@@ -464,7 +475,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
 
       {!isEditable ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-          This listing is {property?.lifecycleStatus.toLowerCase()}. Owner edits
+          This listing is {property?.lifecycleStatus.toLowerCase()}. Changes
           are disabled while it is in this state.
         </div>
       ) : null}
@@ -892,6 +903,7 @@ export function PropertyForm({ property }: PropertyFormProps) {
                   propertyName={selectedName}
                   photos={property.activeVersion.photos}
                   editable={isEditable}
+                  workflow={workflow}
                 />
               ) : (
                 <div className="mt-6 rounded-2xl border border-dashed border-slate-300 bg-slate-50 p-8 text-center">

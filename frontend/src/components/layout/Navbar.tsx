@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
@@ -11,20 +11,11 @@ function navLinkClass({ isActive }: { isActive: boolean }): string {
 }
 
 export function Navbar() {
-  const { user, isAuthenticated, isLoggingOut, logout } = useAuth();
+  const { user, isAuthenticated } = useAuth();
   const [menuOpen, setMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
-  async function handleLogout(): Promise<void> {
+  function closeMenu(): void {
     setMenuOpen(false);
-
-    try {
-      await logout();
-    } catch {
-      // Local authentication state is cleared even when the network is down.
-    } finally {
-      navigate("/login", { replace: true });
-    }
   }
 
   const hasOwnerRole = user?.roles.includes("OWNER") ?? false;
@@ -32,17 +23,19 @@ export function Navbar() {
   const hasReviewerRole = user?.roles.includes("REVIEWER") ?? false;
   const hasAdminRole = user?.roles.includes("ADMIN") ?? false;
   const hasDeveloperRole = user?.roles.includes("DEVELOPER") ?? false;
+  const showPublicNavigation =
+    !isAuthenticated || hasClientRole || hasOwnerRole;
 
   return (
-    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/95 backdrop-blur">
+    <header className="sticky top-0 z-40 border-b border-slate-200/80 bg-white/90 backdrop-blur-xl">
       <nav
         className="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-3 sm:px-6 lg:px-8"
         aria-label="Primary navigation"
       >
         <Link
           className="flex min-h-11 items-center gap-3 rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
-          to="/"
-          onClick={() => setMenuOpen(false)}
+          to={hasReviewerRole ? "/reviewer" : "/"}
+          onClick={closeMenu}
         >
           <span className="grid size-10 place-items-center rounded-xl bg-emerald-700 text-lg font-black text-white shadow-sm">
             CD
@@ -79,125 +72,86 @@ export function Navbar() {
           id="primary-menu"
         >
           <div className="flex flex-col gap-1 lg:flex-row lg:items-center">
-            <NavLink
-              className={navLinkClass}
-              end
-              to="/"
-              onClick={() => setMenuOpen(false)}
-            >
-              Home
-            </NavLink>
-            <NavLink
-              className={navLinkClass}
-              to="/explore"
-              onClick={() => setMenuOpen(false)}
-            >
-              Explore
-            </NavLink>
-            <NavLink
-              className={navLinkClass}
-              to="/map"
-              onClick={() => setMenuOpen(false)}
-            >
-              Map
-            </NavLink>
-            {isAuthenticated && hasClientRole ? (
-              <NavLink
-                className={navLinkClass}
-                to="/list-property"
-                onClick={() => setMenuOpen(false)}
-              >
-                List Your Property
-              </NavLink>
+            {showPublicNavigation ? (
+              <>
+                <NavLink className={navLinkClass} end to="/" onClick={closeMenu}>
+                  Home
+                </NavLink>
+                <NavLink className={navLinkClass} to="/explore" onClick={closeMenu}>
+                  Explore
+                </NavLink>
+                <NavLink className={navLinkClass} to="/map" onClick={closeMenu}>
+                  Map
+                </NavLink>
+              </>
             ) : null}
+
             {isAuthenticated && hasOwnerRole ? (
               <NavLink
                 className={navLinkClass}
                 to="/owner/properties"
-                onClick={() => setMenuOpen(false)}
+                onClick={closeMenu}
               >
                 My Properties
               </NavLink>
             ) : null}
             {isAuthenticated && hasReviewerRole ? (
-              <NavLink
-                className={navLinkClass}
-                to="/reviewer"
-                onClick={() => setMenuOpen(false)}
-              >
-                Reviewer
-              </NavLink>
+              <>
+                <NavLink className={navLinkClass} to="/reviewer" onClick={closeMenu}>
+                  Review queue
+                </NavLink>
+                <NavLink className={navLinkClass} to="/reviewer/properties" onClick={closeMenu}>
+                  Add properties
+                </NavLink>
+              </>
             ) : null}
             {isAuthenticated && hasAdminRole ? (
               <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/users"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink className={navLinkClass} to="/admin/users" onClick={closeMenu}>
                   Users
                 </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/reviewers"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Reviewer Accounts
+                <NavLink className={navLinkClass} to="/admin/reviewers" onClick={closeMenu}>
+                  Reviewers
+                </NavLink>
+                <NavLink className={navLinkClass} to="/admin/properties" onClick={closeMenu}>
+                  Properties
                 </NavLink>
               </>
             ) : null}
             {isAuthenticated && hasDeveloperRole ? (
               <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/developer/users"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink className={navLinkClass} to="/developer/users" onClick={closeMenu}>
                   Users
                 </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/developer/admins"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Admin Accounts
+                <NavLink className={navLinkClass} to="/developer/admins" onClick={closeMenu}>
+                  Admins
                 </NavLink>
               </>
             ) : null}
 
-            <span className="my-2 h-px bg-slate-200 lg:mx-2 lg:my-0 lg:h-7 lg:w-px" />
-
-            {isAuthenticated ? (
-              <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/profile"
-                  onClick={() => setMenuOpen(false)}
-                >
-                  Profile
-                </NavLink>
-                <button
-                  className="min-h-11 rounded-xl bg-slate-900 px-4 py-2 text-left text-sm font-bold text-white transition hover:bg-slate-700 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 disabled:cursor-wait disabled:opacity-60 lg:text-center"
-                  type="button"
-                  disabled={isLoggingOut}
-                  onClick={() => void handleLogout()}
-                >
-                  {isLoggingOut ? "Signing out…" : "Logout"}
-                </button>
-              </>
+            {isAuthenticated && user ? (
+              <Link
+                className="mt-2 flex min-h-11 items-center gap-2.5 rounded-xl px-2 text-sm font-bold text-slate-700 transition hover:bg-slate-100 hover:text-slate-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700 lg:ml-2 lg:mt-0"
+                to="/profile"
+                aria-label="Open your profile"
+                onClick={closeMenu}
+              >
+                <span className="grid size-9 place-items-center rounded-full bg-emerald-700 text-xs font-black text-white ring-2 ring-emerald-100">
+                  {user.name.slice(0, 1).toUpperCase()}
+                </span>
+                <span className="max-w-28 truncate lg:hidden xl:block">
+                  {user.name}
+                </span>
+              </Link>
             ) : (
               <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                >
+                <NavLink className={navLinkClass} to="/login" onClick={closeMenu}>
                   Login
                 </NavLink>
                 <Link
                   className="flex min-h-11 items-center rounded-xl bg-emerald-700 px-4 py-2 text-sm font-bold text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-emerald-700"
                   to="/register"
-                  onClick={() => setMenuOpen(false)}
+                  onClick={closeMenu}
                 >
                   Create account
                 </Link>

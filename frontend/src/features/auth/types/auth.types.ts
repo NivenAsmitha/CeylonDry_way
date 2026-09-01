@@ -50,6 +50,12 @@ export interface UpdateProfileInput {
   language?: SupportedLanguage;
 }
 
+export interface ChangePasswordInput {
+  currentPassword: string;
+  newPassword: string;
+  confirmPassword: string;
+}
+
 export interface ResetPasswordInput {
   token: string;
   newPassword: string;

@@ -48,6 +48,7 @@ describe("lazy application routes", () => {
       logout: vi.fn(),
       refreshSession: vi.fn(),
       updateProfile: vi.fn(),
+      changePassword: vi.fn(),
       refetchUser: vi.fn(),
     };
   });

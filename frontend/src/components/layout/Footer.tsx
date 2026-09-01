@@ -18,9 +18,18 @@ export function Footer() {
           >
             Home
           </Link>
-          <span aria-label="Property discovery is coming later">
-            Explore — coming later
-          </span>
+          <Link
+            className="rounded-md hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            to="/explore"
+          >
+            Explore
+          </Link>
+          <Link
+            className="rounded-md hover:text-white focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-emerald-400"
+            to="/map"
+          >
+            Map
+          </Link>
         </div>
       </div>
     </footer>

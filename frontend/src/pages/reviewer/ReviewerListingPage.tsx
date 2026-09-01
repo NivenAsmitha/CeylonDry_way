@@ -2,6 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingScreen } from "../../components/common/LoadingScreen";
 import { PropertyStatusBadge } from "../../features/properties/components/PropertyStatusBadge";
+import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import { PROPERTY_TYPE_LABELS } from "../../features/properties/property.constants";
 import { ReviewerDecisionForm } from "../../features/reviewer/components/ReviewerDecisionForm";
 import { useReviewerListing } from "../../features/reviewer/hooks/useReviewerListings";
@@ -109,7 +110,7 @@ export function ReviewerListingPage() {
                       className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-50"
                       key={photo.id}
                     >
-                      <img
+                      <PlacePhoto
                         className="aspect-[4/3] w-full object-cover"
                         src={photo.url}
                         alt={
@@ -314,7 +315,10 @@ export function ReviewerListingPage() {
             committing any decision.
           </p>
           <div className="mt-5">
-            <ReviewerDecisionForm listing={listing} />
+            <ReviewerDecisionForm
+              key={`${listing.lifecycleStatus}-${listing.allowedDecisions.join("-")}`}
+              listing={listing}
+            />
           </div>
         </aside>
       </div>

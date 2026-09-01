@@ -10,6 +10,7 @@ import {
 import * as authService from "../features/auth/auth.service";
 import type {
   CurrentUser,
+  ChangePasswordInput,
   LoginInput,
   RegisterInput,
   UpdateProfileInput,
@@ -274,6 +275,13 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return currentUser;
   }, [queryClient]);
 
+  const changePassword = useCallback(
+    async (input: ChangePasswordInput): Promise<void> => {
+      await authService.changePassword(input);
+    },
+    [],
+  );
+
   const value = useMemo<AuthContextValue>(
     () => ({
       user,
@@ -286,6 +294,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       logout,
       refreshSession,
       updateProfile,
+      changePassword,
       refetchUser,
     }),
     [
@@ -298,6 +307,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
       refreshSession,
       register,
       updateProfile,
+      changePassword,
       user,
     ],
   );

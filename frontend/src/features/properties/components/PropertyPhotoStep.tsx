@@ -9,6 +9,8 @@ import {
   useUploadPropertyPhotos,
 } from "../hooks/useOwnerProperties";
 import type { PropertyPhoto } from "../types/property.types";
+import type { PropertyWorkflow } from "../services/properties.service";
+import { normalizeMediaUrl } from "../../places/utils/media-url";
 
 const PROPERTY_PHOTO_FIELD_NAME = "photos";
 const MAX_PROPERTY_PHOTOS = 4;
@@ -29,6 +31,7 @@ interface PropertyPhotoStepProps {
   propertyName: string;
   photos: PropertyPhoto[];
   editable: boolean;
+  workflow?: PropertyWorkflow;
 }
 
 function safeErrorMessages(error: unknown): string[] {
@@ -63,7 +66,7 @@ function PhotoCard({
       <div className="relative aspect-[4/3] bg-slate-100">
         <img
           className="size-full object-cover"
-          src={photo.url}
+          src={normalizeMediaUrl(photo.url)}
           alt={photo.altText || `Photo of ${propertyName}`}
         />
         {photo.isCover ? (
@@ -135,12 +138,13 @@ export function PropertyPhotoStep({
   propertyName,
   photos,
   editable,
+  workflow = "owner",
 }: PropertyPhotoStepProps) {
-  const upload = useUploadPropertyPhotos(propertyId);
-  const reorder = useReorderPropertyPhotos(propertyId);
-  const setCover = useSetPropertyPhotoCover(propertyId);
-  const updateAltText = useUpdatePropertyPhotoAltText(propertyId);
-  const remove = useRemovePropertyPhoto(propertyId);
+  const upload = useUploadPropertyPhotos(propertyId, workflow);
+  const reorder = useReorderPropertyPhotos(propertyId, workflow);
+  const setCover = useSetPropertyPhotoCover(propertyId, workflow);
+  const updateAltText = useUpdatePropertyPhotoAltText(propertyId, workflow);
+  const remove = useRemovePropertyPhoto(propertyId, workflow);
   const [previews, setPreviews] = useState<PreviewFile[]>([]);
   const previewRef = useRef<PreviewFile[]>([]);
   const [validationErrors, setValidationErrors] = useState<string[]>([]);

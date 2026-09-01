@@ -10,6 +10,7 @@ import {
 } from "./schemas/auth-response.schema";
 import type {
   AuthResponse,
+  ChangePasswordInput,
   CurrentUser,
   LoginInput,
   RegisterInput,
@@ -64,4 +65,14 @@ export async function updateProfile(
   const response = await apiClient.patch<unknown>("/me", input);
 
   return currentUserResponseSchema.parse(response.data);
+}
+
+export async function changePassword(
+  input: ChangePasswordInput,
+): Promise<{ message: string }> {
+  const response = await apiClient.patch<{ message: string }>(
+    "/me/password",
+    input,
+  );
+  return response.data;
 }

@@ -50,13 +50,25 @@ const sortLabels: Record<UserSort, string> = {
 
 interface UserManagementListPageProps {
   scope: "admin" | "developer";
+  fixedRole?: RoleName;
+  title?: string;
+  description?: string;
+  showCreateAction?: boolean;
 }
 
-export function UserManagementListPage({ scope }: UserManagementListPageProps) {
+export function UserManagementListPage({
+  scope,
+  fixedRole,
+  title = "User management",
+  description = "Find accounts, review safe activity, and apply audited account actions within your authority.",
+  showCreateAction = true,
+}: UserManagementListPageProps) {
   const [params, setParams] = useSearchParams();
   const query: UserListQuery = {
     search: params.get("search") ?? undefined,
-    role: enumValue(ROLE_NAMES, params.get("role")) as RoleName | undefined,
+    role:
+      fixedRole ??
+      (enumValue(ROLE_NAMES, params.get("role")) as RoleName | undefined),
     status: enumValue(USER_STATUSES, params.get("status")) as
       UserStatus | undefined,
     includeDeleted: params.get("includeDeleted") === "true",
@@ -103,19 +115,20 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
             {scope === "admin" ? "Admin workspace" : "Developer workspace"}
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-            User management
+            {title}
           </h1>
           <p className="mt-2 max-w-2xl text-slate-600">
-            Find accounts, review safe activity, and apply audited account
-            actions within your authority.
+            {description}
           </p>
         </div>
-        <Link
-          className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-700 px-5 font-bold text-emerald-800"
-          to={scope === "admin" ? "/admin/reviewers" : "/developer/admins"}
-        >
-          {scope === "admin" ? "Create reviewer" : "Create admin"}
-        </Link>
+        {showCreateAction ? (
+          <Link
+            className="inline-flex min-h-11 items-center justify-center rounded-xl border border-emerald-700 px-5 font-bold text-emerald-800"
+            to={scope === "admin" ? "/admin/reviewers" : "/developer/admins"}
+          >
+            {scope === "admin" ? "Create reviewer" : "Create admin"}
+          </Link>
+        ) : null}
       </div>
 
       <div className="mt-8 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -142,21 +155,23 @@ export function UserManagementListPage({ scope }: UserManagementListPageProps) {
           </button>
         </form>
         <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <label className="text-sm font-bold">
-            <span className="mb-2 block">Role</span>
-            <select
-              className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3"
-              value={query.role ?? ""}
-              onChange={(event) => updateFilter("role", event.target.value)}
-            >
-              <option value="">All roles</option>
-              {roleFilters.map((role) => (
-                <option key={role} value={role}>
-                  {role}
-                </option>
-              ))}
-            </select>
-          </label>
+          {!fixedRole ? (
+            <label className="text-sm font-bold">
+              <span className="mb-2 block">Role</span>
+              <select
+                className="min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3"
+                value={query.role ?? ""}
+                onChange={(event) => updateFilter("role", event.target.value)}
+              >
+                <option value="">All roles</option>
+                {roleFilters.map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
+            </label>
+          ) : null}
           <label className="text-sm font-bold">
             <span className="mb-2 block">Status</span>
             <select

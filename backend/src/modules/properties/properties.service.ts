@@ -224,6 +224,70 @@ export class PropertiesService {
     return this.getOwnedProperty(userId, propertyId);
   }
 
+  async createReviewerDraft(
+    reviewerId: string,
+    createPropertyDto: CreatePropertyDto,
+  ): Promise<OwnerPropertyResponseDto> {
+    this.assertOpeningHours(createPropertyDto.openingHours);
+
+    const propertyId = await this.prisma.$transaction(async (transaction) => {
+      const reviewer = await transaction.user.findFirst({
+        where: {
+          id: reviewerId,
+          status: UserStatus.ACTIVE,
+          deletedAt: null,
+          roles: { some: { role: { name: RoleName.REVIEWER } } },
+        },
+        select: { id: true },
+      });
+      if (!reviewer) {
+        throw new ForbiddenException('Active reviewer access is required');
+      }
+
+      const property = await transaction.property.create({
+        data: {
+          ownerUserId: reviewerId,
+          lifecycleStatus: PropertyStatus.DRAFT,
+        },
+        select: { id: true },
+      });
+      const version = await transaction.propertyVersion.create({
+        data: {
+          propertyId: property.id,
+          version: 1,
+          ...this.buildVersionData(createPropertyDto),
+        },
+        select: { id: true },
+      });
+      await transaction.property.update({
+        where: { id: property.id },
+        data: { activeVersionId: version.id },
+      });
+      await this.syncRelatedDraftData(
+        transaction,
+        reviewerId,
+        property.id,
+        version.id,
+        createPropertyDto,
+      );
+      await transaction.auditLog.create({
+        data: {
+          actorId: reviewerId,
+          action: 'REVIEWER_PROPERTY_DRAFT_CREATED',
+          targetType: 'PROPERTY',
+          targetId: property.id,
+          afterSummary: {
+            lifecycleStatus: PropertyStatus.DRAFT,
+            propertyVersionId: version.id,
+          },
+        },
+      });
+      return property.id;
+    });
+
+    return this.getOwnedProperty(reviewerId, propertyId);
+  }
+
   async listOwnedProperties(
     userId: string,
   ): Promise<OwnerPropertyListResponseDto> {

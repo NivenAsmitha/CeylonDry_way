@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import type { PublicPlaceListItem } from "../types/place.types";
 import { AmenityList } from "./AmenityList";
+import { PlacePhoto } from "./PlacePhoto";
 
 function displayType(value: string): string {
   return value
@@ -14,14 +15,14 @@ export function PlaceCard({ place }: { place: PublicPlaceListItem }) {
   return (
     <article className="group flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg">
       {place.coverImage ? (
-        <img
+        <PlacePhoto
           className="aspect-[16/9] w-full bg-slate-100 object-cover"
           src={place.coverImage.url}
           alt={place.coverImage.altText ?? `Photo of ${place.name}`}
         />
       ) : (
-        <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-emerald-100 to-sky-100 text-4xl font-black text-emerald-800/40">
-          CD
+        <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-emerald-100 to-sky-100 px-6 text-center font-black text-emerald-900/60">
+          No approved photo yet
         </div>
       )}
       <div className="flex flex-1 flex-col p-5">

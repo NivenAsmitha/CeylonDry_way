@@ -22,6 +22,11 @@ export function LoginPage() {
   const locationState: unknown = location.state;
   const destination = getSafeRedirectPath(locationState);
   const registrationSucceeded = hasRegistrationSuccessNotice(locationState);
+  const passwordChanged =
+    typeof locationState === "object" &&
+    locationState !== null &&
+    "passwordChanged" in locationState &&
+    locationState.passwordChanged === true;
   const [serverError, setServerError] = useState<string | null>(null);
   const {
     register,
@@ -77,6 +82,15 @@ export function LoginPage() {
             role="status"
           >
             Account created successfully. Sign in with your new credentials.
+          </div>
+        ) : null}
+
+        {passwordChanged ? (
+          <div
+            className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm text-emerald-900"
+            role="status"
+          >
+            Password changed successfully. Sign in with your new password.
           </div>
         ) : null}
 

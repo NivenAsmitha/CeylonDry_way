@@ -4,13 +4,33 @@ import heroImage from "../../assets/hero.png";
 import { NearMeButton } from "../../features/places/components/NearMeButton";
 import { PlaceList } from "../../features/places/components/PlaceList";
 import { usePublicPlaces } from "../../features/places/hooks/usePlaces";
-import { useAuth } from "../../features/auth/hooks/useAuth";
+
+const discoveryHighlights = [
+  {
+    number: "01",
+    title: "Verified before publishing",
+    text: "Trained reviewers check listing details and locations before travellers see them.",
+  },
+  {
+    number: "02",
+    title: "Useful accessibility detail",
+    text: "Compare facilities, access notes, opening hours and practical amenities in one place.",
+  },
+  {
+    number: "03",
+    title: "Built around real journeys",
+    text: "Use the live map, nearby search and exact directions to plan with more confidence.",
+  },
+] as const;
 
 export function HomePage() {
   const [search, setSearch] = useState("");
-  const { user } = useAuth();
   const navigate = useNavigate();
-  const featuredQuery = usePublicPlaces({ page: 1, pageSize: 3, sort: "newest" });
+  const featuredQuery = usePublicPlaces({
+    page: 1,
+    pageSize: 3,
+    sort: "newest",
+  });
 
   function submitSearch(event: FormEvent<HTMLFormElement>): void {
     event.preventDefault();
@@ -21,43 +41,68 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative overflow-hidden bg-gradient-to-br from-emerald-950 via-emerald-900 to-teal-800 text-white">
-        <div className="absolute -right-20 -top-28 size-80 rounded-full bg-lime-300/10 blur-3xl" />
-        <div className="absolute -bottom-32 -left-20 size-96 rounded-full bg-cyan-300/10 blur-3xl" />
-        <div className="relative mx-auto grid max-w-7xl gap-12 px-4 py-16 sm:px-6 sm:py-20 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:px-8 lg:py-24">
-          <div>
-            <p className="inline-flex rounded-full border border-emerald-300/30 bg-white/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.18em] text-emerald-100">
-              Reviewer-verified places
-            </p>
-            <h1 className="mt-6 max-w-3xl text-4xl font-black leading-tight tracking-tight sm:text-5xl lg:text-6xl">
-              Find facilities that make every journey easier.
+      <section className="relative isolate min-h-[calc(100svh-4.25rem)] overflow-hidden bg-emerald-950 text-white">
+        <video
+          className="absolute inset-0 -z-30 size-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          poster={heroImage}
+          aria-hidden="true"
+        >
+          <source src="/videos/home-hero-demo.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgba(2,44,34,0.96)_0%,rgba(2,44,34,0.82)_43%,rgba(2,44,34,0.28)_100%)]" />
+        <div className="absolute inset-0 -z-10 bg-[radial-gradient(circle_at_75%_20%,rgba(253,224,71,0.18),transparent_32%)]" />
+
+        <div className="mx-auto flex min-h-[calc(100svh-4.25rem)] max-w-7xl items-center px-4 py-16 sm:px-6 lg:px-8">
+          <div className="max-w-4xl">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-3.5 py-2 text-xs font-black uppercase tracking-[0.18em] text-emerald-50 backdrop-blur-md">
+              <span className="size-2 rounded-full bg-amber-300 shadow-[0_0_0_5px_rgba(253,224,71,0.15)]" />
+              Reviewer-verified across Sri Lanka
+            </div>
+
+            <h1 className="mt-7 max-w-4xl text-5xl font-black leading-[0.98] tracking-[-0.045em] sm:text-6xl lg:text-8xl">
+              Travel with fewer
+              <span className="block text-amber-300">unknowns.</span>
             </h1>
-            <p className="mt-6 max-w-2xl text-base leading-8 text-emerald-50/90 sm:text-lg">
-              Discover approved public facilities across Sri Lanka, compare
-              accessibility details, and get directions from exact verified coordinates.
+            <p className="mt-7 max-w-2xl text-base leading-8 text-emerald-50/90 sm:text-xl">
+              Find verified facilities, accessibility information and precise
+              locations for journeys that feel easier from the start.
             </p>
-            <form className="mt-8 flex max-w-2xl flex-col gap-3 sm:flex-row" onSubmit={submitSearch}>
-              <label className="sr-only" htmlFor="home-place-search">Search places</label>
-              <input
-                className="min-h-12 flex-1 rounded-xl border-0 bg-white px-4 text-slate-950 outline-none ring-2 ring-transparent focus:ring-amber-300"
-                id="home-place-search"
-                type="search"
-                maxLength={100}
-                placeholder="Search a place, city, or district"
-                value={search}
-                onChange={(event) => setSearch(event.target.value)}
-              />
+
+            <form
+              className="mt-9 max-w-3xl rounded-[1.5rem] border border-white/20 bg-white/95 p-2 shadow-2xl shadow-slate-950/30 backdrop-blur-xl sm:flex"
+              onSubmit={submitSearch}
+            >
+              <label className="sr-only" htmlFor="home-place-search">
+                Search places
+              </label>
+              <div className="flex min-h-14 flex-1 items-center gap-3 px-4">
+                <span className="text-xl text-emerald-700" aria-hidden="true">
+                  ⌕
+                </span>
+                <input
+                  className="min-w-0 flex-1 border-0 bg-transparent py-3 text-slate-950 outline-none placeholder:text-slate-500"
+                  id="home-place-search"
+                  type="search"
+                  maxLength={100}
+                  placeholder="Search a place, city or district"
+                  value={search}
+                  onChange={(event) => setSearch(event.target.value)}
+                />
+              </div>
               <button
-                className="min-h-12 rounded-xl bg-amber-300 px-6 font-extrabold text-emerald-950 transition hover:bg-amber-200 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white"
+                className="min-h-14 w-full rounded-[1.1rem] bg-emerald-700 px-7 font-black text-white transition hover:bg-emerald-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-amber-400 sm:w-auto"
                 type="submit"
               >
                 Explore places
               </button>
             </form>
-            <div className="mt-4 rounded-2xl border border-white/20 bg-white/10 p-3">
-              <p className="mb-2 text-sm text-emerald-50">
-                Or share your location once to see the nearest verified places.
-              </p>
+
+            <div className="mt-5 flex flex-wrap items-center gap-3">
               <NearMeButton
                 active={false}
                 onClear={() => undefined}
@@ -71,79 +116,104 @@ export function HomePage() {
                   navigate(`/explore?${params.toString()}`);
                 }}
               />
-            </div>
-            <div className="mt-4 flex flex-wrap gap-4 text-sm font-bold text-emerald-100">
-              <Link className="underline underline-offset-4" to="/explore?wheelchairAccessible=true">
-                Wheelchair accessible
+              <Link
+                className="inline-flex min-h-11 items-center rounded-xl border border-white/25 bg-white/10 px-4 text-sm font-bold text-white backdrop-blur transition hover:bg-white/20"
+                to="/map"
+              >
+                Open live map&nbsp; →
               </Link>
-              <Link className="underline underline-offset-4" to="/explore?isFree=true">
-                Free facilities
-              </Link>
-              <Link className="underline underline-offset-4" to="/map">Location view</Link>
             </div>
-          </div>
 
-          <div className="relative mx-auto w-full max-w-lg">
-            <div className="absolute inset-6 rounded-[2rem] bg-amber-300/20 blur-3xl" />
-            <div className="relative overflow-hidden rounded-[2rem] border border-white/20 bg-white/10 p-3 shadow-2xl backdrop-blur">
-              <img
-                className="aspect-[4/3] w-full rounded-[1.4rem] object-cover"
-                src={heroImage}
-                alt="A scenic Sri Lankan landscape"
-              />
-              <div className="absolute bottom-6 left-6 right-6 rounded-2xl bg-slate-950/75 p-4 backdrop-blur">
-                <p className="text-xs font-bold uppercase tracking-[0.16em] text-amber-300">Public discovery</p>
-                <p className="mt-1 font-semibold text-white">Only approved, active listings appear in search.</p>
-              </div>
+            <div className="mt-10 flex flex-wrap gap-x-8 gap-y-3 border-t border-white/20 pt-6 text-sm text-emerald-50/85">
+              <span>✓ Approved active listings only</span>
+              <span>✓ Exact map coordinates</span>
+              <span>✓ Accessibility-first details</span>
             </div>
           </div>
         </div>
       </section>
 
-      <section className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="flex flex-wrap items-end justify-between gap-4">
-          <div>
-            <p className="text-sm font-black uppercase tracking-[0.16em] text-emerald-700">Recently verified</p>
-            <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">Start exploring</h2>
-          </div>
-          <Link className="inline-flex min-h-11 items-center font-bold text-emerald-800" to="/explore">
-            View all places &rarr;
-          </Link>
-        </div>
-
-        <div className="mt-7">
-          {featuredQuery.isPending ? (
-            <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-              {[0, 1, 2].map((item) => (
-                <div className="h-80 animate-pulse rounded-3xl bg-slate-200" key={item} />
-              ))}
+      <section className="bg-white py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-end">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">
+                Confidence by design
+              </p>
+              <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.035em] text-slate-950 sm:text-5xl">
+                Better information makes better journeys.
+              </h2>
             </div>
-          ) : featuredQuery.data?.items.length ? (
-            <PlaceList places={featuredQuery.data.items} />
-          ) : (
-            <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-10 text-center">
-              <h3 className="text-xl font-black text-slate-950">Verified places are on the way</h3>
-              <p className="mt-2 text-slate-600">Check Explore for newly approved public facilities.</p>
-            </div>
-          )}
-        </div>
-        {!user || user.roles.includes("CLIENT") ? (
-        <div className="mt-10 rounded-3xl bg-slate-900 px-6 py-8 text-white sm:flex sm:items-center sm:justify-between sm:gap-8">
-          <div>
-            <h2 className="text-2xl font-black">Know a useful facility?</h2>
-            <p className="mt-2 text-sm leading-6 text-slate-300">
-              List it for reviewer verification and help make journeys more
-              predictable.
+            <p className="max-w-2xl text-lg leading-8 text-slate-600 lg:justify-self-end">
+              Ceylon DryWay brings trustworthy facility information into a
+              single calm experience—from discovery to directions.
             </p>
           </div>
-          <Link
-            className="mt-5 inline-flex min-h-12 items-center justify-center rounded-xl bg-amber-300 px-5 font-black text-emerald-950 sm:mt-0"
-            to="/list-property"
-          >
-            List your property
-          </Link>
+
+          <div className="mt-11 grid overflow-hidden rounded-[2rem] border border-slate-200 bg-stone-50 md:grid-cols-3">
+            {discoveryHighlights.map((highlight) => (
+              <article
+                className="border-b border-slate-200 p-7 last:border-b-0 md:border-b-0 md:border-r md:last:border-r-0 sm:p-8"
+                key={highlight.number}
+              >
+                <span className="text-sm font-black text-emerald-700">
+                  {highlight.number}
+                </span>
+                <h3 className="mt-8 text-xl font-black text-slate-950">
+                  {highlight.title}
+                </h3>
+                <p className="mt-3 text-sm leading-7 text-slate-600">
+                  {highlight.text}
+                </p>
+              </article>
+            ))}
+          </div>
         </div>
-        ) : null}
+      </section>
+
+      <section className="bg-stone-100 py-16 sm:py-20">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-wrap items-end justify-between gap-5">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-emerald-700">
+                Recently verified
+              </p>
+              <h2 className="mt-3 text-4xl font-black tracking-[-0.035em] text-slate-950">
+                Places ready to explore
+              </h2>
+            </div>
+            <Link
+              className="inline-flex min-h-11 items-center rounded-xl border border-slate-300 bg-white px-5 font-black text-slate-800 transition hover:border-emerald-300 hover:text-emerald-800"
+              to="/explore"
+            >
+              View all places&nbsp; →
+            </Link>
+          </div>
+
+          <div className="mt-8">
+            {featuredQuery.isPending ? (
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                {[0, 1, 2].map((item) => (
+                  <div
+                    className="h-96 animate-pulse rounded-3xl bg-slate-200"
+                    key={item}
+                  />
+                ))}
+              </div>
+            ) : featuredQuery.data?.items.length ? (
+              <PlaceList places={featuredQuery.data.items} />
+            ) : (
+              <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
+                <h3 className="text-2xl font-black text-slate-950">
+                  Verified places are on the way
+                </h3>
+                <p className="mt-2 text-slate-600">
+                  Check Explore for newly approved public facilities.
+                </p>
+              </div>
+            )}
+          </div>
+        </div>
       </section>
     </>
   );

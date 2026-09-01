@@ -2,9 +2,11 @@ import { Link } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
 import { LoadingScreen } from "../../components/common/LoadingScreen";
 import { PropertyStatusBadge } from "../../features/properties/components/PropertyStatusBadge";
+import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import { useOwnerProperties } from "../../features/properties/hooks/useOwnerProperties";
 import { getPropertyStatusLabel } from "../../features/properties/property.constants";
 import { getApiErrorMessage } from "../../types/api.types";
+import type { PropertyWorkflow } from "../../features/properties/services/properties.service";
 
 function formatUpdatedDate(value: string): string {
   const date = new Date(value);
@@ -25,8 +27,15 @@ function formatDecision(value: string): string {
     .join(" ");
 }
 
-export function OwnerPropertiesPage() {
-  const propertiesQuery = useOwnerProperties();
+export function OwnerPropertiesPage({
+  workflow = "owner",
+}: {
+  workflow?: PropertyWorkflow;
+}) {
+  const propertiesQuery = useOwnerProperties(workflow);
+  const isReviewer = workflow === "reviewer";
+  const createPath = isReviewer ? "/reviewer/properties/new" : "/list-property";
+  const collectionPath = isReviewer ? "/reviewer/properties" : "/owner/properties";
 
   if (propertiesQuery.isPending) {
     return <LoadingScreen message="Loading your properties..." />;
@@ -37,20 +46,22 @@ export function OwnerPropertiesPage() {
       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <p className="text-sm font-bold uppercase tracking-[0.16em] text-emerald-700">
-            Owner workspace
+            {isReviewer ? "Reviewer workspace" : "Owner workspace"}
           </p>
           <h1 className="mt-2 text-3xl font-black tracking-tight text-slate-950 sm:text-4xl">
-            My properties
+            {isReviewer ? "Manually added properties" : "My properties"}
           </h1>
           <p className="mt-2 text-slate-600">
-            Continue private drafts and track listings submitted for review.
+            {isReviewer
+              ? "Create verified-source drafts and send them through the normal independent review process."
+              : "Continue private drafts and track listings submitted for review."}
           </p>
         </div>
         <Link
           className="inline-flex min-h-12 items-center justify-center rounded-xl bg-emerald-700 px-5 font-extrabold text-white"
-          to="/list-property"
+          to={createPath}
         >
-          List another property
+          {isReviewer ? "Add property manually" : "List another property"}
         </Link>
       </div>
 
@@ -71,9 +82,9 @@ export function OwnerPropertiesPage() {
           </p>
           <Link
             className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-emerald-700 px-6 font-extrabold text-white"
-            to="/list-property"
+            to={createPath}
           >
-            List Your Property
+            {isReviewer ? "Add property manually" : "List Your Property"}
           </Link>
         </div>
       ) : null}
@@ -85,6 +96,20 @@ export function OwnerPropertiesPage() {
               className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
               key={property.id}
             >
+              {property.activeVersion.photos.length ? (
+                <PlacePhoto
+                  className="mb-5 aspect-[16/7] w-full rounded-2xl object-cover"
+                  src={
+                    property.activeVersion.photos.find((photo) => photo.isCover)
+                      ?.url ?? property.activeVersion.photos[0].url
+                  }
+                  alt={
+                    property.activeVersion.photos.find((photo) => photo.isCover)
+                      ?.altText ??
+                    `Photo of ${property.activeVersion.name || "property"}`
+                  }
+                />
+              ) : null}
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
                   <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
@@ -136,14 +161,14 @@ export function OwnerPropertiesPage() {
               <div className="mt-6 flex flex-wrap gap-3">
                 <Link
                   className="inline-flex min-h-11 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white"
-                  to={`/owner/properties/${property.id}/edit`}
+                  to={`${collectionPath}/${property.id}/edit`}
                 >
                   {property.canEdit ? "Edit" : "View"}
                 </Link>
                 {property.canSubmit ? (
                   <Link
                     className="inline-flex min-h-11 items-center rounded-xl border border-amber-400 bg-amber-50 px-4 text-sm font-bold text-amber-950"
-                    to={`/owner/properties/${property.id}/edit?step=7`}
+                    to={`${collectionPath}/${property.id}/edit?step=7`}
                   >
                     Review and submit
                   </Link>
