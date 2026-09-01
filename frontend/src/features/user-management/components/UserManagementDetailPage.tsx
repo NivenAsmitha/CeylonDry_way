@@ -286,6 +286,7 @@ export function UserManagementDetailPage({
                   {...profileForm.register("language")}
                 >
                   <option value="en">English</option>
+                  <option value="ja">日本語</option>
                 </select>
               </label>
               {profileMutation.isError ? (

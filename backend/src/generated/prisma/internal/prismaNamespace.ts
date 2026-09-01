@@ -406,6 +406,7 @@ export const ModelName = {
   ReviewDecision: 'ReviewDecision',
   AuditLog: 'AuditLog',
   PropertyReport: 'PropertyReport',
+  FacilityRating: 'FacilityRating',
   Notification: 'Notification',
   PropertyPhoto: 'PropertyPhoto',
   Amenity: 'Amenity',
@@ -426,7 +427,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "passwordResetToken" | "refreshSession" | "role" | "userRole" | "property" | "propertyVersion" | "reviewDecision" | "auditLog" | "propertyReport" | "notification" | "propertyPhoto" | "amenity" | "propertyAmenity" | "openingHour"
+    modelProps: "user" | "passwordResetToken" | "refreshSession" | "role" | "userRole" | "property" | "propertyVersion" | "reviewDecision" | "auditLog" | "propertyReport" | "facilityRating" | "notification" | "propertyPhoto" | "amenity" | "propertyAmenity" | "openingHour"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -1170,6 +1171,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    FacilityRating: {
+      payload: Prisma.$FacilityRatingPayload<ExtArgs>
+      fields: Prisma.FacilityRatingFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.FacilityRatingFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.FacilityRatingFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        findFirst: {
+          args: Prisma.FacilityRatingFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.FacilityRatingFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        findMany: {
+          args: Prisma.FacilityRatingFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>[]
+        }
+        create: {
+          args: Prisma.FacilityRatingCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        createMany: {
+          args: Prisma.FacilityRatingCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.FacilityRatingCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>[]
+        }
+        delete: {
+          args: Prisma.FacilityRatingDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        update: {
+          args: Prisma.FacilityRatingUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        deleteMany: {
+          args: Prisma.FacilityRatingDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.FacilityRatingUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.FacilityRatingUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>[]
+        }
+        upsert: {
+          args: Prisma.FacilityRatingUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$FacilityRatingPayload>
+        }
+        aggregate: {
+          args: Prisma.FacilityRatingAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateFacilityRating>
+        }
+        groupBy: {
+          args: Prisma.FacilityRatingGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FacilityRatingGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.FacilityRatingCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.FacilityRatingCountAggregateOutputType> | number
+        }
+      }
+    }
     Notification: {
       payload: Prisma.$NotificationPayload<ExtArgs>
       fields: Prisma.NotificationFieldRefs
@@ -1732,6 +1807,21 @@ export const PropertyReportScalarFieldEnum = {
 export type PropertyReportScalarFieldEnum = (typeof PropertyReportScalarFieldEnum)[keyof typeof PropertyReportScalarFieldEnum]
 
 
+export const FacilityRatingScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  userId: 'userId',
+  cleanliness: 'cleanliness',
+  safety: 'safety',
+  accessibility: 'accessibility',
+  accuracy: 'accuracy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacilityRatingScalarFieldEnum = (typeof FacilityRatingScalarFieldEnum)[keyof typeof FacilityRatingScalarFieldEnum]
+
+
 export const NotificationScalarFieldEnum = {
   id: 'id',
   recipientId: 'recipientId',
@@ -1992,28 +2082,28 @@ export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$Prisma
  * Reference to a field of type 'PropertyReportCategory'
  */
 export type EnumPropertyReportCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyReportCategory'>
-
+    
 
 
 /**
  * Reference to a field of type 'PropertyReportCategory[]'
  */
 export type ListEnumPropertyReportCategoryFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyReportCategory[]'>
-
+    
 
 
 /**
  * Reference to a field of type 'PropertyReportStatus'
  */
 export type EnumPropertyReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyReportStatus'>
-
+    
 
 
 /**
  * Reference to a field of type 'PropertyReportStatus[]'
  */
 export type ListEnumPropertyReportStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'PropertyReportStatus[]'>
-
+    
 
 
 /**
@@ -2204,6 +2294,7 @@ export type GlobalOmitConfig = {
   reviewDecision?: Prisma.ReviewDecisionOmit
   auditLog?: Prisma.AuditLogOmit
   propertyReport?: Prisma.PropertyReportOmit
+  facilityRating?: Prisma.FacilityRatingOmit
   notification?: Prisma.NotificationOmit
   propertyPhoto?: Prisma.PropertyPhotoOmit
   amenity?: Prisma.AmenityOmit
@@ -2271,3 +2362,4 @@ export type PrismaAction =
  * `PrismaClient` proxy available in interactive transactions.
  */
 export type TransactionClient = Omit<DefaultPrismaClient, runtime.ITXClientDenyList>
+

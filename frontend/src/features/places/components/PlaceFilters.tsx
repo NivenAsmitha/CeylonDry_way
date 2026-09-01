@@ -1,8 +1,6 @@
 import { PROPERTY_TYPES } from "../../properties/types/property.types";
-import type {
-  PublicAmenity,
-  PublicPlaceQuery,
-} from "../types/place.types";
+import type { PublicAmenity, PublicPlaceQuery } from "../types/place.types";
+import { useLanguage } from "../../../i18n/useLanguage";
 
 interface PlaceFiltersProps {
   amenities: PublicAmenity[];
@@ -25,6 +23,7 @@ export function PlaceFilters({
   query,
   onChange,
 }: PlaceFiltersProps) {
+  const { t } = useLanguage();
   const selectedAmenities = query.amenities ?? [];
 
   function toggleAmenity(code: string): void {
@@ -37,7 +36,9 @@ export function PlaceFilters({
   return (
     <aside className="rounded-3xl border border-slate-200 bg-white p-5 shadow-sm">
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-lg font-black text-slate-950">Filter places</h2>
+        <h2 className="text-lg font-black text-slate-950">
+          {t("Filter places")}
+        </h2>
         <button
           className="min-h-11 text-sm font-bold text-brand-800 hover:text-brand-950 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           type="button"
@@ -53,13 +54,13 @@ export function PlaceFilters({
             })
           }
         >
-          Clear filters
+          {t("Clear filters")}
         </button>
       </div>
 
       <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
         <label className="text-sm font-bold text-slate-700">
-          District
+          {t("District")}
           <input
             className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.district ?? ""}
@@ -70,7 +71,7 @@ export function PlaceFilters({
           />
         </label>
         <label className="text-sm font-bold text-slate-700">
-          City
+          {t("City")}
           <input
             className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.city ?? ""}
@@ -81,7 +82,7 @@ export function PlaceFilters({
           />
         </label>
         <label className="text-sm font-bold text-slate-700">
-          Place type
+          {t("Place type")}
           <select
             className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={query.propertyType ?? ""}
@@ -92,16 +93,16 @@ export function PlaceFilters({
               })
             }
           >
-            <option value="">All types</option>
+            <option value="">{t("All types")}</option>
             {PROPERTY_TYPES.map((type) => (
               <option key={type} value={type}>
-                {displayType(type)}
+                {t(displayType(type))}
               </option>
             ))}
           </select>
         </label>
         <label className="text-sm font-bold text-slate-700">
-          Cost
+          {t("Cost")}
           <select
             className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal outline-none focus:border-brand-700 focus:ring-2 focus:ring-brand-100"
             value={
@@ -111,9 +112,9 @@ export function PlaceFilters({
               onChange({ isFree: event.target.value || undefined, page: 1 })
             }
           >
-            <option value="">Free and paid</option>
-            <option value="true">Free</option>
-            <option value="false">Paid</option>
+            <option value="">{t("Free and paid")}</option>
+            <option value="true">{t("Free")}</option>
+            <option value="false">{t("Paid")}</option>
           </select>
         </label>
       </div>
@@ -130,12 +131,14 @@ export function PlaceFilters({
             })
           }
         />
-        Wheelchair accessible
+        {t("Wheelchair accessible")}
       </label>
 
       {amenities.length ? (
         <fieldset className="mt-5">
-          <legend className="text-sm font-black text-slate-800">Amenities</legend>
+          <legend className="text-sm font-black text-slate-800">
+            {t("Amenities")}
+          </legend>
           <div className="mt-2 space-y-1">
             {amenities.map((amenity) => (
               <label
@@ -148,7 +151,7 @@ export function PlaceFilters({
                   checked={selectedAmenities.includes(amenity.code)}
                   onChange={() => toggleAmenity(amenity.code)}
                 />
-                {amenity.name}
+                {t(amenity.name)}
               </label>
             ))}
           </div>

@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/hooks/useAuth";
+import { useLanguage } from "../../i18n/useLanguage";
 
 export function PropertyListingFab() {
   const { user, isAuthenticated } = useAuth();
+  const { t } = useLanguage();
   const [open, setOpen] = useState(false);
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -30,7 +32,7 @@ export function PropertyListingFab() {
 
       const focusable = Array.from(
         dialogRef.current.querySelectorAll<HTMLElement>(
-          'button:not([disabled]), a[href], input:not([disabled])',
+          "button:not([disabled]), a[href], input:not([disabled])",
         ),
       );
       if (!focusable.length) return;
@@ -59,7 +61,7 @@ export function PropertyListingFab() {
       <button
         className="group fixed bottom-5 right-5 z-30 grid size-14 place-items-center rounded-full bg-brand-700 text-3xl font-light text-white shadow-[0_16px_45px_rgba(6,78,59,0.35)] transition hover:-translate-y-1 hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-700 sm:bottom-7 sm:right-7 sm:size-16"
         type="button"
-        aria-label="List a property"
+        aria-label={t("List a property")}
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen(true)}
@@ -68,7 +70,7 @@ export function PropertyListingFab() {
           +
         </span>
         <span className="pointer-events-none absolute right-full mr-3 hidden whitespace-nowrap rounded-lg bg-slate-950 px-3 py-2 text-xs font-bold text-white shadow-lg group-hover:block group-focus-visible:block sm:block sm:opacity-0 sm:transition sm:group-hover:opacity-100 sm:group-focus-visible:opacity-100">
-          List a property
+          {t("List a property")}
         </span>
       </button>
 
@@ -90,19 +92,19 @@ export function PropertyListingFab() {
             <div className="flex items-start justify-between gap-4">
               <div>
                 <p className="text-xs font-black uppercase tracking-[0.18em] text-brand-700">
-                  Help travellers plan better
+                  {t("Help travellers plan better")}
                 </p>
                 <h2
                   className="mt-2 text-2xl font-black tracking-tight text-slate-950"
                   id="property-action-title"
                 >
-                  Add a useful place
+                  {t("Add a useful place")}
                 </h2>
               </div>
               <button
                 className="grid size-11 shrink-0 place-items-center rounded-full bg-slate-100 text-xl text-slate-700 hover:bg-slate-200 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                 type="button"
-                aria-label="Close property listing dialog"
+                aria-label={t("Close property listing dialog")}
                 ref={closeRef}
                 onClick={() => setOpen(false)}
               >
@@ -111,8 +113,9 @@ export function PropertyListingFab() {
             </div>
 
             <p className="mt-4 leading-7 text-slate-600">
-              Create a private draft, add accurate facilities and photos, then
-              send it to a reviewer before it becomes public.
+              {t(
+                "Create a private draft, add accurate facilities and photos, then send it to a reviewer before it becomes public.",
+              )}
             </p>
 
             {isAuthenticated && canList ? (
@@ -122,7 +125,7 @@ export function PropertyListingFab() {
                   to="/list-property"
                   onClick={() => setOpen(false)}
                 >
-                  Start a listing
+                  {t("Start a listing")}
                 </Link>
                 {hasProperties ? (
                   <Link
@@ -130,12 +133,13 @@ export function PropertyListingFab() {
                     to="/owner/properties"
                     onClick={() => setOpen(false)}
                   >
-                    My properties
+                    {t("My properties")}
                   </Link>
                 ) : (
                   <p className="flex items-center text-sm leading-6 text-slate-500">
-                    Your owner workspace appears after your first draft is
-                    saved.
+                    {t(
+                      "Your owner workspace appears after your first draft is saved.",
+                    )}
                   </p>
                 )}
               </div>
@@ -147,14 +151,14 @@ export function PropertyListingFab() {
                   state={{ from: "/list-property" }}
                   onClick={() => setOpen(false)}
                 >
-                  Sign in to continue
+                  {t("Sign in to continue")}
                 </Link>
                 <Link
                   className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 px-5 font-black text-slate-800"
                   to="/register"
                   onClick={() => setOpen(false)}
                 >
-                  Create account
+                  {t("Create account")}
                 </Link>
               </div>
             )}

@@ -15,8 +15,10 @@ import {
   getRoleLandingPath,
   hasRegistrationSuccessNotice,
 } from "../../utils/navigation";
+import { useLanguage } from "../../i18n/useLanguage";
 
 export function LoginPage() {
+  const { t } = useLanguage();
   const { login, isAuthenticated, user } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ export function LoginPage() {
       const normalizedError = normalizeApiError(error);
       setServerError(
         normalizedError.statusCode === 401
-          ? "Invalid email or password."
+          ? t("Invalid email or password.")
           : normalizedError.messages.join(" "),
       );
     }
@@ -71,18 +73,18 @@ export function LoginPage() {
     <section className="px-4 py-12 sm:px-6 sm:py-16">
       <div className="mx-auto max-w-md rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl sm:p-9">
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
-          Welcome back
+          {t("Welcome back")}
         </p>
         <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
-          Sign in to your account
+          {t("Sign in to your account")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
-          New to ComfortGo?{" "}
+          {t("New to ComfortGo?")}{" "}
           <Link
             className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
             to="/register"
           >
-            Create an account
+            {t("Create an account")}
           </Link>
         </p>
 
@@ -91,7 +93,9 @@ export function LoginPage() {
             className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900"
             role="status"
           >
-            Account created successfully. Sign in with your new credentials.
+            {t(
+              "Account created successfully. Sign in with your new credentials.",
+            )}
           </div>
         ) : null}
 
@@ -100,13 +104,15 @@ export function LoginPage() {
             className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 px-4 py-3 text-sm text-brand-900"
             role="status"
           >
-            Password changed successfully. Sign in with your new password.
+            {t(
+              "Password changed successfully. Sign in with your new password.",
+            )}
           </div>
         ) : null}
 
         {serverError ? (
           <div className="mt-6">
-            <ErrorMessage message={serverError} title="Sign-in failed" />
+            <ErrorMessage message={serverError} title={t("Sign-in failed")} />
           </div>
         ) : null}
 
@@ -117,7 +123,7 @@ export function LoginPage() {
         >
           <FormField
             id="login-email"
-            label="Email address"
+            label={t("Email address")}
             type="email"
             autoComplete="email"
             error={errors.email?.message}
@@ -125,21 +131,21 @@ export function LoginPage() {
           />
           <FormField
             id="login-password"
-            label="Password"
+            label={t("Password")}
             type="password"
             autoComplete="current-password"
             error={errors.password?.message}
             {...register("password")}
           />
           <p className="text-xs text-slate-500">
-            Forgot password? Recovery is coming in a later phase.
+            {t("Forgot password? Recovery is coming in a later phase.")}
           </p>
           <button
             className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-extrabold text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"
             type="submit"
             disabled={isSubmitting}
           >
-            {isSubmitting ? "Signing in…" : "Sign in"}
+            {t(isSubmitting ? "Signing in…" : "Sign in")}
           </button>
         </form>
       </div>

@@ -1,7 +1,9 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useAuth } from "../../features/auth/hooks/useAuth";
+import { useLanguage } from "../../i18n/useLanguage";
+import { languageLabels, type Language } from "../../i18n/translations";
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
   return `flex min-h-10 items-center rounded-xl px-3.5 py-2 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${
@@ -12,11 +14,47 @@ function navLinkClass({ isActive }: { isActive: boolean }): string {
 }
 
 export function Navbar() {
-  const { user, isAuthenticated } = useAuth();
+  const { user, isAuthenticated, updateProfile } = useAuth();
+  const { language, setLanguage, t } = useLanguage();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [languageMenuOpen, setLanguageMenuOpen] = useState(false);
+  const languageMenuRef = useRef<HTMLDivElement>(null);
 
   function closeMenu(): void {
     setMenuOpen(false);
+  }
+
+  useEffect(() => {
+    function closeLanguageMenu(event: MouseEvent): void {
+      if (
+        languageMenuRef.current &&
+        !languageMenuRef.current.contains(event.target as Node)
+      ) {
+        setLanguageMenuOpen(false);
+      }
+    }
+    function closeOnEscape(event: KeyboardEvent): void {
+      if (event.key === "Escape") setLanguageMenuOpen(false);
+    }
+    document.addEventListener("mousedown", closeLanguageMenu);
+    document.addEventListener("keydown", closeOnEscape);
+    return () => {
+      document.removeEventListener("mousedown", closeLanguageMenu);
+      document.removeEventListener("keydown", closeOnEscape);
+    };
+  }, []);
+
+  async function chooseLanguage(nextLanguage: Language): Promise<void> {
+    setLanguage(nextLanguage);
+    setLanguageMenuOpen(false);
+    closeMenu();
+    if (isAuthenticated && user?.language !== nextLanguage) {
+      try {
+        await updateProfile({ language: nextLanguage });
+      } catch {
+        // The local preference still applies when account syncing is unavailable.
+      }
+    }
   }
 
   const hasOwnerRole = user?.roles.includes("OWNER") ?? false;
@@ -43,7 +81,7 @@ export function Navbar() {
         <Link
           className="group flex min-h-12 items-center rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={workspaceHome}
-          aria-label="ComfortGo home"
+          aria-label={t("ComfortGo home")}
           onClick={closeMenu}
         >
           <img
@@ -52,8 +90,8 @@ export function Navbar() {
             alt=""
           />
           <span className="ml-3 hidden border-l border-brand-100 pl-3 text-xs font-bold leading-5 text-slate-500 md:block">
-            Find your nearest
-            <span className="block text-brand-800">clean stop</span>
+            {t("Find your nearest")}
+            <span className="block text-brand-800">{t("clean stop")}</span>
           </span>
         </Link>
 
@@ -63,7 +101,7 @@ export function Navbar() {
           aria-expanded={menuOpen}
           aria-controls="primary-menu"
           aria-label={
-            menuOpen ? "Close navigation menu" : "Open navigation menu"
+            menuOpen ? t("Close navigation menu") : t("Open navigation menu")
           }
           onClick={() => setMenuOpen((open) => !open)}
         >
@@ -87,21 +125,21 @@ export function Navbar() {
                   to="/"
                   onClick={closeMenu}
                 >
-                  Home
+                  {t("Home")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/explore"
                   onClick={closeMenu}
                 >
-                  Explore
+                  {t("Explore")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/about"
                   onClick={closeMenu}
                 >
-                  About
+                  {t("About")}
                 </NavLink>
               </>
             ) : null}
@@ -112,7 +150,7 @@ export function Navbar() {
                 to="/owner/properties"
                 onClick={closeMenu}
               >
-                My Properties
+                {t("My Properties")}
               </NavLink>
             ) : null}
             {isAuthenticated && hasReviewerRole ? (
@@ -122,14 +160,14 @@ export function Navbar() {
                   to="/reviewer"
                   onClick={closeMenu}
                 >
-                  Review queue
+                  {t("Review queue")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/reviewer/properties"
                   onClick={closeMenu}
                 >
-                  Add properties
+                  {t("Add properties")}
                 </NavLink>
               </>
             ) : null}
@@ -140,28 +178,28 @@ export function Navbar() {
                   to="/admin/users"
                   onClick={closeMenu}
                 >
-                  Users
+                  {t("Users")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/admin/reviewers"
                   onClick={closeMenu}
                 >
-                  Reviewers
+                  {t("Reviewers")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/admin/properties"
                   onClick={closeMenu}
                 >
-                  Properties
+                  {t("Properties")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/admin/reports"
                   onClick={closeMenu}
                 >
-                  Reports
+                  {t("Reports")}
                 </NavLink>
               </>
             ) : null}
@@ -172,36 +210,87 @@ export function Navbar() {
                   to="/developer/users"
                   onClick={closeMenu}
                 >
-                  Users
+                  {t("Users")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/developer/admins"
                   onClick={closeMenu}
                 >
-                  Admins
+                  {t("Admins")}
                 </NavLink>
                 <NavLink
                   className={navLinkClass}
                   to="/developer/operations"
                   onClick={closeMenu}
                 >
-                  Operations
+                  {t("Operations")}
                 </NavLink>
               </>
             ) : null}
+
+            <div className="relative lg:ml-1" ref={languageMenuRef}>
+              <button
+                className="flex min-h-10 w-full items-center justify-between gap-2 rounded-xl border border-slate-200 bg-white px-3 text-sm font-bold text-slate-700 shadow-sm transition hover:border-brand-200 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 lg:w-auto"
+                type="button"
+                aria-label={t("Change language")}
+                aria-haspopup="menu"
+                aria-expanded={languageMenuOpen}
+                onClick={() => setLanguageMenuOpen((open) => !open)}
+              >
+                <span aria-hidden="true" className="text-base font-black">
+                  文
+                </span>
+                <span>{language === "ja" ? "日本語" : "EN"}</span>
+                <span aria-hidden="true" className="text-xs text-slate-400">
+                  ▾
+                </span>
+              </button>
+              {languageMenuOpen ? (
+                <div
+                  className="absolute right-0 z-50 mt-2 w-48 overflow-hidden rounded-2xl border border-slate-200 bg-white p-2 shadow-xl"
+                  role="menu"
+                  aria-label={t("Language")}
+                >
+                  {(["en", "ja"] as const).map((option) => (
+                    <button
+                      className={`flex min-h-11 w-full items-center justify-between rounded-xl px-3 text-left text-sm font-bold transition hover:bg-brand-50 ${
+                        option === language
+                          ? "bg-brand-50 text-brand-900"
+                          : "text-slate-700"
+                      }`}
+                      type="button"
+                      role="menuitemradio"
+                      aria-checked={option === language}
+                      key={option}
+                      onClick={() => void chooseLanguage(option)}
+                    >
+                      <span>{languageLabels[option]}</span>
+                      {option === language ? (
+                        <span
+                          className="text-brand-700"
+                          aria-label={t("Selected language")}
+                        >
+                          ✓
+                        </span>
+                      ) : null}
+                    </button>
+                  ))}
+                </div>
+              ) : null}
+            </div>
 
             {isAuthenticated && user ? (
               <Link
                 className="mt-2 flex min-h-10 items-center gap-2.5 rounded-xl border border-slate-200 bg-white px-2.5 text-sm font-bold text-slate-700 shadow-sm transition hover:border-brand-200 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 lg:ml-1 lg:mt-0"
                 to="/profile"
-                aria-label="Open your profile"
+                aria-label={t("Open your profile")}
                 onClick={closeMenu}
               >
                 <span className="grid size-8 place-items-center rounded-full bg-brand-700 text-xs font-black text-white ring-2 ring-brand-100">
                   {user.name.slice(0, 1).toUpperCase()}
                 </span>
-                <span className="max-w-28 truncate">Profile</span>
+                <span className="max-w-28 truncate">{t("Profile")}</span>
               </Link>
             ) : (
               <>
@@ -210,14 +299,14 @@ export function Navbar() {
                   to="/login"
                   onClick={closeMenu}
                 >
-                  Login
+                  {t("Login")}
                 </NavLink>
                 <Link
                   className="flex min-h-10 items-center justify-center rounded-xl bg-brand-700 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                   to="/register"
                   onClick={closeMenu}
                 >
-                  Create account
+                  {t("Create account")}
                 </Link>
               </>
             )}

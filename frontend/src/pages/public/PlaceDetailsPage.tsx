@@ -7,6 +7,8 @@ import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import { usePublicPlace } from "../../features/places/hooks/usePlaces";
 import { getApiErrorMessage, normalizeApiError } from "../../types/api.types";
 import { ReportPlaceButton } from "../../features/reports/ReportPlaceButton";
+import { FacilityRatings } from "../../features/ratings/components/FacilityRatings";
+import { useLanguage } from "../../i18n/useLanguage";
 
 const LocationPreviewMap = lazy(() =>
   import("../../features/maps/components/LocationPreviewMap").then(
@@ -16,7 +18,7 @@ const LocationPreviewMap = lazy(() =>
   ),
 );
 
-const weekdayNames = [
+const weekdayNamesEnglish = [
   "Sunday",
   "Monday",
   "Tuesday",
@@ -26,20 +28,36 @@ const weekdayNames = [
   "Saturday",
 ] as const;
 
-function hourText(hour: {
-  isClosed: boolean;
-  is24Hours: boolean;
-  openTime: string | null;
-  closeTime: string | null;
-}): string {
-  if (hour.isClosed) return "Closed";
-  if (hour.is24Hours) return "Open 24 hours";
+const weekdayNamesJapanese = [
+  "日曜日",
+  "月曜日",
+  "火曜日",
+  "水曜日",
+  "木曜日",
+  "金曜日",
+  "土曜日",
+] as const;
+
+function hourText(
+  hour: {
+    isClosed: boolean;
+    is24Hours: boolean;
+    openTime: string | null;
+    closeTime: string | null;
+  },
+  t: (message: string) => string,
+): string {
+  if (hour.isClosed) return t("Closed");
+  if (hour.is24Hours) return t("Open 24 hours");
   if (hour.openTime && hour.closeTime)
     return `${hour.openTime} - ${hour.closeTime}`;
-  return "Hours not specified";
+  return t("Hours not specified");
 }
 
 export function PlaceDetailsPage() {
+  const { language, t } = useLanguage();
+  const weekdayNames =
+    language === "ja" ? weekdayNamesJapanese : weekdayNamesEnglish;
   const { id } = useParams<{ id: string }>();
   const query = usePublicPlace(id);
 
@@ -56,10 +74,12 @@ export function PlaceDetailsPage() {
     return (
       <div className="mx-auto max-w-3xl px-4 py-16 sm:px-6 lg:px-8">
         <ErrorMessage
-          title={notFound ? "Place not found" : "Place could not be loaded"}
+          title={t(notFound ? "Place not found" : "Place could not be loaded")}
           message={
             notFound
-              ? "This place is unavailable or is not currently approved for public viewing."
+              ? t(
+                  "This place is unavailable or is not currently approved for public viewing.",
+                )
               : getApiErrorMessage(query.error)
           }
         />
@@ -67,7 +87,7 @@ export function PlaceDetailsPage() {
           className="mt-6 inline-flex min-h-11 items-center font-bold text-brand-800"
           to="/explore"
         >
-          &larr; Back to Explore
+          &larr; {t("Back to Explore")}
         </Link>
       </div>
     );
@@ -82,7 +102,7 @@ export function PlaceDetailsPage() {
         className="inline-flex min-h-11 items-center text-sm font-bold text-brand-800"
         to="/explore"
       >
-        &larr; Back to Explore
+        &larr; {t("Back to Explore")}
       </Link>
 
       {place.photos.length ? (
@@ -98,7 +118,7 @@ export function PlaceDetailsPage() {
         </div>
       ) : (
         <div className="mt-3 grid aspect-[16/7] place-items-center rounded-3xl bg-gradient-to-br from-brand-100 to-brand-100 px-6 text-center text-xl font-black text-brand-900/60">
-          No approved photos are available for this place yet
+          {t("No approved photos are available for this place yet")}
         </div>
       )}
 
@@ -106,14 +126,14 @@ export function PlaceDetailsPage() {
         <article>
           <div className="flex flex-wrap items-center gap-2 text-xs font-black">
             <span className="rounded-full bg-brand-100 px-3 py-1 text-brand-800">
-              Verified
+              {t("Verified")}
             </span>
             <span className="rounded-full bg-slate-100 px-3 py-1 text-slate-700">
               {place.propertyType.replaceAll("_", " ")}
             </span>
             {place.wheelchairAccessible ? (
               <span className="rounded-full bg-brand-100 px-3 py-1 text-brand-800">
-                Wheelchair accessible
+                {t("Wheelchair accessible")}
               </span>
             ) : null}
           </div>
@@ -130,7 +150,9 @@ export function PlaceDetailsPage() {
           ) : null}
 
           <section className="mt-8 border-t border-slate-200 pt-7">
-            <h2 className="text-2xl font-black text-slate-950">Amenities</h2>
+            <h2 className="text-2xl font-black text-slate-950">
+              {t("Amenities")}
+            </h2>
             <div className="mt-4">
               <AmenityList amenities={place.amenities} />
             </div>
@@ -139,7 +161,7 @@ export function PlaceDetailsPage() {
           {place.accessNotes ? (
             <section className="mt-8 border-t border-slate-200 pt-7">
               <h2 className="text-2xl font-black text-slate-950">
-                Access notes
+                {t("Access notes")}
               </h2>
               <p className="mt-3 leading-7 text-slate-700">
                 {place.accessNotes}
@@ -147,9 +169,11 @@ export function PlaceDetailsPage() {
             </section>
           ) : null}
 
+          <FacilityRatings propertyId={place.propertyId} />
+
           <section className="mt-8 border-t border-slate-200 pt-7">
             <h2 className="text-2xl font-black text-slate-950">
-              Opening hours
+              {t("Opening hours")}
             </h2>
             {place.openingHours.length ? (
               <dl className="mt-4 max-w-lg divide-y divide-slate-200 rounded-2xl border border-slate-200 bg-white px-4">
@@ -162,26 +186,26 @@ export function PlaceDetailsPage() {
                       {weekdayNames[hour.weekday]}
                     </dt>
                     <dd className="text-right text-slate-600">
-                      {hourText(hour)}
+                      {hourText(hour, t)}
                     </dd>
                   </div>
                 ))}
               </dl>
             ) : (
               <p className="mt-3 text-slate-600">
-                Opening hours have not been provided.
+                {t("Opening hours have not been provided.")}
               </p>
             )}
           </section>
         </article>
 
         <aside className="h-fit rounded-3xl border border-slate-200 bg-white p-6 shadow-sm lg:sticky lg:top-24">
-          <p className="text-sm font-bold text-slate-500">Entry</p>
+          <p className="text-sm font-bold text-slate-500">{t("Entry")}</p>
           <p className="mt-1 text-2xl font-black text-slate-950">
             {place.isFree
-              ? "Free"
+              ? t("Free")
               : place.feeLkr === null
-                ? "Fee applies"
+                ? t("Fee applies")
                 : `LKR ${place.feeLkr.toLocaleString()}`}
           </p>
           {place.distanceKm !== null ? (
@@ -196,7 +220,9 @@ export function PlaceDetailsPage() {
             />
           </div>
           <div className="mt-6 border-t border-slate-200 pt-5">
-            <h2 className="font-black text-slate-950">Verified location</h2>
+            <h2 className="font-black text-slate-950">
+              {t("Verified location")}
+            </h2>
             <p className="mt-2 text-sm leading-6 text-slate-600">
               {place.latitude.toFixed(6)}, {place.longitude.toFixed(6)}. The
               directions link uses these stored approved coordinates.
@@ -208,7 +234,7 @@ export function PlaceDetailsPage() {
                     className="rounded-2xl bg-slate-100 p-4 text-sm text-slate-600"
                     role="status"
                   >
-                    Loading location preview…
+                    {t("Loading location preview…")}
                   </p>
                 }
               >
@@ -223,7 +249,9 @@ export function PlaceDetailsPage() {
 
           {place.phone || place.email || place.website ? (
             <div className="mt-6 border-t border-slate-200 pt-5">
-              <h2 className="font-black text-slate-950">Public contact</h2>
+              <h2 className="font-black text-slate-950">
+                {t("Public contact")}
+              </h2>
               <div className="mt-3 space-y-2 break-words text-sm text-slate-700">
                 {place.phone ? (
                   <p>
@@ -253,7 +281,7 @@ export function PlaceDetailsPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      Visit website
+                      {t("Visit website")}
                     </a>
                   </p>
                 ) : null}

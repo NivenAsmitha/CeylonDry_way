@@ -45,7 +45,9 @@ export function OwnerPropertiesPage({
   const [deleteConfirmation, setDeleteConfirmation] = useState("");
   const isReviewer = workflow === "reviewer";
   const createPath = isReviewer ? "/reviewer/properties/new" : "/list-property";
-  const collectionPath = isReviewer ? "/reviewer/properties" : "/owner/properties";
+  const collectionPath = isReviewer
+    ? "/reviewer/properties"
+    : "/owner/properties";
 
   if (propertiesQuery.isPending) {
     return <LoadingScreen message="Loading your properties..." />;
@@ -100,15 +102,15 @@ export function OwnerPropertiesPage({
       ) : null}
 
       {propertiesQuery.data?.items.length ? (
-        <div className="mt-8 grid gap-5 lg:grid-cols-2">
+        <div className="mt-8 grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
           {propertiesQuery.data.items.map((property) => (
             <article
-              className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm"
+              className="flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg"
               key={property.id}
             >
               {property.activeVersion.photos.length ? (
                 <PlacePhoto
-                  className="mb-5 aspect-[16/7] w-full rounded-2xl object-cover"
+                  className="aspect-[16/9] w-full bg-slate-100 object-cover"
                   src={
                     property.activeVersion.photos.find((photo) => photo.isCover)
                       ?.url ?? property.activeVersion.photos[0].url
@@ -119,86 +121,93 @@ export function OwnerPropertiesPage({
                     `Photo of ${property.activeVersion.name || "property"}`
                   }
                 />
-              ) : null}
-              <div className="flex flex-wrap items-start justify-between gap-3">
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
-                    Version {property.activeVersion.version}
-                  </p>
-                  <h2 className="mt-1 text-xl font-black text-slate-950">
-                    {property.activeVersion.name || "Untitled property"}
-                  </h2>
+              ) : (
+                <div className="grid aspect-[16/9] place-items-center bg-gradient-to-br from-brand-100 to-brand-50 px-5 text-center text-sm font-black text-brand-900/60">
+                  No approved photo yet
                 </div>
-                <PropertyStatusBadge status={property.lifecycleStatus} />
-              </div>
-              <dl className="mt-5 grid gap-3 text-sm sm:grid-cols-2">
-                <div>
-                  <dt className="font-semibold text-slate-500">Status</dt>
-                  <dd className="mt-1 font-bold">
-                    {getPropertyStatusLabel(property.lifecycleStatus)}
-                  </dd>
+              )}
+              <div className="flex flex-1 flex-col p-5">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div className="min-w-0 flex-1">
+                    <p className="text-xs font-bold uppercase tracking-wide text-slate-500">
+                      Version {property.activeVersion.version}
+                    </p>
+                    <h2 className="mt-1 line-clamp-2 text-lg font-black text-slate-950">
+                      {property.activeVersion.name || "Untitled property"}
+                    </h2>
+                  </div>
+                  <PropertyStatusBadge status={property.lifecycleStatus} />
                 </div>
-                <div>
-                  <dt className="font-semibold text-slate-500">Updated</dt>
-                  <dd className="mt-1 font-bold">
-                    {formatUpdatedDate(property.updatedAt)}
-                  </dd>
-                </div>
-              </dl>
-              {property.latestDecision ? (
-                <div className="mt-5 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-                  <p className="font-black">
-                    Latest review:{" "}
-                    {formatDecision(property.latestDecision.decision)}
-                  </p>
-                  {property.latestDecision.reason ? (
-                    <p className="mt-2 whitespace-pre-wrap">
-                      {property.latestDecision.reason}
+                <dl className="mt-4 grid grid-cols-2 gap-3 text-sm">
+                  <div>
+                    <dt className="font-semibold text-slate-500">Status</dt>
+                    <dd className="mt-1 font-bold">
+                      {getPropertyStatusLabel(property.lifecycleStatus)}
+                    </dd>
+                  </div>
+                  <div>
+                    <dt className="font-semibold text-slate-500">Updated</dt>
+                    <dd className="mt-1 font-bold">
+                      {formatUpdatedDate(property.updatedAt)}
+                    </dd>
+                  </div>
+                </dl>
+                {property.latestDecision ? (
+                  <div className="mt-4 rounded-2xl border border-amber-200 bg-amber-50 p-3.5 text-sm text-amber-950">
+                    <p className="font-black">
+                      Latest review:{" "}
+                      {formatDecision(property.latestDecision.decision)}
                     </p>
-                  ) : (
-                    <p className="mt-2 text-amber-800">
-                      No reviewer reason was provided.
-                    </p>
-                  )}
-                  {property.lifecycleStatus === "CHANGES_REQUESTED" ? (
-                    <p className="mt-2 font-semibold">
-                      Editing and resubmission are available after you address
-                      this feedback.
-                    </p>
+                    {property.latestDecision.reason ? (
+                      <p className="mt-2 line-clamp-3 whitespace-pre-wrap">
+                        {property.latestDecision.reason}
+                      </p>
+                    ) : (
+                      <p className="mt-2 text-amber-800">
+                        No reviewer reason was provided.
+                      </p>
+                    )}
+                    {property.lifecycleStatus === "CHANGES_REQUESTED" ? (
+                      <p className="mt-2 font-semibold">
+                        Editing and resubmission are available after you address
+                        this feedback.
+                      </p>
+                    ) : null}
+                  </div>
+                ) : null}
+                <div className="mt-auto flex flex-wrap gap-2 pt-5">
+                  <Link
+                    className="inline-flex min-h-10 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white"
+                    to={`${collectionPath}/${property.id}/edit`}
+                  >
+                    {property.canEdit ? "Edit" : "View"}
+                  </Link>
+                  {property.canSubmit ? (
+                    <Link
+                      className="inline-flex min-h-10 items-center rounded-xl border border-amber-400 bg-amber-50 px-3 text-sm font-bold text-amber-950"
+                      to={`${collectionPath}/${property.id}/edit?step=7`}
+                    >
+                      Review and submit
+                    </Link>
+                  ) : null}
+                  {!isReviewer ? (
+                    <button
+                      className="ml-auto inline-flex min-h-10 items-center rounded-xl px-3 text-sm font-bold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
+                      type="button"
+                      onClick={() => {
+                        setPropertyToDelete({
+                          id: property.id,
+                          name:
+                            property.activeVersion.name || "Untitled property",
+                        });
+                        setDeleteConfirmation("");
+                        deleteProperty.reset();
+                      }}
+                    >
+                      Delete
+                    </button>
                   ) : null}
                 </div>
-              ) : null}
-              <div className="mt-6 flex flex-wrap gap-3">
-                <Link
-                  className="inline-flex min-h-11 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white"
-                  to={`${collectionPath}/${property.id}/edit`}
-                >
-                  {property.canEdit ? "Edit" : "View"}
-                </Link>
-                {property.canSubmit ? (
-                  <Link
-                    className="inline-flex min-h-11 items-center rounded-xl border border-amber-400 bg-amber-50 px-4 text-sm font-bold text-amber-950"
-                    to={`${collectionPath}/${property.id}/edit?step=7`}
-                  >
-                    Review and submit
-                  </Link>
-                ) : null}
-                {!isReviewer ? (
-                  <button
-                    className="ml-auto inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-bold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700"
-                    type="button"
-                    onClick={() => {
-                      setPropertyToDelete({
-                        id: property.id,
-                        name: property.activeVersion.name || "Untitled property",
-                      });
-                      setDeleteConfirmation("");
-                      deleteProperty.reset();
-                    }}
-                  >
-                    Delete property
-                  </button>
-                ) : null}
               </div>
             </article>
           ))}
@@ -225,7 +234,10 @@ export function OwnerPropertiesPage({
             aria-labelledby="delete-property-title"
           >
             <p className="text-sm font-bold text-red-700">Remove property</p>
-            <h2 className="mt-1 text-2xl font-black text-slate-950" id="delete-property-title">
+            <h2
+              className="mt-1 text-2xl font-black text-slate-950"
+              id="delete-property-title"
+            >
               Delete {propertyToDelete.name}?
             </h2>
             <p className="mt-3 text-sm leading-6 text-slate-600">
@@ -240,8 +252,13 @@ export function OwnerPropertiesPage({
                 />
               </div>
             ) : null}
-            <label className="mt-5 block text-sm font-bold" htmlFor="delete-property-confirmation">
-              Type <span className="text-slate-950">{propertyToDelete.name}</span> to confirm
+            <label
+              className="mt-5 block text-sm font-bold"
+              htmlFor="delete-property-confirmation"
+            >
+              Type{" "}
+              <span className="text-slate-950">{propertyToDelete.name}</span> to
+              confirm
             </label>
             <input
               className="mt-2 min-h-12 w-full rounded-xl border border-slate-300 px-4 outline-none focus:border-red-500 focus:ring-4 focus:ring-red-100"

@@ -58,7 +58,7 @@ let authenticationHandlerInstalled = false;
 
 function applicationMapLanguage(): string {
   const requested = document.documentElement.lang.toLowerCase().split("-")[0];
-  return ["en", "si", "ta"].includes(requested) ? requested : "en";
+  return ["en", "ja"].includes(requested) ? requested : "en";
 }
 
 export function getGoogleMapsConfiguration(): {

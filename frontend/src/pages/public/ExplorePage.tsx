@@ -10,8 +10,10 @@ import {
   updatePlaceParams,
 } from "../../features/places/utils/place-query";
 import { getApiErrorMessage } from "../../types/api.types";
+import { useLanguage } from "../../i18n/useLanguage";
 
 export function ExplorePage() {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const query = useMemo(() => parsePlaceQuery(searchParams), [searchParams]);
   const searchTimer = useRef<number | undefined>(undefined);
@@ -70,21 +72,22 @@ export function ExplorePage() {
       <div className="flex flex-wrap items-end justify-between gap-6">
         <div className="max-w-3xl">
           <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
-            Verified public directory
+            {t("Verified public directory")}
           </p>
           <h1 className="mt-2 text-4xl font-black tracking-tight text-slate-950 sm:text-5xl">
-            Explore accessible places
+            {t("Explore accessible places")}
           </h1>
           <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-            Search approved facilities across Sri Lanka. Every result reflects
-            the latest version accepted by a reviewer.
+            {t(
+              "Search approved facilities across Sri Lanka. Every result reflects the latest version accepted by a reviewer.",
+            )}
           </p>
         </div>
         <Link
           className="inline-flex min-h-12 items-center rounded-xl border border-brand-200 bg-brand-50 px-5 font-black text-brand-900 transition hover:border-brand-300 hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={`/map${searchParams.size ? `?${searchParams.toString()}` : ""}`}
         >
-          View on map&nbsp; →
+          {t("View on map")}&nbsp; →
         </Link>
       </div>
 
@@ -93,7 +96,7 @@ export function ExplorePage() {
           className="block text-sm font-bold text-slate-700"
           htmlFor="place-search"
         >
-          Search by place, city, district, address, or description
+          {t("Search by place, city, district, address, or description")}
         </label>
         <div className="mt-2 flex flex-col gap-3 sm:flex-row">
           <input
@@ -102,12 +105,12 @@ export function ExplorePage() {
             key={query.search ?? ""}
             type="search"
             maxLength={100}
-            placeholder="Try Colombo, accessible toilet, or rest stop"
+            placeholder={t("Try Colombo, accessible toilet, or rest stop")}
             defaultValue={query.search ?? ""}
             onChange={(event) => updateSearch(event.target.value)}
           />
           <label className="sr-only" htmlFor="place-sort">
-            Sort places
+            {t("Sort places")}
           </label>
           <select
             className="min-h-12 rounded-xl border border-slate-200 bg-slate-50 px-4 font-bold text-slate-800 outline-none transition focus:border-brand-300 focus:bg-white focus:ring-2 focus:ring-brand-100"
@@ -117,12 +120,12 @@ export function ExplorePage() {
               updateFilters({ sort: event.target.value, page: 1 })
             }
           >
-            <option value="newest">Newest verified</option>
-            <option value="name_asc">Name A-Z</option>
-            <option value="name_desc">Name Z-A</option>
-            <option value="city_asc">City A-Z</option>
+            <option value="newest">{t("Newest verified")}</option>
+            <option value="name_asc">{t("Name A-Z")}</option>
+            <option value="name_desc">{t("Name Z-A")}</option>
+            <option value="city_asc">{t("City A-Z")}</option>
             {query.latitude !== undefined ? (
-              <option value="distance">Nearest first</option>
+              <option value="distance">{t("Nearest first")}</option>
             ) : null}
           </select>
         </div>
@@ -133,8 +136,9 @@ export function ExplorePage() {
         id="near-me"
       >
         <p className="mb-3 max-w-2xl text-sm leading-6 text-brand-950">
-          Use your location once to sort verified places by distance. It is
-          requested only when you click and is never stored or tracked.
+          {t(
+            "Use your location once to sort verified places by distance. It is requested only when you click and is never stored or tracked.",
+          )}
         </p>
         <NearMeButton
           active={query.latitude !== undefined}
@@ -143,7 +147,7 @@ export function ExplorePage() {
         />
         {query.latitude !== undefined ? (
           <label className="mt-4 block max-w-xs text-sm font-bold text-slate-700">
-            Search radius
+            {t("Search radius")}
             <select
               className="mt-1.5 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3 font-normal"
               value={query.radiusKm ?? 25}
@@ -151,11 +155,11 @@ export function ExplorePage() {
                 updateFilters({ radiusKm: event.target.value, page: 1 })
               }
             >
-              <option value="5">Within 5 km</option>
-              <option value="10">Within 10 km</option>
-              <option value="25">Within 25 km</option>
-              <option value="50">Within 50 km</option>
-              <option value="100">Within 100 km</option>
+              {[5, 10, 25, 50, 100].map((radius) => (
+                <option value={radius} key={radius}>
+                  {t("Within {radius} km", { radius })}
+                </option>
+              ))}
             </select>
           </label>
         ) : null}
@@ -172,11 +176,13 @@ export function ExplorePage() {
           <div className="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 className="text-2xl font-black text-slate-950">
-                {data ? `${data.pagination.total} places found` : "Places"}
+                {data
+                  ? t("{count} places found", { count: data.pagination.total })
+                  : t("Places")}
               </h2>
               {placesQuery.isFetching && data ? (
                 <p className="mt-1 text-sm text-slate-500">
-                  Updating results...
+                  {t("Updating results...")}
                 </p>
               ) : null}
             </div>
@@ -194,7 +200,7 @@ export function ExplorePage() {
           ) : placesQuery.isError ? (
             <div>
               <ErrorMessage
-                title="Places could not be loaded"
+                title={t("Places could not be loaded")}
                 message={getApiErrorMessage(placesQuery.error)}
               />
               <button
@@ -202,7 +208,7 @@ export function ExplorePage() {
                 type="button"
                 onClick={() => void placesQuery.refetch()}
               >
-                Try again
+                {t("Try again")}
               </button>
             </div>
           ) : data?.items.length ? (
@@ -210,7 +216,7 @@ export function ExplorePage() {
               <PlaceList places={data.items} />
               <nav
                 className="mt-8 flex items-center justify-between gap-4"
-                aria-label="Place results pages"
+                aria-label={t("Place results pages")}
               >
                 <button
                   className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-40"
@@ -220,11 +226,13 @@ export function ExplorePage() {
                     updateFilters({ page: data.pagination.page - 1 })
                   }
                 >
-                  Previous
+                  {t("Previous")}
                 </button>
                 <span className="text-sm font-semibold text-slate-600">
-                  Page {data.pagination.page} of{" "}
-                  {Math.max(data.pagination.totalPages, 1)}
+                  {t("Page {page} of {total}", {
+                    page: data.pagination.page,
+                    total: Math.max(data.pagination.totalPages, 1),
+                  })}
                 </span>
                 <button
                   className="min-h-11 rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold disabled:cursor-not-allowed disabled:opacity-40"
@@ -234,19 +242,19 @@ export function ExplorePage() {
                     updateFilters({ page: data.pagination.page + 1 })
                   }
                 >
-                  Next
+                  {t("Next")}
                 </button>
               </nav>
             </>
           ) : (
             <div className="rounded-3xl border border-dashed border-slate-300 bg-white px-6 py-14 text-center">
               <h2 className="text-xl font-black text-slate-950">
-                No places match yet
+                {t("No places match yet")}
               </h2>
               <p className="mx-auto mt-2 max-w-md text-sm leading-6 text-slate-600">
-                Try a broader city or district, remove an amenity, or increase
-                the Near Me radius. Private and unapproved listings never appear
-                here.
+                {t(
+                  "Try a broader city or district, remove an amenity, or increase the Near Me radius. Private and unapproved listings never appear here.",
+                )}
               </p>
             </div>
           )}

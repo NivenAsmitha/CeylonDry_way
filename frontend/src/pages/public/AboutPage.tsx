@@ -2,6 +2,7 @@ import { Link } from "react-router-dom";
 import communityImage from "../../assets/about1.png";
 import accessibilityImage from "../../assets/about2.png";
 import journeyImage from "../../assets/about3.png";
+import { useLanguage } from "../../i18n/useLanguage";
 
 const audiences = [
   {
@@ -61,6 +62,8 @@ const facilityDetails = [
 ] as const;
 
 export function AboutPage() {
+  const { t } = useLanguage();
+
   return (
     <main>
       <section className="relative isolate overflow-hidden border-b border-brand-100 bg-gradient-to-br from-white via-brand-50 to-amber-50">
@@ -70,32 +73,31 @@ export function AboutPage() {
           <div>
             <div className="inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white/85 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-brand-800 shadow-sm backdrop-blur">
               <span className="size-2 rounded-full bg-amber-400" />
-              About ComfortGo
+              {t("About ComfortGo")}
             </div>
             <h1 className="mt-6 text-5xl font-black leading-[1.02] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
-              Comfort and confidence,
+              {t("Comfort and confidence,")}
               <span className="block text-brand-700">
-                wherever the road takes you.
+                {t("wherever the road takes you.")}
               </span>
             </h1>
             <p className="mt-7 max-w-3xl text-lg leading-8 text-slate-600 sm:text-xl">
-              ComfortGo helps locals and tourists across Sri Lanka easily find
-              nearby restroom facilities. We bring location, access and amenity
-              information together so every journey can feel more convenient and
-              prepared.
+              {t(
+                "ComfortGo helps locals and tourists across Sri Lanka easily find nearby restroom facilities. We bring location, access and amenity information together so every journey can feel more convenient and prepared.",
+              )}
             </p>
             <div className="mt-9 flex flex-wrap gap-3">
               <Link
                 className="inline-flex min-h-12 items-center rounded-xl bg-brand-700 px-6 font-black text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                 to="/explore"
               >
-                Explore restrooms&nbsp; →
+                {t("Explore restrooms")}&nbsp; →
               </Link>
               <a
                 className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 bg-white px-6 font-black text-slate-800 transition hover:border-brand-300 hover:text-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                 href="#how-it-works"
               >
-                How it works
+                {t("How it works")}
               </a>
             </div>
           </div>
@@ -104,16 +106,20 @@ export function AboutPage() {
               <img
                 className="aspect-[5/4] w-full object-cover"
                 src={journeyImage}
-                alt="Local and international travellers beside a tuk-tuk on a scenic Sri Lankan reservoir road"
+                alt={t(
+                  "Local and international travellers beside a tuk-tuk on a scenic Sri Lankan reservoir road",
+                )}
                 fetchPriority="high"
               />
             </div>
             <figcaption className="absolute bottom-5 left-5 right-5 rounded-2xl border border-white/80 bg-white/90 px-5 py-4 text-sm text-slate-700 shadow-lg backdrop-blur-md">
               <span className="block font-black text-slate-950">
-                Made for journeys across Sri Lanka
+                {t("Made for journeys across Sri Lanka")}
               </span>
               <span className="mt-1 block text-xs text-slate-500">
-                Helping locals and visitors prepare for more comfortable travel.
+                {t(
+                  "Helping locals and visitors prepare for more comfortable travel.",
+                )}
               </span>
             </figcaption>
           </figure>
@@ -124,10 +130,10 @@ export function AboutPage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-              One practical need, shared by everyone
+              {t("One practical need, shared by everyone")}
             </p>
             <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-              Built for locals and visitors.
+              {t("Built for locals and visitors.")}
             </h2>
           </div>
           <div className="mt-12 grid gap-5 md:grid-cols-2">
@@ -137,13 +143,13 @@ export function AboutPage() {
                 key={audience.label}
               >
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
-                  {audience.label}
+                  {t(audience.label)}
                 </p>
                 <h3 className="mt-4 text-2xl font-black text-slate-950 sm:text-3xl">
-                  {audience.title}
+                  {t(audience.title)}
                 </h3>
                 <p className="mt-4 max-w-xl leading-7 text-slate-600">
-                  {audience.text}
+                  {t(audience.text)}
                 </p>
               </article>
             ))}
@@ -159,25 +165,30 @@ export function AboutPage() {
           <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-                How trust works
+                {t("How trust works")}
               </p>
               <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-                Reviewed before it reaches the map.
+                {t("Reviewed before it reaches the map.")}
               </h2>
               <p className="mt-5 text-lg leading-8 text-slate-600">
-                A clear review process helps turn local submissions into useful
-                public information.
+                {t(
+                  "A clear review process helps turn local submissions into useful public information.",
+                )}
               </p>
             </div>
             <figure className="overflow-hidden rounded-[2rem] border-[8px] border-white bg-white shadow-xl shadow-brand-950/10">
               <img
                 className="aspect-[3/2] w-full object-cover"
                 src={communityImage}
-                alt="A Sri Lankan reviewer showing restroom information to visiting travellers"
+                alt={t(
+                  "A Sri Lankan reviewer showing restroom information to visiting travellers",
+                )}
                 loading="lazy"
               />
               <figcaption className="border-t border-brand-100 bg-white px-5 py-4 text-sm font-bold text-slate-700">
-                Local review and traveller feedback keep information useful.
+                {t(
+                  "Local review and traveller feedback keep information useful.",
+                )}
               </figcaption>
             </figure>
           </div>
@@ -191,10 +202,10 @@ export function AboutPage() {
                   {step.number}
                 </span>
                 <h3 className="mt-6 text-xl font-black text-slate-950">
-                  {step.title}
+                  {t(step.title)}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">
-                  {step.text}
+                  {t(step.text)}
                 </p>
               </li>
             ))}
@@ -207,25 +218,29 @@ export function AboutPage() {
           <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-start">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-                Know before you go
+                {t("Know before you go")}
               </p>
               <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-                Details that make a real difference.
+                {t("Details that make a real difference.")}
               </h2>
               <p className="mt-5 text-lg leading-8 text-slate-600">
-                Each listing is designed to answer practical questions before a
-                traveller reaches the facility.
+                {t(
+                  "Each listing is designed to answer practical questions before a traveller reaches the facility.",
+                )}
               </p>
               <figure className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-lg shadow-slate-900/5">
                 <img
                   className="aspect-[4/3] w-full object-cover"
                   src={accessibilityImage}
-                  alt="A clean step-free restroom entrance with universal accessibility symbols"
+                  alt={t(
+                    "A clean step-free restroom entrance with universal accessibility symbols",
+                  )}
                   loading="lazy"
                 />
                 <figcaption className="bg-white px-4 py-3 text-xs text-slate-500">
-                  Accessibility information helps travellers plan ahead with
-                  confidence.
+                  {t(
+                    "Accessibility information helps travellers plan ahead with confidence.",
+                  )}
                 </figcaption>
               </figure>
             </div>
@@ -236,10 +251,10 @@ export function AboutPage() {
                   key={detail.title}
                 >
                   <h3 className="text-xl font-black text-slate-950">
-                    {detail.title}
+                    {t(detail.title)}
                   </h3>
                   <p className="mt-3 text-sm leading-7 text-slate-600">
-                    {detail.text}
+                    {t(detail.text)}
                   </p>
                 </article>
               ))}
@@ -253,33 +268,34 @@ export function AboutPage() {
           <div className="grid overflow-hidden rounded-[2rem] border border-brand-200 bg-gradient-to-r from-brand-50 to-amber-50 lg:grid-cols-2">
             <div className="border-b border-brand-200 p-8 sm:p-10 lg:border-b-0 lg:border-r lg:p-12">
               <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
-                See something incorrect?
+                {t("See something incorrect?")}
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-slate-950">
-                Help keep information current.
+                {t("Help keep information current.")}
               </h2>
               <p className="mt-4 leading-7 text-slate-600">
-                Anyone can report a closed facility, inaccurate details,
-                accessibility concern, safety issue or inappropriate content
-                from the restroom&apos;s public page.
+                {t(
+                  "Anyone can report a closed facility, inaccurate details, accessibility concern, safety issue or inappropriate content from the restroom's public page.",
+                )}
               </p>
             </div>
             <div className="p-8 sm:p-10 lg:p-12">
               <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
-                Own or manage a facility?
+                {t("Own or manage a facility?")}
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] text-slate-950">
-                Add a restroom to ComfortGo.
+                {t("Add a restroom to ComfortGo.")}
               </h2>
               <p className="mt-4 leading-7 text-slate-600">
-                Create a listing with accurate details and photos, then manage
-                updates and reviewer feedback from your property workspace.
+                {t(
+                  "Create a listing with accurate details and photos, then manage updates and reviewer feedback from your property workspace.",
+                )}
               </p>
               <Link
                 className="mt-6 inline-flex min-h-12 items-center rounded-xl bg-brand-700 px-6 font-black text-white transition hover:bg-brand-800"
                 to="/list-property"
               >
-                List a property&nbsp; →
+                {t("List a property")}&nbsp; →
               </Link>
             </div>
           </div>

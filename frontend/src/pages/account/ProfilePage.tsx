@@ -57,7 +57,7 @@ export function ProfilePage() {
     defaultValues: {
       name: user?.name ?? "",
       phone: user?.phone ?? "",
-      language: "en",
+      language: user?.language === "ja" ? "ja" : "en",
     },
   });
   const passwordForm = useForm<ChangePasswordFormValues>({
@@ -74,7 +74,7 @@ export function ProfilePage() {
     profileForm.reset({
       name: user.name,
       phone: user.phone ?? "",
-      language: "en",
+      language: user.language === "ja" ? "ja" : "en",
     });
   }, [profileForm, user]);
 
@@ -343,7 +343,7 @@ export function ProfilePage() {
                 >
                   {SUPPORTED_LANGUAGES.map((language) => (
                     <option value={language} key={language}>
-                      English
+                      {language === "ja" ? "日本語" : "English"}
                     </option>
                   ))}
                 </select>

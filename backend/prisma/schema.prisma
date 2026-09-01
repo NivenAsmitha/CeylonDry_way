@@ -100,6 +100,7 @@ model User {
   notifications       Notification[]       @relation("NotificationRecipient")
   passwordResetTokens PasswordResetToken[]
   moderatedReports    PropertyReport[]     @relation("PropertyReportModerator")
+  facilityRatings     FacilityRating[]
 
   @@index([status])
   @@index([deletedAt])
@@ -182,6 +183,7 @@ model Property {
   activeVersion   PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
   reviewDecisions ReviewDecision[]
   reports         PropertyReport[]
+  ratings         FacilityRating[]
 
   @@index([ownerUserId])
   @@index([lifecycleStatus])
@@ -285,6 +287,25 @@ model PropertyReport {
   @@index([status, createdAt])
   @@index([propertyId, createdAt])
   @@index([moderatorId, updatedAt])
+}
+
+model FacilityRating {
+  id            String   @id @default(uuid())
+  propertyId    String
+  userId        String
+  cleanliness   Int
+  safety        Int
+  accessibility Int
+  accuracy      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([propertyId, userId])
+  @@index([propertyId, updatedAt])
+  @@index([userId, updatedAt])
 }
 
 model Notification {

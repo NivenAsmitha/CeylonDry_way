@@ -1,4 +1,5 @@
 import { buildGoogleMapsDirectionsUrl } from "../utils/directions";
+import { useLanguage } from "../../../i18n/useLanguage";
 
 export function DirectionsButton({
   latitude,
@@ -7,6 +8,7 @@ export function DirectionsButton({
   latitude: number;
   longitude: number;
 }) {
+  const { t } = useLanguage();
   const url = buildGoogleMapsDirectionsUrl(latitude, longitude);
 
   if (!url) {
@@ -15,7 +17,7 @@ export function DirectionsButton({
         className="inline-flex min-h-11 items-center rounded-xl bg-slate-200 px-5 text-sm font-bold text-slate-500"
         aria-disabled="true"
       >
-        Directions unavailable
+        {t("Directions unavailable")}
       </span>
     );
   }
@@ -27,7 +29,7 @@ export function DirectionsButton({
       target="_blank"
       rel="noopener noreferrer"
     >
-      Get directions
+      {t("Get directions")}
       <span className="ml-2" aria-hidden="true">
         &rarr;
       </span>

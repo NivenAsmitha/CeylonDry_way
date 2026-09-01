@@ -3,6 +3,7 @@ import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import type { AuthContextValue } from "../../context/auth-context";
+import { LanguageContext } from "../../i18n/language-context";
 import { Navbar } from "./Navbar";
 
 const authValue: AuthContextValue = {
@@ -46,6 +47,20 @@ function renderNavbar() {
   );
 }
 
+function renderNavbarWithLanguage(
+  setLanguage: (language: "en" | "ja") => void,
+) {
+  return render(
+    <MemoryRouter initialEntries={["/"]}>
+      <LanguageContext.Provider
+        value={{ language: "en", setLanguage, t: (message) => message }}
+      >
+        <Navbar />
+      </LanguageContext.Provider>
+    </MemoryRouter>,
+  );
+}
+
 describe("Navbar profile control", () => {
   it("shows About instead of a separate Map tab in public navigation", () => {
     renderNavbar();
@@ -84,5 +99,20 @@ describe("Navbar profile control", () => {
     );
 
     expect(menuButton.getAttribute("aria-expanded")).toBe("false");
+  });
+
+  it("lets a user choose Japanese from the navbar and saves the preference", async () => {
+    const setLanguage = vi.fn();
+    renderNavbarWithLanguage(setLanguage);
+
+    await userEvent.click(
+      screen.getByRole("button", { name: "Change language" }),
+    );
+    await userEvent.click(
+      screen.getByRole("menuitemradio", { name: "日本語" }),
+    );
+
+    expect(setLanguage).toHaveBeenCalledWith("ja");
+    expect(authValue.updateProfile).toHaveBeenCalledWith({ language: "ja" });
   });
 });

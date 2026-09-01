@@ -1,10 +1,13 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
+import { useLanguage } from "../../i18n/useLanguage";
 
 const footerLinkClass =
   "inline-flex min-h-10 items-center rounded-md text-sm font-medium text-slate-600 transition hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500";
 
 export function Footer() {
+  const { t } = useLanguage();
+
   return (
     <footer className="border-t border-brand-100 bg-[#f7fbfe] text-slate-700">
       <div className="mx-auto max-w-7xl px-4 pb-8 pt-14 sm:px-6 sm:pt-16 lg:px-8">
@@ -13,7 +16,7 @@ export function Footer() {
             <Link
               className="inline-flex rounded-xl focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500"
               to="/"
-              aria-label="ComfortGo home"
+              aria-label={t("ComfortGo home")}
             >
               <img
                 className="h-24 w-auto max-w-[13rem] object-contain sm:h-28 sm:max-w-[15rem]"
@@ -22,82 +25,83 @@ export function Footer() {
               />
             </Link>
             <p className="mt-1 text-sm font-bold text-brand-800">
-              Find your nearest clean stop
+              {t("Find your nearest clean stop")}
             </p>
             <p className="mt-5 max-w-md text-sm leading-7 text-slate-600">
-              Helping locals and tourists across Sri Lanka find nearby restroom
-              facilities, useful amenities and clear directions when they need
-              them.
+              {t(
+                "Helping locals and tourists across Sri Lanka find nearby restroom facilities, useful amenities and clear directions when they need them.",
+              )}
             </p>
             <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-3 py-2 text-xs font-bold text-brand-800 shadow-sm">
               <span className="size-2 rounded-full bg-brand-500" />
-              Community-informed · Reviewer-verified
+              {t("Community-informed · Reviewer-verified")}
             </div>
           </div>
 
           <div>
             <h2 className="text-sm font-black uppercase tracking-[0.14em] text-slate-950">
-              Discover
+              {t("Discover")}
             </h2>
             <nav
               className="mt-4 flex flex-col items-start"
               aria-label="Footer discovery links"
             >
               <Link className={footerLinkClass} to="/explore">
-                Explore places
+                {t("Explore places")}
               </Link>
               <Link className={footerLinkClass} to="/map">
-                Live map
+                {t("Live map")}
               </Link>
               <Link
                 className={footerLinkClass}
                 to="/explore?wheelchairAccessible=true"
               >
-                Accessible places
+                {t("Accessible places")}
               </Link>
             </nav>
           </div>
 
           <div>
             <h2 className="text-sm font-black uppercase tracking-[0.14em] text-slate-950">
-              Contribute
+              {t("Contribute")}
             </h2>
             <nav
               className="mt-4 flex flex-col items-start"
               aria-label="Footer contribution links"
             >
               <Link className={footerLinkClass} to="/list-property">
-                List a property
+                {t("List a property")}
               </Link>
               <Link className={footerLinkClass} to="/register">
-                Create an account
+                {t("Create an account")}
               </Link>
               <Link className={footerLinkClass} to="/login">
-                Sign in
+                {t("Sign in")}
               </Link>
             </nav>
           </div>
 
           <div>
             <h2 className="text-sm font-black uppercase tracking-[0.14em] text-slate-950">
-              How trust works
+              {t("How trust works")}
             </h2>
             <p className="mt-4 text-sm leading-7 text-slate-600">
-              Restroom listings are reviewed before publication. Visitors can
-              report outdated details so the information remains useful for the
-              next journey.
+              {t(
+                "Restroom listings are reviewed before publication. Visitors can report outdated details so the information remains useful for the next journey.",
+              )}
             </p>
           </div>
         </div>
 
         <div className="flex flex-col gap-3 pt-7 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>
-            © {new Date().getFullYear()} ComfortGo. Built for more comfortable
-            journeys across Sri Lanka.
+            © {new Date().getFullYear()} ComfortGo.{" "}
+            {t("Built for more comfortable journeys across Sri Lanka.")}
           </p>
           <p>
-            Facility details can change. Confirm critical access needs directly
-            when possible.
+            {t(
+              "Facility details can change. Confirm critical access needs directly when possible.",
+            )}
           </p>
         </div>
       </div>

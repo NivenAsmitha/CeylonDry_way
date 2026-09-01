@@ -194,6 +194,7 @@ export type PropertyWhereInput = {
   activeVersion?: Prisma.XOR<Prisma.PropertyVersionNullableScalarRelationFilter, Prisma.PropertyVersionWhereInput> | null
   reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
   reports?: Prisma.PropertyReportListRelationFilter
+  ratings?: Prisma.FacilityRatingListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -208,6 +209,7 @@ export type PropertyOrderByWithRelationInput = {
   activeVersion?: Prisma.PropertyVersionOrderByWithRelationInput
   reviewDecisions?: Prisma.ReviewDecisionOrderByRelationAggregateInput
   reports?: Prisma.PropertyReportOrderByRelationAggregateInput
+  ratings?: Prisma.FacilityRatingOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -225,6 +227,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   activeVersion?: Prisma.XOR<Prisma.PropertyVersionNullableScalarRelationFilter, Prisma.PropertyVersionWhereInput> | null
   reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
   reports?: Prisma.PropertyReportListRelationFilter
+  ratings?: Prisma.FacilityRatingListRelationFilter
 }, "id" | "activeVersionId">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -261,6 +264,7 @@ export type PropertyCreateInput = {
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -273,6 +277,7 @@ export type PropertyUncheckedCreateInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -285,6 +290,7 @@ export type PropertyUpdateInput = {
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -297,6 +303,7 @@ export type PropertyUncheckedUpdateInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -491,6 +498,20 @@ export type PropertyUpdateOneRequiredWithoutReportsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutReportsInput, Prisma.PropertyUpdateWithoutReportsInput>, Prisma.PropertyUncheckedUpdateWithoutReportsInput>
 }
 
+export type PropertyCreateNestedOneWithoutRatingsInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutRatingsInput, Prisma.PropertyUncheckedCreateWithoutRatingsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutRatingsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneRequiredWithoutRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutRatingsInput, Prisma.PropertyUncheckedCreateWithoutRatingsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutRatingsInput
+  upsert?: Prisma.PropertyUpsertWithoutRatingsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutRatingsInput, Prisma.PropertyUpdateWithoutRatingsInput>, Prisma.PropertyUncheckedUpdateWithoutRatingsInput>
+}
+
 export type PropertyCreateWithoutOwnerInput = {
   id?: string
   lifecycleStatus?: $Enums.PropertyStatus
@@ -500,6 +521,7 @@ export type PropertyCreateWithoutOwnerInput = {
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutOwnerInput = {
@@ -511,6 +533,7 @@ export type PropertyUncheckedCreateWithoutOwnerInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutOwnerInput = {
@@ -560,6 +583,7 @@ export type PropertyCreateWithoutVersionsInput = {
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutVersionsInput = {
@@ -571,6 +595,7 @@ export type PropertyUncheckedCreateWithoutVersionsInput = {
   updatedAt?: Date | string
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutVersionsInput = {
@@ -587,6 +612,7 @@ export type PropertyCreateWithoutActiveVersionInput = {
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutActiveVersionInput = {
@@ -598,6 +624,7 @@ export type PropertyUncheckedCreateWithoutActiveVersionInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutActiveVersionInput = {
@@ -625,6 +652,7 @@ export type PropertyUpdateWithoutVersionsInput = {
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutVersionsInput = {
@@ -636,6 +664,7 @@ export type PropertyUncheckedUpdateWithoutVersionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUpsertWithoutActiveVersionInput = {
@@ -658,6 +687,7 @@ export type PropertyUpdateWithoutActiveVersionInput = {
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutActiveVersionInput = {
@@ -669,6 +699,7 @@ export type PropertyUncheckedUpdateWithoutActiveVersionInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReviewDecisionsInput = {
@@ -680,6 +711,7 @@ export type PropertyCreateWithoutReviewDecisionsInput = {
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReviewDecisionsInput = {
@@ -691,6 +723,7 @@ export type PropertyUncheckedCreateWithoutReviewDecisionsInput = {
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReviewDecisionsInput = {
@@ -718,6 +751,7 @@ export type PropertyUpdateWithoutReviewDecisionsInput = {
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReviewDecisionsInput = {
@@ -729,6 +763,7 @@ export type PropertyUncheckedUpdateWithoutReviewDecisionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReportsInput = {
@@ -740,6 +775,7 @@ export type PropertyCreateWithoutReportsInput = {
   versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
   activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReportsInput = {
@@ -751,6 +787,7 @@ export type PropertyUncheckedCreateWithoutReportsInput = {
   updatedAt?: Date | string
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReportsInput = {
@@ -778,6 +815,7 @@ export type PropertyUpdateWithoutReportsInput = {
   versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReportsInput = {
@@ -789,6 +827,71 @@ export type PropertyUncheckedUpdateWithoutReportsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyCreateWithoutRatingsInput = {
+  id?: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
+  activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutRatingsInput = {
+  id?: string
+  ownerUserId: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  activeVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutRatingsInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutRatingsInput, Prisma.PropertyUncheckedCreateWithoutRatingsInput>
+}
+
+export type PropertyUpsertWithoutRatingsInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutRatingsInput, Prisma.PropertyUncheckedUpdateWithoutRatingsInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutRatingsInput, Prisma.PropertyUncheckedCreateWithoutRatingsInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutRatingsInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutRatingsInput, Prisma.PropertyUncheckedUpdateWithoutRatingsInput>
+}
+
+export type PropertyUpdateWithoutRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
+  activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  activeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyOwnerInput = {
@@ -808,6 +911,7 @@ export type PropertyUpdateWithoutOwnerInput = {
   activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutOwnerInput = {
@@ -819,6 +923,7 @@ export type PropertyUncheckedUpdateWithoutOwnerInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutOwnerInput = {
@@ -838,12 +943,14 @@ export type PropertyCountOutputType = {
   versions: number
   reviewDecisions: number
   reports: number
+  ratings: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   versions?: boolean | PropertyCountOutputTypeCountVersionsArgs
   reviewDecisions?: boolean | PropertyCountOutputTypeCountReviewDecisionsArgs
   reports?: boolean | PropertyCountOutputTypeCountReportsArgs
+  ratings?: boolean | PropertyCountOutputTypeCountRatingsArgs
 }
 
 /**
@@ -877,6 +984,13 @@ export type PropertyCountOutputTypeCountReportsArgs<ExtArgs extends runtime.Type
   where?: Prisma.PropertyReportWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityRatingWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -890,6 +1004,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   activeVersion?: boolean | Prisma.Property$activeVersionArgs<ExtArgs>
   reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
+  ratings?: boolean | Prisma.Property$ratingsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -931,6 +1046,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   activeVersion?: boolean | Prisma.Property$activeVersionArgs<ExtArgs>
   reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
+  ratings?: boolean | Prisma.Property$ratingsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -950,6 +1066,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     activeVersion: Prisma.$PropertyVersionPayload<ExtArgs> | null
     reviewDecisions: Prisma.$ReviewDecisionPayload<ExtArgs>[]
     reports: Prisma.$PropertyReportPayload<ExtArgs>[]
+    ratings: Prisma.$FacilityRatingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1357,6 +1474,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   activeVersion<T extends Prisma.Property$activeVersionArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$activeVersionArgs<ExtArgs>>): Prisma.Prisma__PropertyVersionClient<runtime.Types.Result.GetResult<Prisma.$PropertyVersionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   reviewDecisions<T extends Prisma.Property$reviewDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reviewDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reports<T extends Prisma.Property$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ratings<T extends Prisma.Property$ratingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$ratingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1881,6 +1999,30 @@ export type Property$reportsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.PropertyReportScalarFieldEnum | Prisma.PropertyReportScalarFieldEnum[]
+}
+
+/**
+ * Property.ratings
+ */
+export type Property$ratingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRating
+   */
+  select?: Prisma.FacilityRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRating
+   */
+  omit?: Prisma.FacilityRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingWhereInput
+  orderBy?: Prisma.FacilityRatingOrderByWithRelationInput | Prisma.FacilityRatingOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityRatingScalarFieldEnum | Prisma.FacilityRatingScalarFieldEnum[]
 }
 
 /**

@@ -246,6 +246,7 @@ export type UserWhereInput = {
   notifications?: Prisma.NotificationListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   moderatedReports?: Prisma.PropertyReportListRelationFilter
+  facilityRatings?: Prisma.FacilityRatingListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -270,6 +271,7 @@ export type UserOrderByWithRelationInput = {
   notifications?: Prisma.NotificationOrderByRelationAggregateInput
   passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
   moderatedReports?: Prisma.PropertyReportOrderByRelationAggregateInput
+  facilityRatings?: Prisma.FacilityRatingOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -297,6 +299,7 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   notifications?: Prisma.NotificationListRelationFilter
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   moderatedReports?: Prisma.PropertyReportListRelationFilter
+  facilityRatings?: Prisma.FacilityRatingListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -357,6 +360,7 @@ export type UserCreateInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -381,6 +385,7 @@ export type UserUncheckedCreateInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserUpdateInput = {
@@ -405,6 +410,7 @@ export type UserUpdateInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -429,6 +435,7 @@ export type UserUncheckedUpdateInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -667,6 +674,20 @@ export type UserUpdateOneWithoutModeratedReportsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutModeratedReportsInput, Prisma.UserUpdateWithoutModeratedReportsInput>, Prisma.UserUncheckedUpdateWithoutModeratedReportsInput>
 }
 
+export type UserCreateNestedOneWithoutFacilityRatingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFacilityRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutFacilityRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutFacilityRatingsInput
+  upsert?: Prisma.UserUpsertWithoutFacilityRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFacilityRatingsInput, Prisma.UserUpdateWithoutFacilityRatingsInput>, Prisma.UserUncheckedUpdateWithoutFacilityRatingsInput>
+}
+
 export type UserCreateNestedOneWithoutNotificationsInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutNotificationsInput, Prisma.UserUncheckedCreateWithoutNotificationsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutNotificationsInput
@@ -702,6 +723,7 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -725,6 +747,7 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -764,6 +787,7 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -787,6 +811,7 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRefreshSessionsInput = {
@@ -810,6 +835,7 @@ export type UserCreateWithoutRefreshSessionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -833,6 +859,7 @@ export type UserUncheckedCreateWithoutRefreshSessionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -872,6 +899,7 @@ export type UserUpdateWithoutRefreshSessionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -895,6 +923,7 @@ export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutRolesInput = {
@@ -918,6 +947,7 @@ export type UserCreateWithoutRolesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -941,6 +971,7 @@ export type UserUncheckedCreateWithoutRolesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -969,6 +1000,7 @@ export type UserCreateWithoutRolesAssignedInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutRolesAssignedInput = {
@@ -992,6 +1024,7 @@ export type UserUncheckedCreateWithoutRolesAssignedInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutRolesAssignedInput = {
@@ -1031,6 +1064,7 @@ export type UserUpdateWithoutRolesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -1054,6 +1088,7 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserUpsertWithoutRolesAssignedInput = {
@@ -1088,6 +1123,7 @@ export type UserUpdateWithoutRolesAssignedInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesAssignedInput = {
@@ -1111,6 +1147,7 @@ export type UserUncheckedUpdateWithoutRolesAssignedInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutPropertiesInput = {
@@ -1134,6 +1171,7 @@ export type UserCreateWithoutPropertiesInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -1157,6 +1195,7 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -1196,6 +1235,7 @@ export type UserUpdateWithoutPropertiesInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -1219,6 +1259,7 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutReviewDecisionsInput = {
@@ -1242,6 +1283,7 @@ export type UserCreateWithoutReviewDecisionsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutReviewDecisionsInput = {
@@ -1265,6 +1307,7 @@ export type UserUncheckedCreateWithoutReviewDecisionsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutReviewDecisionsInput = {
@@ -1304,6 +1347,7 @@ export type UserUpdateWithoutReviewDecisionsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewDecisionsInput = {
@@ -1327,6 +1371,7 @@ export type UserUncheckedUpdateWithoutReviewDecisionsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1350,6 +1395,7 @@ export type UserCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1373,6 +1419,7 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1412,6 +1459,7 @@ export type UserUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1435,6 +1483,7 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 export type UserCreateWithoutModeratedReportsInput = {
@@ -1458,6 +1507,7 @@ export type UserCreateWithoutModeratedReportsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutModeratedReportsInput = {
@@ -1481,6 +1531,7 @@ export type UserUncheckedCreateWithoutModeratedReportsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutModeratedReportsInput = {
@@ -1520,6 +1571,7 @@ export type UserUpdateWithoutModeratedReportsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModeratedReportsInput = {
@@ -1543,6 +1595,119 @@ export type UserUncheckedUpdateWithoutModeratedReportsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+}
+
+export type UserCreateWithoutFacilityRatingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+}
+
+export type UserUncheckedCreateWithoutFacilityRatingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+}
+
+export type UserCreateOrConnectWithoutFacilityRatingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
+}
+
+export type UserUpsertWithoutFacilityRatingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutFacilityRatingsInput, Prisma.UserUncheckedUpdateWithoutFacilityRatingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutFacilityRatingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutFacilityRatingsInput, Prisma.UserUncheckedUpdateWithoutFacilityRatingsInput>
+}
+
+export type UserUpdateWithoutFacilityRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutFacilityRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1566,6 +1731,7 @@ export type UserCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1589,6 +1755,7 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1628,6 +1795,7 @@ export type UserUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1651,6 +1819,7 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
 }
 
 
@@ -1668,6 +1837,7 @@ export type UserCountOutputType = {
   notifications: number
   passwordResetTokens: number
   moderatedReports: number
+  facilityRatings: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1680,6 +1850,7 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   notifications?: boolean | UserCountOutputTypeCountNotificationsArgs
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
   moderatedReports?: boolean | UserCountOutputTypeCountModeratedReportsArgs
+  facilityRatings?: boolean | UserCountOutputTypeCountFacilityRatingsArgs
 }
 
 /**
@@ -1755,6 +1926,13 @@ export type UserCountOutputTypeCountModeratedReportsArgs<ExtArgs extends runtime
   where?: Prisma.PropertyReportWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountFacilityRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityRatingWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1778,6 +1956,7 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   moderatedReports?: boolean | Prisma.User$moderatedReportsArgs<ExtArgs>
+  facilityRatings?: boolean | Prisma.User$facilityRatingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -1837,6 +2016,7 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   notifications?: boolean | Prisma.User$notificationsArgs<ExtArgs>
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   moderatedReports?: boolean | Prisma.User$moderatedReportsArgs<ExtArgs>
+  facilityRatings?: boolean | Prisma.User$facilityRatingsArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -1854,6 +2034,7 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     notifications: Prisma.$NotificationPayload<ExtArgs>[]
     passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     moderatedReports: Prisma.$PropertyReportPayload<ExtArgs>[]
+    facilityRatings: Prisma.$FacilityRatingPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2271,6 +2452,7 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   notifications<T extends Prisma.User$notificationsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$notificationsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$NotificationPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   moderatedReports<T extends Prisma.User$moderatedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderatedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  facilityRatings<T extends Prisma.User$facilityRatingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$facilityRatingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2918,6 +3100,30 @@ export type User$moderatedReportsArgs<ExtArgs extends runtime.Types.Extensions.I
   take?: number
   skip?: number
   distinct?: Prisma.PropertyReportScalarFieldEnum | Prisma.PropertyReportScalarFieldEnum[]
+}
+
+/**
+ * User.facilityRatings
+ */
+export type User$facilityRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRating
+   */
+  select?: Prisma.FacilityRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRating
+   */
+  omit?: Prisma.FacilityRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingWhereInput
+  orderBy?: Prisma.FacilityRatingOrderByWithRelationInput | Prisma.FacilityRatingOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityRatingScalarFieldEnum | Prisma.FacilityRatingScalarFieldEnum[]
 }
 
 /**

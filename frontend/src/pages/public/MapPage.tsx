@@ -11,6 +11,7 @@ import {
   updatePlaceParams,
 } from "../../features/places/utils/place-query";
 import { getApiErrorMessage } from "../../types/api.types";
+import { useLanguage } from "../../i18n/useLanguage";
 
 const PublicPlacesMap = lazy(() =>
   import("../../features/maps/components/PublicPlacesMap").then((module) => ({
@@ -35,6 +36,7 @@ function PlaceMapResult({
   selected: boolean;
   onSelect: () => void;
 }) {
+  const { t } = useLanguage();
   return (
     <li
       className={`overflow-hidden rounded-2xl border bg-white transition ${
@@ -48,11 +50,14 @@ function PlaceMapResult({
         <PlacePhoto
           className="aspect-[16/8] w-full object-cover"
           src={place.coverImage.url}
-          alt={place.coverImage.altText ?? `Photo of ${place.name}`}
+          alt={
+            place.coverImage.altText ??
+            t("Photo of {name}", { name: place.name })
+          }
         />
       ) : (
         <div className="grid aspect-[16/8] place-items-center bg-gradient-to-br from-brand-100 to-brand-100 text-sm font-black text-brand-900/60">
-          Verified facility
+          {t("Verified facility")}
         </div>
       )}
       <div className="p-5">
@@ -65,28 +70,29 @@ function PlaceMapResult({
           <span className="flex items-start justify-between gap-3">
             <span className="font-black text-slate-950">{place.name}</span>
             <span className="shrink-0 rounded-full bg-brand-100 px-2.5 py-1 text-[0.68rem] font-black uppercase tracking-wide text-brand-800">
-              Verified
+              {t("Verified")}
             </span>
           </span>
           <span className="mt-1 block text-sm text-slate-600">
             {place.city}, {place.district}
           </span>
           <span className="mt-3 block text-xs font-bold uppercase tracking-wide text-slate-500">
-            {displayType(place.propertyType)} · {place.isFree ? "Free" : "Paid"}
+            {t(displayType(place.propertyType))} ·{" "}
+            {t(place.isFree ? "Free" : "Paid")}
             {place.distanceKm !== null ? ` · ${place.distanceKm} km` : ""}
           </span>
           {selected ? (
             <span className="mt-3 block text-xs font-black uppercase tracking-wide text-brand-800">
-              Selected on map
+              {t("Selected on map")}
             </span>
           ) : null}
         </button>
         <Link
           className="mt-4 inline-flex min-h-10 items-center text-sm font-black text-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={`/places/${place.propertyId}`}
-          aria-label="View place details"
+          aria-label={t("View place details")}
         >
-          View place details&nbsp; →
+          {t("View place details")}&nbsp; →
         </Link>
       </div>
     </li>
@@ -94,6 +100,7 @@ function PlaceMapResult({
 }
 
 export function MapPage() {
+  const { t } = useLanguage();
   const [searchParams, setSearchParams] = useSearchParams();
   const parsedQuery = useMemo(
     () => parsePlaceQuery(searchParams),
@@ -149,14 +156,15 @@ export function MapPage() {
           <div className="flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-                Explore by location
+                {t("Explore by location")}
               </p>
               <h1 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-                Find verified facilities on the map.
+                {t("Find verified facilities on the map.")}
               </h1>
               <p className="mt-4 max-w-2xl text-lg leading-8 text-slate-600">
-                Search across Sri Lanka, narrow the results to the amenities you
-                need, and open precise directions for your journey.
+                {t(
+                  "Search across Sri Lanka, narrow the results to the amenities you need, and open precise directions for your journey.",
+                )}
               </p>
             </div>
             <div className="flex gap-8 text-sm">
@@ -164,11 +172,11 @@ export function MapPage() {
                 <p className="text-3xl font-black text-slate-950">
                   {data?.pagination.total ?? "—"}
                 </p>
-                <p className="mt-1 text-slate-500">Matching places</p>
+                <p className="mt-1 text-slate-500">{t("Matching places")}</p>
               </div>
               <div className="border-l border-slate-200 pl-8">
                 <p className="text-3xl font-black text-slate-950">50</p>
-                <p className="mt-1 text-slate-500">Shown per map</p>
+                <p className="mt-1 text-slate-500">{t("Shown per map")}</p>
               </div>
             </div>
           </div>
@@ -181,7 +189,7 @@ export function MapPage() {
           onSubmit={submitSearch}
         >
           <label className="sr-only" htmlFor="map-place-search">
-            Search mapped places
+            {t("Search mapped places")}
           </label>
           <div className="flex min-h-14 flex-1 items-center gap-3 rounded-xl bg-slate-50 px-4">
             <span className="text-xl text-brand-700" aria-hidden="true">
@@ -195,14 +203,14 @@ export function MapPage() {
               maxLength={100}
               defaultValue={query.search ?? ""}
               key={query.search ?? ""}
-              placeholder="Search place, city, or district"
+              placeholder={t("Search place, city, or district")}
             />
           </div>
           <button
             className="min-h-14 rounded-xl bg-brand-700 px-7 font-black text-white transition hover:bg-brand-800"
             type="submit"
           >
-            Search map
+            {t("Search map")}
           </button>
         </form>
 
@@ -210,11 +218,12 @@ export function MapPage() {
           <div className="space-y-5 xl:sticky xl:top-24">
             <section className="rounded-3xl border border-brand-200 bg-brand-50 p-5 text-slate-900 shadow-sm">
               <p className="text-xs font-black uppercase tracking-[0.14em] text-brand-800">
-                Use your location
+                {t("Use your location")}
               </p>
               <p className="mt-2 text-sm leading-6 text-slate-600">
-                Find nearby verified facilities. Your location is used only for
-                this search and is not stored.
+                {t(
+                  "Find nearby verified facilities. Your location is used only for this search and is not stored.",
+                )}
               </p>
               <div className="mt-4">
                 <NearMeButton
@@ -227,7 +236,7 @@ export function MapPage() {
               </div>
               {query.latitude !== undefined ? (
                 <label className="mt-4 block text-sm font-bold text-slate-800">
-                  Search radius
+                  {t("Search radius")}
                   <select
                     className="mt-2 min-h-11 w-full rounded-xl border border-brand-200 bg-white px-3 font-normal text-slate-900"
                     value={query.radiusKm ?? 25}
@@ -237,7 +246,7 @@ export function MapPage() {
                   >
                     {[5, 10, 25, 50, 100].map((radius) => (
                       <option value={radius} key={radius}>
-                        Within {radius} km
+                        {t("Within {radius} km", { radius })}
                       </option>
                     ))}
                   </select>
@@ -265,7 +274,7 @@ export function MapPage() {
                     className="grid min-h-[36rem] place-items-center rounded-[1.4rem] bg-slate-100 text-sm font-semibold text-slate-600"
                     role="status"
                   >
-                    Loading map module…
+                    {t("Loading map module…")}
                   </div>
                 }
               >
@@ -284,16 +293,16 @@ export function MapPage() {
               >
                 <div>
                   <p className="text-xs font-black uppercase tracking-wide text-brand-700">
-                    Selected verified place
+                    {t("Selected verified place")}
                   </p>
                   <h2 className="mt-1 text-xl font-black text-slate-950">
                     {selectedPlace.name}
                   </h2>
                   <p className="mt-1 text-sm text-slate-600">
                     {selectedPlace.city}, {selectedPlace.district} ·{" "}
-                    {selectedPlace.isFree ? "Free" : "Paid"}
+                    {t(selectedPlace.isFree ? "Free" : "Paid")}
                     {selectedPlace.wheelchairAccessible
-                      ? " · Wheelchair accessible"
+                      ? ` · ${t("Wheelchair accessible")}`
                       : ""}
                   </p>
                 </div>
@@ -301,7 +310,7 @@ export function MapPage() {
                   className="inline-flex min-h-11 shrink-0 items-center rounded-xl bg-slate-950 px-5 font-black text-white"
                   to={`/places/${selectedPlace.propertyId}`}
                 >
-                  Open full details
+                  {t("Open full details")}
                 </Link>
               </aside>
             ) : null}
@@ -316,17 +325,20 @@ export function MapPage() {
           <div className="flex flex-wrap items-end justify-between gap-4">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
-                Map results
+                {t("Map results")}
               </p>
               <h2 className="mt-2 text-3xl font-black tracking-tight text-slate-950">
                 {data
-                  ? `${data.pagination.total} verified places`
-                  : "Verified places"}
+                  ? t("{count} verified places", {
+                      count: data.pagination.total,
+                    })
+                  : t("Verified places")}
               </h2>
             </div>
             <p className="max-w-lg text-sm leading-6 text-slate-600">
-              Select a card to focus its marker, or open the full page for
-              amenities, photos and directions.
+              {t(
+                "Select a card to focus its marker, or open the full page for amenities, photos and directions.",
+              )}
             </p>
           </div>
           {placesQuery.isPending ? (
@@ -351,8 +363,9 @@ export function MapPage() {
             </ol>
           ) : (
             <p className="mt-7 rounded-2xl border border-dashed border-slate-300 bg-white p-10 text-center text-slate-600">
-              No verified places match these filters. Try a broader city,
-              district, or radius.
+              {t(
+                "No verified places match these filters. Try a broader city, district, or radius.",
+              )}
             </p>
           )}
         </section>

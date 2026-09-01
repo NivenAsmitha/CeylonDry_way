@@ -63,9 +63,14 @@ export type ReviewDecision = Prisma.ReviewDecisionModel
 export type AuditLog = Prisma.AuditLogModel
 /**
  * Model PropertyReport
- *
+ * 
  */
 export type PropertyReport = Prisma.PropertyReportModel
+/**
+ * Model FacilityRating
+ * 
+ */
+export type FacilityRating = Prisma.FacilityRatingModel
 /**
  * Model Notification
  * 

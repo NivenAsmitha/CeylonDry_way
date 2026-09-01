@@ -9,7 +9,7 @@ import {
 } from 'class-validator';
 import { trimString } from '../../../common/transforms/string.transforms';
 
-export const SUPPORTED_LANGUAGES = ['en'] as const;
+export const SUPPORTED_LANGUAGES = ['en', 'ja'] as const;
 
 export class UpdateProfileDto {
   @ApiPropertyOptional({ minLength: 2, maxLength: 100 })

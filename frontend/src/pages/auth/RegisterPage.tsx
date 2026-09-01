@@ -10,8 +10,10 @@ import {
   type RegisterFormValues,
 } from "../../features/auth/schemas/register.schema";
 import { getApiErrorMessage } from "../../types/api.types";
+import { useLanguage } from "../../i18n/useLanguage";
 
 export function RegisterPage() {
+  const { t } = useLanguage();
   const { register: registerAccount, isAuthenticated } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
@@ -59,48 +61,54 @@ export function RegisterPage() {
       <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl lg:grid-cols-[0.8fr_1.2fr]">
         <aside className="bg-brand-950 p-7 text-white sm:p-10">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
-            Join ComfortGo
+            {t("Join ComfortGo")}
           </p>
           <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
-            Create your account.
+            {t("Create your account.")}
           </h1>
           <p className="mt-4 leading-7 text-brand-100">
-            Your new account receives the safe Client role automatically.
-            Additional roles are never selected during public registration.
+            {t(
+              "Your new account receives the safe Client role automatically. Additional roles are never selected during public registration.",
+            )}
           </p>
           <ul className="mt-8 space-y-4 text-sm text-brand-50">
             <li className="flex gap-3">
               <span aria-hidden="true" className="text-amber-300">
                 ✓
               </span>
-              Passwords are protected by the backend and never displayed.
+              {t("Passwords are protected by the backend and never displayed.")}
             </li>
             <li className="flex gap-3">
               <span aria-hidden="true" className="text-amber-300">
                 ✓
               </span>
-              Session credentials remain outside browser storage.
+              {t("Session credentials remain outside browser storage.")}
             </li>
           </ul>
         </aside>
 
         <div className="p-6 sm:p-10">
           <div className="mb-7">
-            <h2 className="text-2xl font-black text-slate-950">Your details</h2>
+            <h2 className="text-2xl font-black text-slate-950">
+              {t("Your details")}
+            </h2>
             <p className="mt-2 text-sm text-slate-600">
-              Already registered?{" "}
+              {t("Already registered?")}{" "}
               <Link
                 className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
                 to="/login"
               >
-                Sign in
+                {t("Sign in")}
               </Link>
             </p>
           </div>
 
           {serverError ? (
             <div className="mb-6">
-              <ErrorMessage message={serverError} title="Registration failed" />
+              <ErrorMessage
+                message={serverError}
+                title={t("Registration failed")}
+              />
             </div>
           ) : null}
 
@@ -111,14 +119,14 @@ export function RegisterPage() {
           >
             <FormField
               id="register-name"
-              label="Full name"
+              label={t("Full name")}
               autoComplete="name"
               error={errors.name?.message}
               {...registerField("name")}
             />
             <FormField
               id="register-email"
-              label="Email address"
+              label={t("Email address")}
               type="email"
               autoComplete="email"
               error={errors.email?.message}
@@ -126,7 +134,7 @@ export function RegisterPage() {
             />
             <FormField
               id="register-phone"
-              label="Phone number (optional)"
+              label={t("Phone number (optional)")}
               type="tel"
               autoComplete="tel"
               error={errors.phone?.message}
@@ -135,16 +143,16 @@ export function RegisterPage() {
             <div className="grid gap-5 sm:grid-cols-2">
               <FormField
                 id="register-password"
-                label="Password"
+                label={t("Password")}
                 type="password"
                 autoComplete="new-password"
-                hint="Use 12–128 characters."
+                hint={t("Use 12–128 characters.")}
                 error={errors.password?.message}
                 {...registerField("password")}
               />
               <FormField
                 id="register-confirm-password"
-                label="Confirm password"
+                label={t("Confirm password")}
                 type="password"
                 autoComplete="new-password"
                 error={errors.confirmPassword?.message}
@@ -156,7 +164,7 @@ export function RegisterPage() {
               type="submit"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Creating account…" : "Create account"}
+              {t(isSubmitting ? "Creating account…" : "Create account")}
             </button>
           </form>
         </div>

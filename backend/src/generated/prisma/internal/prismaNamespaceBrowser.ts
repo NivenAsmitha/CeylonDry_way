@@ -60,6 +60,7 @@ export const ModelName = {
   ReviewDecision: 'ReviewDecision',
   AuditLog: 'AuditLog',
   PropertyReport: 'PropertyReport',
+  FacilityRating: 'FacilityRating',
   Notification: 'Notification',
   PropertyPhoto: 'PropertyPhoto',
   Amenity: 'Amenity',
@@ -234,6 +235,21 @@ export const PropertyReportScalarFieldEnum = {
 } as const
 
 export type PropertyReportScalarFieldEnum = (typeof PropertyReportScalarFieldEnum)[keyof typeof PropertyReportScalarFieldEnum]
+
+
+export const FacilityRatingScalarFieldEnum = {
+  id: 'id',
+  propertyId: 'propertyId',
+  userId: 'userId',
+  cleanliness: 'cleanliness',
+  safety: 'safety',
+  accessibility: 'accessibility',
+  accuracy: 'accuracy',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacilityRatingScalarFieldEnum = (typeof FacilityRatingScalarFieldEnum)[keyof typeof FacilityRatingScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

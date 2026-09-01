@@ -6,6 +6,7 @@ import App from "./App.tsx";
 import { AuthProvider } from "./context/AuthContext";
 import "./index.css";
 import { queryClient } from "./services/queryClient";
+import { LanguageProvider } from "./i18n/LanguageProvider";
 
 const LazyReactQueryDevtools = import.meta.env.DEV
   ? lazy(() =>
@@ -26,7 +27,9 @@ createRoot(rootElement).render(
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <LanguageProvider>
+            <App />
+          </LanguageProvider>
         </AuthProvider>
       </BrowserRouter>
       {LazyReactQueryDevtools ? (

@@ -4,6 +4,7 @@ import heroImage from "../../assets/hero.png";
 import { NearMeButton } from "../../features/places/components/NearMeButton";
 import { PlaceList } from "../../features/places/components/PlaceList";
 import { usePublicPlaces } from "../../features/places/hooks/usePlaces";
+import { useLanguage } from "../../i18n/useLanguage";
 
 const discoveryHighlights = [
   {
@@ -53,6 +54,7 @@ const projectBenefits = [
 ] as const;
 
 export function HomePage() {
+  const { t } = useLanguage();
   const [search, setSearch] = useState("");
   const navigate = useNavigate();
   const featuredQuery = usePublicPlaces({
@@ -77,19 +79,19 @@ export function HomePage() {
           <div>
             <div className="inline-flex items-center gap-2.5 rounded-full border border-brand-200 bg-white/85 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-brand-900 shadow-sm backdrop-blur">
               <span className="size-2 rounded-full bg-brand-500 shadow-[0_0_0_5px_rgba(14,165,233,0.12)]" />
-              Sri Lanka&apos;s restroom finder
+              {t("Sri Lanka's restroom finder")}
             </div>
 
             <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
-              Find a restroom.
+              {t("Find a restroom.")}
               <span className="block text-brand-700">
-                Continue the journey.
+                {t("Continue the journey.")}
               </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl">
-              ComfortGo helps locals and tourists across Sri Lanka quickly find
-              nearby restroom facilities for a more comfortable and convenient
-              journey.
+              {t(
+                "ComfortGo helps locals and tourists across Sri Lanka quickly find nearby restroom facilities for a more comfortable and convenient journey.",
+              )}
             </p>
 
             <form
@@ -97,7 +99,7 @@ export function HomePage() {
               onSubmit={submitSearch}
             >
               <label className="sr-only" htmlFor="home-place-search">
-                Search places
+                {t("Search places")}
               </label>
               <div className="flex min-h-14 flex-1 items-center gap-3 px-4">
                 <span className="text-xl text-brand-700" aria-hidden="true">
@@ -108,7 +110,7 @@ export function HomePage() {
                   id="home-place-search"
                   type="search"
                   maxLength={100}
-                  placeholder="Search a place, city or district"
+                  placeholder={t("Search a place, city or district")}
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                 />
@@ -117,7 +119,7 @@ export function HomePage() {
                 className="min-h-14 w-full rounded-xl bg-brand-700 px-7 font-black text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 sm:w-auto"
                 type="submit"
               >
-                Find a facility
+                {t("Find a facility")}
               </button>
             </form>
 
@@ -139,7 +141,7 @@ export function HomePage() {
                 className="inline-flex min-h-11 items-center rounded-xl px-4 text-sm font-black text-brand-800 transition hover:bg-white"
                 to="/map"
               >
-                Explore the live map&nbsp; →
+                {t("Explore the live map")}&nbsp; →
               </Link>
             </div>
           </div>
@@ -154,23 +156,25 @@ export function HomePage() {
                 playsInline
                 preload="metadata"
                 poster={heroImage}
-                aria-label="A journey across Sri Lanka"
+                aria-label={t("A journey across Sri Lanka")}
               >
                 <source src="/videos/home-hero-demo.mp4" type="video/mp4" />
               </video>
               <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/80 bg-white/90 p-5 text-slate-950 shadow-xl backdrop-blur-md">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
-                  Find your nearest clean stop
+                  {t("Find your nearest clean stop")}
                 </p>
                 <p className="mt-2 text-lg font-black">
-                  Nearby restrooms, useful details and clear directions.
+                  {t("Nearby restrooms, useful details and clear directions.")}
                 </p>
               </div>
             </div>
             <div className="absolute -left-5 top-8 hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:block">
-              <p className="text-xs font-bold text-slate-500">Coverage</p>
+              <p className="text-xs font-bold text-slate-500">
+                {t("Coverage")}
+              </p>
               <p className="mt-1 font-black text-slate-950">
-                Island-wide discovery
+                {t("Island-wide discovery")}
               </p>
             </div>
           </div>
@@ -182,19 +186,19 @@ export function HomePage() {
               <span className="mr-2 text-brand-600" aria-hidden="true">
                 ●
               </span>
-              Reviewer-checked listings
+              {t("Reviewer-checked listings")}
             </p>
             <p className="rounded-2xl border border-amber-100 bg-amber-50 px-4 py-4 text-center text-sm font-bold text-slate-700">
               <span className="mr-2 text-amber-500" aria-hidden="true">
                 ●
               </span>
-              Exact locations and directions
+              {t("Exact locations and directions")}
             </p>
             <p className="rounded-2xl border border-cyan-100 bg-cyan-50 px-4 py-4 text-center text-sm font-bold text-slate-700">
               <span className="mr-2 text-cyan-600" aria-hidden="true">
                 ●
               </span>
-              Helpful community reports
+              {t("Helpful community reports")}
             </p>
           </div>
         </div>
@@ -204,14 +208,15 @@ export function HomePage() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mx-auto max-w-3xl text-center">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-              Easy to use wherever you are
+              {t("Easy to use wherever you are")}
             </p>
             <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.04em] text-slate-950 sm:text-5xl">
-              Find the right restroom in three simple steps.
+              {t("Find the right restroom in three simple steps.")}
             </h2>
             <p className="mt-5 text-lg leading-8 text-slate-600">
-              Search trusted local information, compare the details that matter
-              and open directions—all in one place.
+              {t(
+                "Search trusted local information, compare the details that matter and open directions—all in one place.",
+              )}
             </p>
           </div>
 
@@ -227,10 +232,10 @@ export function HomePage() {
                   {highlight.number}
                 </span>
                 <h3 className="mt-7 text-2xl font-black text-slate-950">
-                  {highlight.title}
+                  {t(highlight.title)}
                 </h3>
                 <p className="mt-3 leading-7 text-slate-600">
-                  {highlight.text}
+                  {t(highlight.text)}
                 </p>
               </article>
             ))}
@@ -242,15 +247,15 @@ export function HomePage() {
         <div className="mx-auto grid max-w-7xl gap-12 px-4 sm:px-6 lg:grid-cols-[0.8fr_1.2fr] lg:items-start lg:px-8">
           <div className="lg:sticky lg:top-28">
             <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-              Made for everyone on the road
+              {t("Made for everyone on the road")}
             </p>
             <h2 className="mt-3 text-4xl font-black leading-tight tracking-[-0.04em] text-slate-950 sm:text-5xl">
-              A more comfortable journey for locals and visitors.
+              {t("A more comfortable journey for locals and visitors.")}
             </h2>
             <p className="mt-6 max-w-xl text-lg leading-8 text-slate-600">
-              Whether you are on a familiar daily route or discovering Sri Lanka
-              for the first time, dependable restroom information should be easy
-              to find.
+              {t(
+                "Whether you are on a familiar daily route or discovering Sri Lanka for the first time, dependable restroom information should be easy to find.",
+              )}
             </p>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -260,13 +265,13 @@ export function HomePage() {
                 key={benefit.label}
               >
                 <p className="text-xs font-black uppercase tracking-[0.14em] text-brand-700">
-                  {benefit.label}
+                  {t(benefit.label)}
                 </p>
                 <h3 className="mt-4 text-xl font-black text-slate-950">
-                  {benefit.title}
+                  {t(benefit.title)}
                 </h3>
                 <p className="mt-3 text-sm leading-7 text-slate-600">
-                  {benefit.text}
+                  {t(benefit.text)}
                 </p>
               </article>
             ))}
@@ -279,17 +284,17 @@ export function HomePage() {
           <div className="flex flex-wrap items-end justify-between gap-5">
             <div>
               <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-                Ready for your journey
+                {t("Ready for your journey")}
               </p>
               <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-                Places ready to explore
+                {t("Places ready to explore")}
               </h2>
             </div>
             <Link
               className="inline-flex min-h-12 items-center rounded-xl border border-slate-300 bg-white px-5 font-black text-slate-800 transition hover:border-brand-300 hover:text-brand-800"
               to="/explore"
             >
-              View all places&nbsp; →
+              {t("View all places")}&nbsp; →
             </Link>
           </div>
 
@@ -308,10 +313,10 @@ export function HomePage() {
             ) : (
               <div className="rounded-3xl border border-dashed border-slate-300 bg-white p-12 text-center">
                 <h3 className="text-2xl font-black text-slate-950">
-                  Verified places are on the way
+                  {t("Verified places are on the way")}
                 </h3>
                 <p className="mt-2 text-slate-600">
-                  Newly approved public facilities will appear here.
+                  {t("Newly approved public facilities will appear here.")}
                 </p>
               </div>
             )}
@@ -328,21 +333,22 @@ export function HomePage() {
             />
             <div className="relative max-w-3xl">
               <p className="text-sm font-black uppercase tracking-[0.16em] text-brand-700">
-                Help more people travel comfortably
+                {t("Help more people travel comfortably")}
               </p>
               <h2 className="mt-3 text-3xl font-black tracking-[-0.03em] sm:text-4xl">
-                Know a restroom that should be on the map?
+                {t("Know a restroom that should be on the map?")}
               </h2>
               <p className="mt-4 max-w-2xl leading-7 text-slate-600">
-                Property owners can share accurate details and photos. Every
-                submission is reviewed before it becomes publicly visible.
+                {t(
+                  "Property owners can share accurate details and photos. Every submission is reviewed before it becomes publicly visible.",
+                )}
               </p>
             </div>
             <Link
               className="relative mt-7 inline-flex min-h-12 shrink-0 items-center rounded-xl bg-brand-700 px-6 font-black text-white shadow-sm transition hover:bg-brand-800 lg:mt-0"
               to="/list-property"
             >
-              List a property&nbsp; →
+              {t("List a property")}&nbsp; →
             </Link>
           </div>
         </div>

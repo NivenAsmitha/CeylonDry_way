@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useLanguage } from "../../../i18n/useLanguage";
 
 interface NearMeButtonProps {
   active: boolean;
@@ -21,6 +22,7 @@ export function NearMeButton({
   onClear,
   onLocated,
 }: NearMeButtonProps) {
+  const { t } = useLanguage();
   const [isLocating, setIsLocating] = useState(false);
   const [message, setMessage] = useState<string | null>(null);
 
@@ -82,7 +84,7 @@ export function NearMeButton({
           disabled={isLocating}
           onClick={findNearMe}
         >
-          {isLocating ? "Finding your location..." : "Find places near me"}
+          {t(isLocating ? "Finding your location..." : "Find places near me")}
         </button>
         {active ? (
           <button
@@ -90,13 +92,13 @@ export function NearMeButton({
             type="button"
             onClick={onClear}
           >
-            Clear location
+            {t("Clear location")}
           </button>
         ) : null}
       </div>
       {message ? (
         <p className="mt-2 max-w-xl text-sm text-amber-800" role="status">
-          {message}
+          {t(message)}
         </p>
       ) : null}
     </div>
