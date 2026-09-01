@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import logo from "../../assets/logo.png";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
@@ -40,21 +41,19 @@ export function Navbar() {
         aria-label="Primary navigation"
       >
         <Link
-          className="group flex min-h-12 items-center gap-3 rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+          className="group flex min-h-12 items-center rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
           to={workspaceHome}
+          aria-label="Ceylon DryWay home"
           onClick={closeMenu}
         >
-          <span className="relative grid size-11 place-items-center rounded-2xl bg-gradient-to-br from-brand-700 to-brand-500 text-base font-black tracking-tight text-white shadow-md shadow-brand-900/15 transition group-hover:-translate-y-0.5">
-            CD
-            <span className="absolute -right-1 -top-1 size-3 rounded-full border-2 border-white bg-amber-400" />
-          </span>
-          <span>
-            <span className="block text-base font-black tracking-[-0.02em] text-slate-950">
-              Ceylon DryWay
-            </span>
-            <span className="hidden text-xs text-slate-500 sm:block">
-              Restrooms, clearly mapped
-            </span>
+          <img
+            className="h-12 w-auto max-w-[7.75rem] object-contain transition group-hover:-translate-y-0.5 sm:h-14 sm:max-w-[9rem]"
+            src={logo}
+            alt=""
+          />
+          <span className="ml-3 hidden border-l border-brand-100 pl-3 text-xs font-bold leading-5 text-slate-500 md:block">
+            Find your nearest
+            <span className="block text-brand-800">clean stop</span>
           </span>
         </Link>
 

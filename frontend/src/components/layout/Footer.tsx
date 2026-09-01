@@ -21,7 +21,7 @@ export function Footer() {
                   Ceylon DryWay
                 </span>
                 <span className="text-xs text-slate-500">
-                  Find comfort on the journey
+                  Find your nearest clean stop
                 </span>
               </span>
             </Link>

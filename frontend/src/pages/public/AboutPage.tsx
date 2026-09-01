@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
-
-const sriLankaRoadImage = "/images/about-sri-lanka-road.jpg";
-const accessibleRestroomImage = "/images/about-accessible-restroom.jpg";
+import communityImage from "../../assets/about1.png";
+import accessibilityImage from "../../assets/about2.png";
+import journeyImage from "../../assets/about3.png";
 
 const audiences = [
   {
@@ -103,8 +103,8 @@ export function AboutPage() {
             <div className="overflow-hidden rounded-[2rem] border-[8px] border-white bg-white shadow-2xl shadow-brand-950/15">
               <img
                 className="aspect-[5/4] w-full object-cover"
-                src={sriLankaRoadImage}
-                alt="A scenic road beside Loggal Oya reservoir in Sri Lanka"
+                src={journeyImage}
+                alt="Local and international travellers beside a tuk-tuk on a scenic Sri Lankan reservoir road"
                 fetchPriority="high"
               />
             </div>
@@ -113,15 +113,7 @@ export function AboutPage() {
                 Made for journeys across Sri Lanka
               </span>
               <span className="mt-1 block text-xs text-slate-500">
-                Photo by{" "}
-                <a
-                  className="font-bold text-brand-700 underline-offset-2 hover:underline"
-                  href="https://unsplash.com/photos/a-road-next-to-a-large-body-of-water-W-ptSCa4veA"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Nalaka Thalagala
-                </a>
+                Helping locals and visitors prepare for more comfortable travel.
               </span>
             </figcaption>
           </figure>
@@ -164,17 +156,30 @@ export function AboutPage() {
         id="how-it-works"
       >
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl">
-            <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
-              How trust works
-            </p>
-            <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
-              Reviewed before it reaches the map.
-            </h2>
-            <p className="mt-5 text-lg leading-8 text-slate-600">
-              A clear review process helps turn local submissions into useful
-              public information.
-            </p>
+          <div className="grid gap-10 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+            <div>
+              <p className="text-sm font-black uppercase tracking-[0.18em] text-brand-700">
+                How trust works
+              </p>
+              <h2 className="mt-3 text-4xl font-black tracking-[-0.04em] text-slate-950 sm:text-5xl">
+                Reviewed before it reaches the map.
+              </h2>
+              <p className="mt-5 text-lg leading-8 text-slate-600">
+                A clear review process helps turn local submissions into useful
+                public information.
+              </p>
+            </div>
+            <figure className="overflow-hidden rounded-[2rem] border-[8px] border-white bg-white shadow-xl shadow-brand-950/10">
+              <img
+                className="aspect-[3/2] w-full object-cover"
+                src={communityImage}
+                alt="A Sri Lankan reviewer showing restroom information to visiting travellers"
+                loading="lazy"
+              />
+              <figcaption className="border-t border-brand-100 bg-white px-5 py-4 text-sm font-bold text-slate-700">
+                Local review and traveller feedback keep information useful.
+              </figcaption>
+            </figure>
           </div>
           <ol className="mt-12 grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {trustSteps.map((step) => (
@@ -214,22 +219,13 @@ export function AboutPage() {
               <figure className="mt-8 overflow-hidden rounded-3xl border border-slate-200 bg-slate-100 shadow-lg shadow-slate-900/5">
                 <img
                   className="aspect-[4/3] w-full object-cover"
-                  src={accessibleRestroomImage}
-                  alt="An accessible restroom sign on a clean tiled wall"
+                  src={accessibilityImage}
+                  alt="A clean step-free restroom entrance with universal accessibility symbols"
                   loading="lazy"
                 />
                 <figcaption className="bg-white px-4 py-3 text-xs text-slate-500">
-                  Accessibility information helps travellers plan ahead. Photo
-                  by{" "}
-                  <a
-                    className="font-bold text-brand-700 underline-offset-2 hover:underline"
-                    href="https://www.pexels.com/photo/white-tiled-wall-with-men-s-restroom-sign-13554363/"
-                    target="_blank"
-                    rel="noreferrer"
-                  >
-                    Grant Hughes
-                  </a>
-                  .
+                  Accessibility information helps travellers plan ahead with
+                  confidence.
                 </figcaption>
               </figure>
             </div>

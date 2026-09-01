@@ -82,7 +82,9 @@ export function HomePage() {
 
             <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
               Find a restroom.
-              <span className="block text-brand-700">Continue the journey.</span>
+              <span className="block text-brand-700">
+                Continue the journey.
+              </span>
             </h1>
             <p className="mt-7 max-w-xl text-lg leading-8 text-slate-600 sm:text-xl">
               Ceylon DryWay helps locals and tourists across Sri Lanka quickly
@@ -158,7 +160,7 @@ export function HomePage() {
               </video>
               <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/80 bg-white/90 p-5 text-slate-950 shadow-xl backdrop-blur-md">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
-                  Travel with confidence
+                  Find your nearest clean stop
                 </p>
                 <p className="mt-2 text-lg font-black">
                   Nearby restrooms, useful details and clear directions.
