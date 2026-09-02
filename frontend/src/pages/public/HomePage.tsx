@@ -1,6 +1,5 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import heroImage from "../../assets/hero.png";
 import heroVideo from "../../assets/hero.mp4";
 import { NearMeButton } from "../../features/places/components/NearMeButton";
 import { PlaceList } from "../../features/places/components/PlaceList";
@@ -54,6 +53,45 @@ const projectBenefits = [
   },
 ] as const;
 
+function HeroVideo() {
+  const { t } = useLanguage();
+
+  return (
+    <div className="relative mx-auto w-full max-w-3xl lg:translate-x-4 lg:justify-self-end">
+      <div className="absolute -inset-3 -z-10 rounded-[2.5rem] bg-gradient-to-br from-brand-200/60 via-white to-amber-200/60" />
+
+      <div className="relative overflow-hidden rounded-[2rem] border-[6px] border-white bg-slate-950 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/5">
+        <video
+          className="aspect-video w-full object-cover"
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          aria-label={t("A journey across Sri Lanka")}
+        >
+          <source src={heroVideo} type="video/mp4" />
+          {t("A journey across Sri Lanka")}
+        </video>
+
+        <div
+          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"
+          aria-hidden="true"
+        />
+
+        <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-7">
+          <p className="text-xs font-black uppercase tracking-[0.16em] text-cyan-200">
+            {t("Find your nearest clean stop")}
+          </p>
+          <p className="mt-2 max-w-md text-lg font-black leading-snug sm:text-xl">
+            {t("Nearby restrooms, useful details and clear directions.")}
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function HomePage() {
   const { t } = useLanguage();
   const [search, setSearch] = useState("");
@@ -76,14 +114,9 @@ export function HomePage() {
       <section className="relative isolate overflow-hidden bg-gradient-to-br from-white via-brand-50 to-amber-50">
         <div className="absolute -left-36 top-24 -z-10 size-80 rounded-full bg-brand-200/55 blur-3xl" />
         <div className="absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-amber-200/50 blur-3xl" />
-        <div className="mx-auto grid min-h-[46rem] max-w-7xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[1.02fr_0.98fr] lg:items-center lg:px-8">
+        <div className="mx-auto grid min-h-[46rem] max-w-7xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-10 lg:px-8">
           <div>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-brand-200 bg-white/85 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-brand-900 shadow-sm backdrop-blur">
-              <span className="size-2 rounded-full bg-brand-500 shadow-[0_0_0_5px_rgba(14,165,233,0.12)]" />
-              {t("Sri Lanka's restroom finder")}
-            </div>
-
-            <h1 className="mt-7 max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
               {t("Find a restroom.")}
               <span className="block text-brand-700">
                 {t("Continue the journey.")}
@@ -147,39 +180,7 @@ export function HomePage() {
             </div>
           </div>
 
-          <div className="relative mx-auto w-full max-w-xl lg:justify-self-end">
-            <div className="overflow-hidden rounded-[2.25rem] border-[10px] border-white bg-slate-100 shadow-2xl shadow-brand-950/15">
-              <video
-                className="aspect-[4/5] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5]"
-                autoPlay
-                loop
-                muted
-                playsInline
-                preload="metadata"
-                poster={heroImage}
-                aria-label={t("A journey across Sri Lanka")}
-              >
-                <source src={heroVideo} type="video/mp4" />
-                {t("A journey across Sri Lanka")}
-              </video>
-              <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/80 bg-white/90 p-5 text-slate-950 shadow-xl backdrop-blur-md">
-                <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
-                  {t("Find your nearest clean stop")}
-                </p>
-                <p className="mt-2 text-lg font-black">
-                  {t("Nearby restrooms, useful details and clear directions.")}
-                </p>
-              </div>
-            </div>
-            <div className="absolute -left-5 top-8 hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-xl sm:block">
-              <p className="text-xs font-bold text-slate-500">
-                {t("Coverage")}
-              </p>
-              <p className="mt-1 font-black text-slate-950">
-                {t("Island-wide discovery")}
-              </p>
-            </div>
-          </div>
+          <HeroVideo />
         </div>
 
         <div className="border-y border-brand-100 bg-white/75 py-5 backdrop-blur">
