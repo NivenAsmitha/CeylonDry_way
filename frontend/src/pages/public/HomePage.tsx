@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import heroImage from "../../assets/hero.png";
+import heroVideo from "../../assets/hero.mp4";
 import { NearMeButton } from "../../features/places/components/NearMeButton";
 import { PlaceList } from "../../features/places/components/PlaceList";
 import { usePublicPlaces } from "../../features/places/hooks/usePlaces";
@@ -158,7 +159,8 @@ export function HomePage() {
                 poster={heroImage}
                 aria-label={t("A journey across Sri Lanka")}
               >
-                <source src="/videos/home-hero-demo.mp4" type="video/mp4" />
+                <source src={heroVideo} type="video/mp4" />
+                {t("A journey across Sri Lanka")}
               </video>
               <div className="absolute inset-x-5 bottom-5 rounded-2xl border border-white/80 bg-white/90 p-5 text-slate-950 shadow-xl backdrop-blur-md">
                 <p className="text-xs font-black uppercase tracking-[0.16em] text-brand-700">
