@@ -5,7 +5,7 @@ import {
 } from './public-eligibility';
 
 describe('public property eligibility', () => {
-  it('requires APPROVED with a non-null active version', () => {
+  it('requires a public lifecycle status with a non-null published version', () => {
     expect(
       isPubliclyEligible({
         lifecycleStatus: PropertyStatus.APPROVED,
@@ -21,10 +21,21 @@ describe('public property eligibility', () => {
   });
 
   it.each([
+    PropertyStatus.PENDING_UPDATE,
+    PropertyStatus.UPDATE_CHANGES_REQUESTED,
+  ])('keeps the approved version public while status is %s', (status) => {
+    expect(
+      isPubliclyEligible({
+        lifecycleStatus: status,
+        activeVersionId: 'approved-version',
+      }),
+    ).toBe(true);
+  });
+
+  it.each([
     PropertyStatus.DRAFT,
     PropertyStatus.PENDING,
     PropertyStatus.CHANGES_REQUESTED,
-    PropertyStatus.PENDING_UPDATE,
     PropertyStatus.REJECTED,
     PropertyStatus.SUSPENDED,
     PropertyStatus.ARCHIVED,
@@ -39,7 +50,13 @@ describe('public property eligibility', () => {
 
   it('exports the same focused query invariant for future public services', () => {
     expect(publicEligibilityWhere).toEqual({
-      lifecycleStatus: PropertyStatus.APPROVED,
+      lifecycleStatus: {
+        in: [
+          PropertyStatus.APPROVED,
+          PropertyStatus.PENDING_UPDATE,
+          PropertyStatus.UPDATE_CHANGES_REQUESTED,
+        ],
+      },
       activeVersionId: { not: null },
     });
   });

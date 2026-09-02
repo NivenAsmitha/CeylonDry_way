@@ -1727,6 +1727,7 @@ export const PropertyScalarFieldEnum = {
   ownerUserId: 'ownerUserId',
   lifecycleStatus: 'lifecycleStatus',
   activeVersionId: 'activeVersionId',
+  workingVersionId: 'workingVersionId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const

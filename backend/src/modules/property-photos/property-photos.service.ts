@@ -307,6 +307,19 @@ export class PropertyPhotosService {
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );
 
+    const sharedReferenceCount = await this.prisma.propertyPhoto.count({
+      where: { storageKey: original.removed.storageKey },
+    });
+    if (sharedReferenceCount > 0) {
+      return original.remaining.map((photo, sortOrder) =>
+        mapSafePhoto({
+          ...photo,
+          sortOrder,
+          isCover: photo.id === original.coverId,
+        }),
+      );
+    }
+
     try {
       await this.storage.deletePropertyPhoto(original.removed.storageKey);
     } catch {
@@ -336,7 +349,9 @@ export class PropertyPhotosService {
       select: {
         id: true,
         lifecycleStatus: true,
-        activeVersion: {
+        activeVersionId: true,
+        workingVersionId: true,
+        workingVersion: {
           select: {
             id: true,
             version: true,
@@ -345,18 +360,26 @@ export class PropertyPhotosService {
         },
       },
     });
-    if (!property?.activeVersion) {
+    if (!property?.workingVersion) {
       throw new NotFoundException('Property not found');
     }
-    if (!isOwnerEditableStatus(property.lifecycleStatus)) {
+    const hasUnpublishedRevision =
+      property.activeVersionId !== property.workingVersionId;
+    if (
+      !isOwnerEditableStatus(property.lifecycleStatus) &&
+      !(
+        property.lifecycleStatus === PropertyStatus.APPROVED &&
+        hasUnpublishedRevision
+      )
+    ) {
       throw new ConflictException(
         `Photos cannot be changed while the property is ${property.lifecycleStatus}`,
       );
     }
     return {
-      versionId: property.activeVersion.id,
-      version: property.activeVersion.version,
-      photos: property.activeVersion.photos,
+      versionId: property.workingVersion.id,
+      version: property.workingVersion.version,
+      photos: property.workingVersion.photos,
     };
   }
 
@@ -391,7 +414,12 @@ export class PropertyPhotosService {
         id: propertyId,
         ownerUserId,
         lifecycleStatus: {
-          in: [PropertyStatus.DRAFT, PropertyStatus.CHANGES_REQUESTED],
+          in: [
+            PropertyStatus.DRAFT,
+            PropertyStatus.CHANGES_REQUESTED,
+            PropertyStatus.APPROVED,
+            PropertyStatus.UPDATE_CHANGES_REQUESTED,
+          ],
         },
       },
       data: { updatedAt: new Date() },

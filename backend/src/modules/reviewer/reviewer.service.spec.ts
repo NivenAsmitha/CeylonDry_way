@@ -14,6 +14,7 @@ import { ReviewerService } from './reviewer.service';
 
 const PROPERTY_ID = '11111111-1111-4111-8111-111111111111';
 const VERSION_ID = '22222222-2222-4222-8222-222222222222';
+const PUBLISHED_VERSION_ID = '99999999-9999-4999-8999-999999999999';
 const OWNER_ID = 'owner-user';
 const REVIEWER_ID = 'reviewer-user';
 const PHOTO_ID = '33333333-3333-4333-8333-333333333333';
@@ -28,8 +29,14 @@ function decisionProperty(status: PropertyStatus) {
     id: PROPERTY_ID,
     ownerUserId: OWNER_ID,
     lifecycleStatus: status,
-    activeVersionId: VERSION_ID,
-    activeVersion: {
+    activeVersionId:
+      status === PropertyStatus.PENDING ||
+      status === PropertyStatus.CHANGES_REQUESTED ||
+      status === PropertyStatus.REJECTED
+        ? null
+        : VERSION_ID,
+    workingVersionId: VERSION_ID,
+    workingVersion: {
       id: VERSION_ID,
       propertyId: PROPERTY_ID,
       submittedAt,
@@ -47,7 +54,9 @@ function detailProperty(status: PropertyStatus) {
     ownerUserId: OWNER_ID,
     lifecycleStatus: status,
     owner: { name: 'Property Owner' },
-    activeVersion: {
+    activeVersionId: VERSION_ID,
+    workingVersionId: VERSION_ID,
+    workingVersion: {
       id: VERSION_ID,
       propertyId: PROPERTY_ID,
       version: 1,
@@ -141,7 +150,7 @@ describe('ReviewerService', () => {
     expect(updateInput).toMatchObject({
       where: {
         lifecycleStatus: PropertyStatus.PENDING,
-        activeVersionId: VERSION_ID,
+        workingVersionId: VERSION_ID,
       },
       data: {
         lifecycleStatus: PropertyStatus.APPROVED,
@@ -174,6 +183,56 @@ describe('ReviewerService', () => {
     expect(updateData).not.toHaveProperty('activeVersionId');
     expect(updateData).toMatchObject({ lifecycleStatus: next });
   });
+
+  it.each([
+    [
+      ReviewDecisionType.APPROVE,
+      PropertyStatus.APPROVED,
+      VERSION_ID,
+      undefined,
+    ],
+    [
+      ReviewDecisionType.REQUEST_CHANGES,
+      PropertyStatus.UPDATE_CHANGES_REQUESTED,
+      undefined,
+      undefined,
+    ],
+    [
+      ReviewDecisionType.REJECT,
+      PropertyStatus.APPROVED,
+      undefined,
+      PUBLISHED_VERSION_ID,
+    ],
+  ])(
+    'applies update decision %s while preserving the published-version invariant',
+    async (decision, nextStatus, nextActiveVersionId, nextWorkingVersionId) => {
+      const pendingUpdate = decisionProperty(PropertyStatus.PENDING_UPDATE);
+      pendingUpdate.activeVersionId = PUBLISHED_VERSION_ID;
+      pendingUpdate.workingVersionId = VERSION_ID;
+      transaction.property.findUnique.mockResolvedValue(pendingUpdate);
+      propertyFindFirst.mockResolvedValue(detailProperty(nextStatus));
+
+      await service.decide(REVIEWER_ID, PROPERTY_ID, {
+        decision,
+        ...(decision === ReviewDecisionType.APPROVE
+          ? {}
+          : { reason: 'A meaningful update review explanation.' }),
+      });
+
+      const updateInput = updateInputs[0] as {
+        where: Record<string, unknown>;
+        data: Record<string, unknown>;
+      };
+      expect(updateInput.where).toMatchObject({
+        lifecycleStatus: PropertyStatus.PENDING_UPDATE,
+        activeVersionId: PUBLISHED_VERSION_ID,
+        workingVersionId: VERSION_ID,
+      });
+      expect(updateInput.data.lifecycleStatus).toBe(nextStatus);
+      expect(updateInput.data.activeVersionId).toBe(nextActiveVersionId);
+      expect(updateInput.data.workingVersionId).toBe(nextWorkingVersionId);
+    },
+  );
 
   it('requires a meaningful reason for change, reject, and suspend decisions', async () => {
     await expect(

@@ -10,6 +10,7 @@ import {
 import type { FacilityRatingScores } from "../types/rating.types";
 import { getApiErrorMessage } from "../../../types/api.types";
 import { useLanguage } from "../../../i18n/useLanguage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 
 type RatingCategory = keyof FacilityRatingScores;
 
@@ -94,6 +95,7 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
     null,
   );
   const [saved, setSaved] = useState(false);
+  const [confirmRemoval, setConfirmRemoval] = useState(false);
   const scores =
     draftScores ??
     (myRatingQuery.data
@@ -118,8 +120,13 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
   async function removeRating(): Promise<void> {
     if (busy) return;
     setSaved(false);
-    await deleteRating.mutateAsync();
-    setDraftScores(null);
+    try {
+      await deleteRating.mutateAsync();
+      setDraftScores(null);
+      setConfirmRemoval(false);
+    } catch {
+      setConfirmRemoval(false);
+    }
   }
 
   return (
@@ -253,7 +260,7 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
                 className="min-h-11 rounded-xl px-4 text-sm font-bold text-red-700 transition hover:bg-red-50 disabled:opacity-50"
                 type="button"
                 disabled={busy}
-                onClick={() => void removeRating()}
+                onClick={() => setConfirmRemoval(true)}
               >
                 {t("Remove my rating")}
               </button>
@@ -271,6 +278,20 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
           </Link>{" "}
           {t("with a client account to rate this facility.")}
         </p>
+      ) : null}
+
+      {confirmRemoval ? (
+        <ConfirmationDialog
+          title={t("Remove your facility rating?")}
+          description={t(
+            "Your cleanliness, safety, accessibility and accuracy scores will be removed from the public rating summary.",
+          )}
+          confirmLabel={t("Remove rating")}
+          tone="danger"
+          isPending={deleteRating.isPending}
+          onCancel={() => setConfirmRemoval(false)}
+          onConfirm={() => void removeRating()}
+        />
       ) : null}
     </section>
   );

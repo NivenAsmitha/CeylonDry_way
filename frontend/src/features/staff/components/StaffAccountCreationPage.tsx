@@ -3,6 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "../../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { FormField } from "../../../components/common/FormField";
 import { getApiErrorMessage } from "../../../types/api.types";
 import {
@@ -33,6 +34,8 @@ export function StaffAccountCreationPage({
 }: StaffAccountCreationPageProps) {
   const [createdAccount, setCreatedAccount] =
     useState<CreatedStaffAccount | null>(null);
+  const [pendingAccount, setPendingAccount] =
+    useState<StaffAccountFormValues | null>(null);
   const mutation = useMutation({ mutationFn: createAccount });
   const {
     register,
@@ -51,16 +54,26 @@ export function StaffAccountCreationPage({
   });
 
   async function onSubmit(values: StaffAccountFormValues): Promise<void> {
+    setPendingAccount(values);
+  }
+
+  async function createConfirmedAccount(): Promise<void> {
+    if (!pendingAccount) return;
     setCreatedAccount(null);
-    const phone = values.phone.trim();
-    const account = await mutation.mutateAsync({
-      name: values.name,
-      email: values.email,
-      temporaryPassword: values.temporaryPassword,
-      ...(phone ? { phone } : {}),
-    });
-    setCreatedAccount(account);
-    reset();
+    const phone = pendingAccount.phone.trim();
+    try {
+      const account = await mutation.mutateAsync({
+        name: pendingAccount.name,
+        email: pendingAccount.email,
+        temporaryPassword: pendingAccount.temporaryPassword,
+        ...(phone ? { phone } : {}),
+      });
+      setCreatedAccount(account);
+      setPendingAccount(null);
+      reset();
+    } catch {
+      setPendingAccount(null);
+    }
   }
 
   return (
@@ -73,10 +86,10 @@ export function StaffAccountCreationPage({
           <h1 className="mt-4 text-3xl font-black tracking-tight">{title}</h1>
           <p className="mt-4 leading-7 text-slate-300">{description}</p>
           <div className="mt-8 rounded-2xl border border-slate-700 bg-slate-900 p-4 text-sm leading-6 text-slate-300">
-            The new account receives exactly <strong>{targetLabel}</strong>.
-            It does not receive CLIENT or any other role. Share the initial
-            password through a separate trusted channel; it is never returned
-            by the API.
+            The new account receives exactly <strong>{targetLabel}</strong>. It
+            does not receive CLIENT or any other role. Share the initial
+            password through a separate trusted channel; it is never returned by
+            the API.
           </div>
         </aside>
 
@@ -96,8 +109,8 @@ export function StaffAccountCreationPage({
             >
               <p className="font-black">Account created securely</p>
               <p className="mt-1">
-                {createdAccount.name} now has exactly the {targetLabel} role.
-                No password or hash was returned.
+                {createdAccount.name} now has exactly the {targetLabel} role. No
+                password or hash was returned.
               </p>
             </div>
           ) : null}
@@ -161,6 +174,29 @@ export function StaffAccountCreationPage({
           </form>
         </div>
       </div>
+
+      {pendingAccount ? (
+        <ConfirmationDialog
+          title={`Create this ${targetLabel.toLowerCase()} account?`}
+          description={`This creates a new staff account with exactly the ${targetLabel} role. Review the identity carefully before continuing.`}
+          confirmLabel={`Create ${targetLabel.toLowerCase()}`}
+          isPending={mutation.isPending}
+          details={
+            <dl className="space-y-2">
+              <div>
+                <dt className="font-bold text-slate-950">Name</dt>
+                <dd>{pendingAccount.name}</dd>
+              </div>
+              <div>
+                <dt className="font-bold text-slate-950">Email</dt>
+                <dd className="break-all">{pendingAccount.email}</dd>
+              </div>
+            </dl>
+          }
+          onCancel={() => setPendingAccount(null)}
+          onConfirm={() => void createConfirmedAccount()}
+        />
+      ) : null}
     </section>
   );
 }

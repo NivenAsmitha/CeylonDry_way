@@ -5,13 +5,23 @@ export interface PublicEligibilityCandidate {
   activeVersionId: string | null;
 }
 
-export const publicEligibilityWhere = {
-  lifecycleStatus: PropertyStatus.APPROVED,
+export const publicPropertyStatuses = [
+  PropertyStatus.APPROVED,
+  PropertyStatus.PENDING_UPDATE,
+  PropertyStatus.UPDATE_CHANGES_REQUESTED,
+] as const;
+
+export const publicEligibilityWhere: Prisma.PropertyWhereInput = {
+  lifecycleStatus: { in: [...publicPropertyStatuses] },
   activeVersionId: { not: null },
-} as const;
+};
 
 export const publicEligibilitySql = Prisma.sql`
-  p."lifecycleStatus" = ${PropertyStatus.APPROVED}::"PropertyStatus"
+  p."lifecycleStatus" IN (
+    ${PropertyStatus.APPROVED}::"PropertyStatus",
+    ${PropertyStatus.PENDING_UPDATE}::"PropertyStatus",
+    ${PropertyStatus.UPDATE_CHANGES_REQUESTED}::"PropertyStatus"
+  )
   AND p."activeVersionId" IS NOT NULL
   AND pv.id = p."activeVersionId"
   AND pv."propertyId" = p.id
@@ -29,7 +39,8 @@ export function isPubliclyEligible(
   property: PublicEligibilityCandidate,
 ): boolean {
   return (
-    property.lifecycleStatus === PropertyStatus.APPROVED &&
-    property.activeVersionId !== null
+    publicPropertyStatuses.some(
+      (status) => status === property.lifecycleStatus,
+    ) && property.activeVersionId !== null
   );
 }

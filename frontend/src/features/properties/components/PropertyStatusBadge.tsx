@@ -7,6 +7,7 @@ const statusStyles: Record<PropertyStatus, string> = {
   CHANGES_REQUESTED: "border-orange-300 bg-orange-50 text-orange-900",
   APPROVED: "border-green-300 bg-green-50 text-green-900",
   PENDING_UPDATE: "border-brand-300 bg-brand-50 text-brand-900",
+  UPDATE_CHANGES_REQUESTED: "border-orange-300 bg-orange-50 text-orange-900",
   REJECTED: "border-red-300 bg-red-50 text-red-900",
   SUSPENDED: "border-red-300 bg-red-50 text-red-900",
   ARCHIVED: "border-slate-300 bg-slate-100 text-slate-700",

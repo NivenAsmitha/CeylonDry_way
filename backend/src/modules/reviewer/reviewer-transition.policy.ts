@@ -13,6 +13,12 @@ const transitions: Readonly<
     [ReviewDecisionType.REQUEST_CHANGES]: PropertyStatus.CHANGES_REQUESTED,
     [ReviewDecisionType.REJECT]: PropertyStatus.REJECTED,
   },
+  [PropertyStatus.PENDING_UPDATE]: {
+    [ReviewDecisionType.APPROVE]: PropertyStatus.APPROVED,
+    [ReviewDecisionType.REQUEST_CHANGES]:
+      PropertyStatus.UPDATE_CHANGES_REQUESTED,
+    [ReviewDecisionType.REJECT]: PropertyStatus.APPROVED,
+  },
   [PropertyStatus.APPROVED]: {
     [ReviewDecisionType.SUSPEND]: PropertyStatus.SUSPENDED,
   },

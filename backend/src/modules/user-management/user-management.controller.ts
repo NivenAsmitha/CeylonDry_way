@@ -31,6 +31,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { ChangeUserStatusDto } from './dto/change-user-status.dto';
+import { ChangeUserRolesDto } from './dto/change-user-roles.dto';
 import { ManagementReasonDto } from './dto/management-reason.dto';
 import { UpdateManagedUserDto } from './dto/update-managed-user.dto';
 import { UserListQueryDto } from './dto/user-list-query.dto';
@@ -80,6 +81,23 @@ export class UserManagementController {
     @Body() input: UpdateManagedUserDto,
   ) {
     return this.users.updateUser(actor.id, targetId, input);
+  }
+
+  @Patch(':id/roles')
+  @ApiOperation({ summary: 'Assign an audited, valid account role set' })
+  @ApiOkResponse({ description: 'Updated safe management details' })
+  @ApiBadRequestResponse({
+    description: 'Role combination or reason is invalid',
+  })
+  @ApiConflictResponse({
+    description: 'Role change conflicts with account data',
+  })
+  changeRoles(
+    @CurrentUser() actor: AuthenticatedUser,
+    @Param('id', ParseUUIDPipe) targetId: string,
+    @Body() input: ChangeUserRolesDto,
+  ) {
+    return this.users.changeRoles(actor.id, targetId, input);
   }
 
   @Patch(':id/status')

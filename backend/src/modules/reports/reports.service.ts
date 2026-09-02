@@ -4,12 +4,9 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import {
-  Prisma,
-  PropertyReportStatus,
-  PropertyStatus,
-} from '../../generated/prisma/client.js';
+import { Prisma, PropertyReportStatus } from '../../generated/prisma/client.js';
 import { PrismaService } from '../../prisma/prisma.service';
+import { publicEligibilityWhere } from '../properties/public-eligibility';
 import type { AdminReportQueryDto } from './dto/admin-report-query.dto';
 import type { CreatePropertyReportDto } from './dto/create-property-report.dto';
 import {
@@ -49,8 +46,7 @@ export class ReportsService {
     const property = await this.prisma.property.findFirst({
       where: {
         id: propertyId,
-        lifecycleStatus: PropertyStatus.APPROVED,
-        activeVersionId: { not: null },
+        ...publicEligibilityWhere,
       },
       select: { id: true, activeVersionId: true },
     });

@@ -1,5 +1,6 @@
 import { useState, type FormEvent } from "react";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../components/common/ConfirmationDialog";
 import { useAuth } from "../auth/hooks/useAuth";
 import {
   PROPERTY_REPORT_CATEGORIES,
@@ -16,6 +17,7 @@ export function ReportPlaceButton({ propertyId }: { propertyId: string }) {
     useState<PropertyReportCategory>("INCORRECT_DETAILS");
   const [description, setDescription] = useState("");
   const [email, setEmail] = useState(user?.email ?? "");
+  const [confirmSubmission, setConfirmSubmission] = useState(false);
   const report = useCreatePropertyReport(propertyId);
 
   function close(): void {
@@ -25,11 +27,21 @@ export function ReportPlaceButton({ propertyId }: { propertyId: string }) {
   async function submit(event: FormEvent<HTMLFormElement>): Promise<void> {
     event.preventDefault();
     if (description.trim().length < 20) return;
-    await report.mutateAsync({
-      category,
-      description: description.trim(),
-      ...(email.trim() ? { reporterEmail: email.trim() } : {}),
-    });
+    setConfirmSubmission(true);
+  }
+
+  async function sendReport(): Promise<void> {
+    try {
+      await report.mutateAsync({
+        category,
+        description: description.trim(),
+        ...(email.trim() ? { reporterEmail: email.trim() } : {}),
+      });
+    } catch {
+      // The mutation exposes the error in the report form.
+    } finally {
+      setConfirmSubmission(false);
+    }
   }
 
   return (
@@ -198,6 +210,24 @@ export function ReportPlaceButton({ propertyId }: { propertyId: string }) {
             )}
           </div>
         </div>
+      ) : null}
+
+      {confirmSubmission ? (
+        <ConfirmationDialog
+          title="Send this community report?"
+          description="Your report will be sent to the ComfortGo moderation team for investigation."
+          confirmLabel="Send report"
+          tone="danger"
+          isPending={report.isPending}
+          details={
+            <p>
+              <span className="font-bold text-slate-950">Problem type:</span>{" "}
+              {propertyReportCategoryLabels[category]}
+            </p>
+          }
+          onCancel={() => setConfirmSubmission(false)}
+          onConfirm={() => void sendReport()}
+        />
       ) : null}
     </>
   );

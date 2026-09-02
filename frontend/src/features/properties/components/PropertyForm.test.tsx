@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
@@ -63,6 +63,7 @@ const completeDraftWithoutPhotos: OwnerProperty = {
   updatedAt: "2026-08-25T00:00:00.000Z",
   canEdit: true,
   canSubmit: true,
+  canStartRevision: false,
   latestDecision: null,
   activeVersion: {
     id: "22222222-2222-4222-8222-222222222222",
@@ -99,10 +100,12 @@ describe("PropertyForm photo submission validation", () => {
     );
 
     await userEvent.click(
-      screen.getByLabelText(/I confirm this listing is complete/i),
+      screen.getByRole("button", { name: "Submit for review" }),
     );
     await userEvent.click(
-      screen.getByRole("button", { name: "Submit for review" }),
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Submit for review",
+      }),
     );
 
     expect(
@@ -127,7 +130,9 @@ describe("PropertyForm photo submission validation", () => {
       </MemoryRouter>,
     );
 
-    expect(await screen.findByText("Saved marker: 6.0329, 80.2168")).toBeTruthy();
+    expect(
+      await screen.findByText("Saved marker: 6.0329, 80.2168"),
+    ).toBeTruthy();
     const latitude = screen.getByLabelText("Latitude") as HTMLInputElement;
     const longitude = screen.getByLabelText("Longitude") as HTMLInputElement;
     expect(latitude.value).toBe("6.0329");

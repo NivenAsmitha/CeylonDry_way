@@ -56,14 +56,14 @@ export class ReviewerService {
     const skip = (query.page - 1) * query.pageSize;
     const where: Prisma.PropertyWhereInput = {
       lifecycleStatus: status,
-      activeVersionId: { not: null },
-      activeVersion: { submittedAt: { not: null } },
+      workingVersionId: { not: null },
+      workingVersion: { submittedAt: { not: null } },
     };
     const [records, total] = await this.prisma.$transaction([
       this.prisma.property.findMany({
         where,
         select: reviewerQueueSelect,
-        orderBy: [{ activeVersion: { submittedAt: 'asc' } }, { id: 'asc' }],
+        orderBy: [{ workingVersion: { submittedAt: 'asc' } }, { id: 'asc' }],
         skip,
         take: query.pageSize,
       }),
@@ -89,8 +89,8 @@ export class ReviewerService {
       where: {
         id: propertyId,
         lifecycleStatus: { in: [...reviewerQueueStatuses] },
-        activeVersionId: { not: null },
-        activeVersion: { submittedAt: { not: null } },
+        workingVersionId: { not: null },
+        workingVersion: { submittedAt: { not: null } },
       },
       select: reviewerListingSelect,
     });
@@ -117,7 +117,8 @@ export class ReviewerService {
           ownerUserId: true,
           lifecycleStatus: true,
           activeVersionId: true,
-          activeVersion: {
+          workingVersionId: true,
+          workingVersion: {
             select: { id: true, propertyId: true, submittedAt: true },
           },
           reviewDecisions: {
@@ -128,11 +129,14 @@ export class ReviewerService {
         },
       });
 
-      if (!property?.activeVersionId || !property.activeVersion?.submittedAt) {
+      if (
+        !property?.workingVersionId ||
+        !property.workingVersion?.submittedAt
+      ) {
         throw new NotFoundException('Reviewer listing not found');
       }
 
-      if (property.activeVersion.propertyId !== property.id) {
+      if (property.workingVersion.propertyId !== property.id) {
         throw new ConflictException('Submitted property version is invalid');
       }
 
@@ -170,11 +174,16 @@ export class ReviewerService {
           id: property.id,
           lifecycleStatus: property.lifecycleStatus,
           activeVersionId: property.activeVersionId,
+          workingVersionId: property.workingVersionId,
         },
         data: {
           lifecycleStatus: nextStatus,
           ...(input.decision === ReviewDecisionType.APPROVE
-            ? { activeVersionId: property.activeVersion.id }
+            ? { activeVersionId: property.workingVersion.id }
+            : {}),
+          ...(property.lifecycleStatus === PropertyStatus.PENDING_UPDATE &&
+          input.decision === ReviewDecisionType.REJECT
+            ? { workingVersionId: property.activeVersionId }
             : {}),
           updatedAt: decidedAt,
         },
@@ -195,7 +204,7 @@ export class ReviewerService {
       await transaction.reviewDecision.create({
         data: {
           propertyId: property.id,
-          propertyVersionId: property.activeVersion.id,
+          propertyVersionId: property.workingVersion.id,
           reviewerId,
           decision: input.decision,
           reason,
@@ -211,12 +220,12 @@ export class ReviewerService {
           targetId: property.id,
           beforeSummary: {
             propertyId: property.id,
-            propertyVersionId: property.activeVersion.id,
+            propertyVersionId: property.workingVersion.id,
             lifecycleStatus: property.lifecycleStatus,
           },
           afterSummary: {
             propertyId: property.id,
-            propertyVersionId: property.activeVersion.id,
+            propertyVersionId: property.workingVersion.id,
             lifecycleStatus: nextStatus,
           },
           createdAt: decidedAt,
@@ -228,7 +237,7 @@ export class ReviewerService {
           type: notificationTypeByDecision[input.decision],
           payload: {
             propertyId: property.id,
-            propertyVersionId: property.activeVersion.id,
+            propertyVersionId: property.workingVersion.id,
             decision: input.decision,
             lifecycleStatus: nextStatus,
             ...(reason ? { reason } : {}),

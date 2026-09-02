@@ -3,6 +3,7 @@ import { useRef, useState } from "react";
 import { useForm, useWatch } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { ErrorMessage } from "../../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { normalizeApiError } from "../../../types/api.types";
 import { useReviewDecision } from "../hooks/useReviewerListings";
 import { REVIEW_DECISION_LABELS } from "../reviewer.constants";
@@ -21,11 +22,9 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
   const navigate = useNavigate();
   const mutation = useReviewDecision(listing.propertyId);
   const submissionInFlight = useRef<Promise<void> | null>(null);
-  const [confirmed, setConfirmed] = useState(false);
+  const [pendingDecision, setPendingDecision] =
+    useState<ReviewDecisionFormValues | null>(null);
   const [serverError, setServerError] = useState<string | null>(null);
-  const [confirmationError, setConfirmationError] = useState<string | null>(
-    null,
-  );
   const {
     register,
     handleSubmit,
@@ -47,11 +46,6 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
       return submissionInFlight.current;
     }
 
-    if (!confirmed) {
-      setConfirmationError("Confirm this privileged decision before saving.");
-      return;
-    }
-
     if (!listing.allowedDecisions.includes(values.decision)) {
       setError("decision", {
         type: "validate",
@@ -60,13 +54,17 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
       setServerError(
         "The listing status changed. Review the available decision and try again.",
       );
-      setConfirmed(false);
+      setPendingDecision(null);
+      return;
+    }
+
+    if (!pendingDecision) {
+      setPendingDecision(values);
       return;
     }
 
     const operation = (async () => {
       setServerError(null);
-      setConfirmationError(null);
 
       try {
         await mutation.mutateAsync({
@@ -92,6 +90,7 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
           });
         }
         setServerError(normalized.messages.join(" "));
+        setPendingDecision(null);
       }
     })().finally(() => {
       submissionInFlight.current = null;
@@ -111,108 +110,122 @@ export function ReviewerDecisionForm({ listing }: ReviewerDecisionFormProps) {
   }
 
   return (
-    <form
-      className="space-y-5"
-      noValidate
-      onSubmit={(event) => void handleSubmit(submit)(event)}
-    >
-      {serverError ? (
-        <ErrorMessage
-          title="Decision could not be saved"
-          message={serverError}
-        />
-      ) : null}
-
-      <div>
-        <label
-          className="mb-2 block text-sm font-bold"
-          htmlFor="review-decision"
-        >
-          Decision
-        </label>
-        <select
-          className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
-          id="review-decision"
-          {...register("decision", {
-            onChange: () => {
-              setConfirmed(false);
-              setConfirmationError(null);
-            },
-          })}
-        >
-          {listing.allowedDecisions.map((decision) => (
-            <option key={decision} value={decision}>
-              {REVIEW_DECISION_LABELS[decision]}
-            </option>
-          ))}
-        </select>
-        {errors.decision?.message ? (
-          <p className="mt-2 text-sm font-semibold text-red-700" role="alert">
-            {errors.decision.message}
-          </p>
-        ) : null}
-      </div>
-
-      <div>
-        <label className="mb-2 block text-sm font-bold" htmlFor="review-reason">
-          Reason {reasonRequired ? "(required)" : "(optional)"}
-        </label>
-        <textarea
-          className={`min-h-32 w-full rounded-xl border bg-white px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 ${
-            errors.reason
-              ? "border-red-400 focus-visible:outline-red-700"
-              : "border-slate-300 focus-visible:outline-brand-700"
-          }`}
-          id="review-reason"
-          maxLength={1000}
-          aria-invalid={Boolean(errors.reason)}
-          aria-describedby={errors.reason ? "review-reason-error" : undefined}
-          {...register("reason")}
-        />
-        <p className="mt-2 text-xs text-slate-500">
-          Owners can see this reason. Do not include private reviewer notes or
-          authentication information.
-        </p>
-        {errors.reason?.message ? (
-          <p
-            className="mt-2 text-sm font-semibold text-red-700"
-            id="review-reason-error"
-          >
-            {errors.reason.message}
-          </p>
-        ) : null}
-      </div>
-
-      <label className="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 font-semibold text-amber-950">
-        <input
-          className="mt-1 size-5 accent-brand-700"
-          type="checkbox"
-          checked={confirmed}
-          onChange={(event) => {
-            setConfirmed(event.target.checked);
-            setConfirmationError(null);
-          }}
-        />
-        <span>
-          I confirm I want to apply the privileged “
-          {REVIEW_DECISION_LABELS[selectedDecision]}” decision to this listing.
-        </span>
-      </label>
-      {confirmationError ? (
-        <p className="text-sm font-semibold text-red-700" role="alert">
-          {confirmationError}
-        </p>
-      ) : null}
-
-      <button
-        className="min-h-12 w-full rounded-xl bg-slate-950 px-5 font-extrabold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-50"
-        type="submit"
-        disabled={!confirmed || mutation.isPending}
+    <>
+      <form
+        className="space-y-5"
+        noValidate
+        onSubmit={(event) => void handleSubmit(submit)(event)}
       >
-        {mutation.isPending
-          ? "Recording decision..."
-          : `Confirm ${REVIEW_DECISION_LABELS[selectedDecision]}`}
-      </button>
-    </form>
+        {serverError ? (
+          <ErrorMessage
+            title="Decision could not be saved"
+            message={serverError}
+          />
+        ) : null}
+
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold"
+            htmlFor="review-decision"
+          >
+            Decision
+          </label>
+          <select
+            className="min-h-12 w-full rounded-xl border border-slate-300 bg-white px-4 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+            id="review-decision"
+            {...register("decision", {
+              onChange: () => {
+                setPendingDecision(null);
+              },
+            })}
+          >
+            {listing.allowedDecisions.map((decision) => (
+              <option key={decision} value={decision}>
+                {REVIEW_DECISION_LABELS[decision]}
+              </option>
+            ))}
+          </select>
+          {errors.decision?.message ? (
+            <p className="mt-2 text-sm font-semibold text-red-700" role="alert">
+              {errors.decision.message}
+            </p>
+          ) : null}
+        </div>
+
+        <div>
+          <label
+            className="mb-2 block text-sm font-bold"
+            htmlFor="review-reason"
+          >
+            Reason {reasonRequired ? "(required)" : "(optional)"}
+          </label>
+          <textarea
+            className={`min-h-32 w-full rounded-xl border bg-white px-4 py-3 focus-visible:outline-2 focus-visible:outline-offset-2 ${
+              errors.reason
+                ? "border-red-400 focus-visible:outline-red-700"
+                : "border-slate-300 focus-visible:outline-brand-700"
+            }`}
+            id="review-reason"
+            maxLength={1000}
+            aria-invalid={Boolean(errors.reason)}
+            aria-describedby={errors.reason ? "review-reason-error" : undefined}
+            {...register("reason")}
+          />
+          <p className="mt-2 text-xs text-slate-500">
+            Owners can see this reason. Do not include private reviewer notes or
+            authentication information.
+          </p>
+          {errors.reason?.message ? (
+            <p
+              className="mt-2 text-sm font-semibold text-red-700"
+              id="review-reason-error"
+            >
+              {errors.reason.message}
+            </p>
+          ) : null}
+        </div>
+
+        <button
+          className="min-h-12 w-full rounded-xl bg-slate-950 px-5 font-extrabold text-white transition hover:bg-slate-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-50"
+          type="submit"
+          disabled={mutation.isPending}
+        >
+          {mutation.isPending
+            ? "Recording decision..."
+            : `Review ${REVIEW_DECISION_LABELS[selectedDecision]} decision`}
+        </button>
+      </form>
+
+      {pendingDecision ? (
+        <ConfirmationDialog
+          title={`${REVIEW_DECISION_LABELS[pendingDecision.decision]} this listing?`}
+          description="This decision changes the property workflow, notifies the owner and is retained in the audit history."
+          confirmLabel={`Confirm ${REVIEW_DECISION_LABELS[pendingDecision.decision]}`}
+          tone={
+            pendingDecision.decision === "REJECT" ||
+            pendingDecision.decision === "SUSPEND"
+              ? "danger"
+              : "default"
+          }
+          isPending={mutation.isPending}
+          details={
+            <div className="space-y-2">
+              <p>
+                <span className="font-bold text-slate-950">Property:</span>{" "}
+                {listing.submittedVersion.name || "Untitled property"}
+              </p>
+              {pendingDecision.reason ? (
+                <p className="whitespace-pre-wrap">
+                  <span className="font-bold text-slate-950">Reason:</span>{" "}
+                  {pendingDecision.reason}
+                </p>
+              ) : null}
+            </div>
+          }
+          onCancel={() => setPendingDecision(null)}
+          onConfirm={() => void submit(pendingDecision)}
+        />
+      ) : null}
+    </>
   );
 }

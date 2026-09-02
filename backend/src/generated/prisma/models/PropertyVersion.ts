@@ -357,6 +357,7 @@ export type PropertyVersionWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
   activeForProperty?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
+  workingForProperty?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
   photos?: Prisma.PropertyPhotoListRelationFilter
   amenities?: Prisma.PropertyAmenityListRelationFilter
   openingHours?: Prisma.OpeningHourListRelationFilter
@@ -388,6 +389,7 @@ export type PropertyVersionOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   property?: Prisma.PropertyOrderByWithRelationInput
   activeForProperty?: Prisma.PropertyOrderByWithRelationInput
+  workingForProperty?: Prisma.PropertyOrderByWithRelationInput
   photos?: Prisma.PropertyPhotoOrderByRelationAggregateInput
   amenities?: Prisma.PropertyAmenityOrderByRelationAggregateInput
   openingHours?: Prisma.OpeningHourOrderByRelationAggregateInput
@@ -423,6 +425,7 @@ export type PropertyVersionWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"PropertyVersion"> | Date | string
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
   activeForProperty?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
+  workingForProperty?: Prisma.XOR<Prisma.PropertyNullableScalarRelationFilter, Prisma.PropertyWhereInput> | null
   photos?: Prisma.PropertyPhotoListRelationFilter
   amenities?: Prisma.PropertyAmenityListRelationFilter
   openingHours?: Prisma.OpeningHourListRelationFilter
@@ -509,6 +512,7 @@ export type PropertyVersionCreateInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
@@ -539,6 +543,7 @@ export type PropertyVersionUncheckedCreateInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -569,6 +574,7 @@ export type PropertyVersionUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
@@ -599,6 +605,7 @@ export type PropertyVersionUncheckedUpdateInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -801,6 +808,12 @@ export type PropertyVersionCreateNestedOneWithoutActiveForPropertyInput = {
   connect?: Prisma.PropertyVersionWhereUniqueInput
 }
 
+export type PropertyVersionCreateNestedOneWithoutWorkingForPropertyInput = {
+  create?: Prisma.XOR<Prisma.PropertyVersionCreateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutWorkingForPropertyInput>
+  connectOrCreate?: Prisma.PropertyVersionCreateOrConnectWithoutWorkingForPropertyInput
+  connect?: Prisma.PropertyVersionWhereUniqueInput
+}
+
 export type PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput = {
   create?: Prisma.XOR<Prisma.PropertyVersionCreateWithoutPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutPropertyInput> | Prisma.PropertyVersionCreateWithoutPropertyInput[] | Prisma.PropertyVersionUncheckedCreateWithoutPropertyInput[]
   connectOrCreate?: Prisma.PropertyVersionCreateOrConnectWithoutPropertyInput | Prisma.PropertyVersionCreateOrConnectWithoutPropertyInput[]
@@ -830,6 +843,16 @@ export type PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput = {
   delete?: Prisma.PropertyVersionWhereInput | boolean
   connect?: Prisma.PropertyVersionWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyVersionUpdateToOneWithWhereWithoutActiveForPropertyInput, Prisma.PropertyVersionUpdateWithoutActiveForPropertyInput>, Prisma.PropertyVersionUncheckedUpdateWithoutActiveForPropertyInput>
+}
+
+export type PropertyVersionUpdateOneWithoutWorkingForPropertyNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyVersionCreateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutWorkingForPropertyInput>
+  connectOrCreate?: Prisma.PropertyVersionCreateOrConnectWithoutWorkingForPropertyInput
+  upsert?: Prisma.PropertyVersionUpsertWithoutWorkingForPropertyInput
+  disconnect?: Prisma.PropertyVersionWhereInput | boolean
+  delete?: Prisma.PropertyVersionWhereInput | boolean
+  connect?: Prisma.PropertyVersionWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyVersionUpdateToOneWithWhereWithoutWorkingForPropertyInput, Prisma.PropertyVersionUpdateWithoutWorkingForPropertyInput>, Prisma.PropertyVersionUncheckedUpdateWithoutWorkingForPropertyInput>
 }
 
 export type PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput = {
@@ -962,6 +985,7 @@ export type PropertyVersionCreateWithoutPropertyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
@@ -991,6 +1015,7 @@ export type PropertyVersionUncheckedCreateWithoutPropertyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1030,6 +1055,7 @@ export type PropertyVersionCreateWithoutActiveForPropertyInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
@@ -1059,6 +1085,7 @@ export type PropertyVersionUncheckedCreateWithoutActiveForPropertyInput = {
   submittedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1069,6 +1096,71 @@ export type PropertyVersionUncheckedCreateWithoutActiveForPropertyInput = {
 export type PropertyVersionCreateOrConnectWithoutActiveForPropertyInput = {
   where: Prisma.PropertyVersionWhereUniqueInput
   create: Prisma.XOR<Prisma.PropertyVersionCreateWithoutActiveForPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutActiveForPropertyInput>
+}
+
+export type PropertyVersionCreateWithoutWorkingForPropertyInput = {
+  id?: string
+  version: number
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
+  organisation?: string | null
+  description?: string | null
+  accessNotes?: string | null
+  isFree?: boolean
+  feeLkr?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
+  activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
+  amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
+  openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
+  reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyVersionInput
+}
+
+export type PropertyVersionUncheckedCreateWithoutWorkingForPropertyInput = {
+  id?: string
+  propertyId: string
+  version: number
+  propertyType?: $Enums.PropertyType | null
+  name?: string | null
+  organisation?: string | null
+  description?: string | null
+  accessNotes?: string | null
+  isFree?: boolean
+  feeLkr?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: string | null
+  email?: string | null
+  website?: string | null
+  address?: string | null
+  district?: string | null
+  city?: string | null
+  latitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
+  amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
+  openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
+  reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyVersionInput
+}
+
+export type PropertyVersionCreateOrConnectWithoutWorkingForPropertyInput = {
+  where: Prisma.PropertyVersionWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyVersionCreateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutWorkingForPropertyInput>
 }
 
 export type PropertyVersionUpsertWithWhereUniqueWithoutPropertyInput = {
@@ -1147,6 +1239,7 @@ export type PropertyVersionUpdateWithoutActiveForPropertyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
@@ -1176,6 +1269,78 @@ export type PropertyVersionUncheckedUpdateWithoutActiveForPropertyInput = {
   submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
+  photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
+  reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyVersionNestedInput
+}
+
+export type PropertyVersionUpsertWithoutWorkingForPropertyInput = {
+  update: Prisma.XOR<Prisma.PropertyVersionUpdateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedUpdateWithoutWorkingForPropertyInput>
+  create: Prisma.XOR<Prisma.PropertyVersionCreateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedCreateWithoutWorkingForPropertyInput>
+  where?: Prisma.PropertyVersionWhereInput
+}
+
+export type PropertyVersionUpdateToOneWithWhereWithoutWorkingForPropertyInput = {
+  where?: Prisma.PropertyVersionWhereInput
+  data: Prisma.XOR<Prisma.PropertyVersionUpdateWithoutWorkingForPropertyInput, Prisma.PropertyVersionUncheckedUpdateWithoutWorkingForPropertyInput>
+}
+
+export type PropertyVersionUpdateWithoutWorkingForPropertyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  feeLkr?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
+  activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
+  amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
+  openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
+  reports?: Prisma.PropertyReportUpdateManyWithoutPropertyVersionNestedInput
+}
+
+export type PropertyVersionUncheckedUpdateWithoutWorkingForPropertyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  version?: Prisma.IntFieldUpdateOperationsInput | number
+  propertyType?: Prisma.NullableEnumPropertyTypeFieldUpdateOperationsInput | $Enums.PropertyType | null
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  organisation?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  accessNotes?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  isFree?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  feeLkr?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  email?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  website?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  address?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  district?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  city?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  latitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  longitude?: Prisma.NullableDecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string | null
+  submittedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1206,6 +1371,7 @@ export type PropertyVersionCreateWithoutReviewDecisionsInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
@@ -1235,6 +1401,7 @@ export type PropertyVersionUncheckedCreateWithoutReviewDecisionsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1280,6 +1447,7 @@ export type PropertyVersionUpdateWithoutReviewDecisionsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
@@ -1309,6 +1477,7 @@ export type PropertyVersionUncheckedUpdateWithoutReviewDecisionsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1338,6 +1507,7 @@ export type PropertyVersionCreateWithoutReportsInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
@@ -1367,6 +1537,7 @@ export type PropertyVersionUncheckedCreateWithoutReportsInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1412,6 +1583,7 @@ export type PropertyVersionUpdateWithoutReportsInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
@@ -1441,6 +1613,7 @@ export type PropertyVersionUncheckedUpdateWithoutReportsInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1470,6 +1643,7 @@ export type PropertyVersionCreateWithoutPhotosInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
@@ -1499,6 +1673,7 @@ export type PropertyVersionUncheckedCreateWithoutPhotosInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1544,6 +1719,7 @@ export type PropertyVersionUpdateWithoutPhotosInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
@@ -1573,6 +1749,7 @@ export type PropertyVersionUncheckedUpdateWithoutPhotosInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1602,6 +1779,7 @@ export type PropertyVersionCreateWithoutAmenitiesInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
@@ -1631,6 +1809,7 @@ export type PropertyVersionUncheckedCreateWithoutAmenitiesInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   openingHours?: Prisma.OpeningHourUncheckedCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1676,6 +1855,7 @@ export type PropertyVersionUpdateWithoutAmenitiesInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
@@ -1705,6 +1885,7 @@ export type PropertyVersionUncheckedUpdateWithoutAmenitiesInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1734,6 +1915,7 @@ export type PropertyVersionCreateWithoutOpeningHoursInput = {
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutVersionsInput
   activeForProperty?: Prisma.PropertyCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyVersionInput
@@ -1763,6 +1945,7 @@ export type PropertyVersionUncheckedCreateWithoutOpeningHoursInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   activeForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutActiveVersionInput
+  workingForProperty?: Prisma.PropertyUncheckedCreateNestedOneWithoutWorkingVersionInput
   photos?: Prisma.PropertyPhotoUncheckedCreateNestedManyWithoutPropertyVersionInput
   amenities?: Prisma.PropertyAmenityUncheckedCreateNestedManyWithoutPropertyVersionInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyVersionInput
@@ -1808,6 +1991,7 @@ export type PropertyVersionUpdateWithoutOpeningHoursInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutVersionsNestedInput
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyVersionNestedInput
@@ -1837,6 +2021,7 @@ export type PropertyVersionUncheckedUpdateWithoutOpeningHoursInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -1888,6 +2073,7 @@ export type PropertyVersionUpdateWithoutPropertyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUpdateManyWithoutPropertyVersionNestedInput
@@ -1917,6 +2103,7 @@ export type PropertyVersionUncheckedUpdateWithoutPropertyInput = {
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   activeForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutActiveVersionNestedInput
+  workingForProperty?: Prisma.PropertyUncheckedUpdateOneWithoutWorkingVersionNestedInput
   photos?: Prisma.PropertyPhotoUncheckedUpdateManyWithoutPropertyVersionNestedInput
   amenities?: Prisma.PropertyAmenityUncheckedUpdateManyWithoutPropertyVersionNestedInput
   openingHours?: Prisma.OpeningHourUncheckedUpdateManyWithoutPropertyVersionNestedInput
@@ -2038,6 +2225,7 @@ export type PropertyVersionSelect<ExtArgs extends runtime.Types.Extensions.Inter
   updatedAt?: boolean
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   activeForProperty?: boolean | Prisma.PropertyVersion$activeForPropertyArgs<ExtArgs>
+  workingForProperty?: boolean | Prisma.PropertyVersion$workingForPropertyArgs<ExtArgs>
   photos?: boolean | Prisma.PropertyVersion$photosArgs<ExtArgs>
   amenities?: boolean | Prisma.PropertyVersion$amenitiesArgs<ExtArgs>
   openingHours?: boolean | Prisma.PropertyVersion$openingHoursArgs<ExtArgs>
@@ -2124,6 +2312,7 @@ export type PropertyVersionOmit<ExtArgs extends runtime.Types.Extensions.Interna
 export type PropertyVersionInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   activeForProperty?: boolean | Prisma.PropertyVersion$activeForPropertyArgs<ExtArgs>
+  workingForProperty?: boolean | Prisma.PropertyVersion$workingForPropertyArgs<ExtArgs>
   photos?: boolean | Prisma.PropertyVersion$photosArgs<ExtArgs>
   amenities?: boolean | Prisma.PropertyVersion$amenitiesArgs<ExtArgs>
   openingHours?: boolean | Prisma.PropertyVersion$openingHoursArgs<ExtArgs>
@@ -2143,6 +2332,7 @@ export type $PropertyVersionPayload<ExtArgs extends runtime.Types.Extensions.Int
   objects: {
     property: Prisma.$PropertyPayload<ExtArgs>
     activeForProperty: Prisma.$PropertyPayload<ExtArgs> | null
+    workingForProperty: Prisma.$PropertyPayload<ExtArgs> | null
     photos: Prisma.$PropertyPhotoPayload<ExtArgs>[]
     amenities: Prisma.$PropertyAmenityPayload<ExtArgs>[]
     openingHours: Prisma.$OpeningHourPayload<ExtArgs>[]
@@ -2567,6 +2757,7 @@ export interface Prisma__PropertyVersionClient<T, Null = never, ExtArgs extends 
   readonly [Symbol.toStringTag]: "PrismaPromise"
   property<T extends Prisma.PropertyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyDefaultArgs<ExtArgs>>): Prisma.Prisma__PropertyClient<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   activeForProperty<T extends Prisma.PropertyVersion$activeForPropertyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$activeForPropertyArgs<ExtArgs>>): Prisma.Prisma__PropertyClient<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  workingForProperty<T extends Prisma.PropertyVersion$workingForPropertyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$workingForPropertyArgs<ExtArgs>>): Prisma.Prisma__PropertyClient<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   photos<T extends Prisma.PropertyVersion$photosArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$photosArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyPhotoPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   amenities<T extends Prisma.PropertyVersion$amenitiesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$amenitiesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyAmenityPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   openingHours<T extends Prisma.PropertyVersion$openingHoursArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyVersion$openingHoursArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$OpeningHourPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -3026,6 +3217,25 @@ export type PropertyVersionDeleteManyArgs<ExtArgs extends runtime.Types.Extensio
  * PropertyVersion.activeForProperty
  */
 export type PropertyVersion$activeForPropertyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Property
+   */
+  select?: Prisma.PropertySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Property
+   */
+  omit?: Prisma.PropertyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PropertyInclude<ExtArgs> | null
+  where?: Prisma.PropertyWhereInput
+}
+
+/**
+ * PropertyVersion.workingForProperty
+ */
+export type PropertyVersion$workingForPropertyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   /**
    * Select specific fields to fetch from the Property
    */

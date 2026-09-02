@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   ConflictException,
   ForbiddenException,
@@ -18,6 +19,7 @@ const USER_ID = 'owner-a';
 const OTHER_USER_ID = 'owner-b';
 const PROPERTY_ID = '11111111-1111-4111-8111-111111111111';
 const VERSION_ID = '22222222-2222-4222-8222-222222222222';
+const PUBLISHED_VERSION_ID = '99999999-9999-4999-8999-999999999999';
 const NOW = new Date('2026-08-25T00:00:00.000Z');
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -44,9 +46,16 @@ function createPropertyRecord(
   return {
     id: PROPERTY_ID,
     lifecycleStatus: status,
+    activeVersionId:
+      status === PropertyStatus.DRAFT ||
+      status === PropertyStatus.PENDING ||
+      status === PropertyStatus.CHANGES_REQUESTED
+        ? null
+        : VERSION_ID,
+    workingVersionId: VERSION_ID,
     createdAt: NOW,
     updatedAt: NOW,
-    activeVersion: {
+    workingVersion: {
       id: VERSION_ID,
       version: 1,
       propertyType: complete ? PropertyType.HOTEL : null,
@@ -94,6 +103,7 @@ function createPropertyRecord(
           ]
         : [],
     },
+    reviewDecisions: [],
   };
 }
 
@@ -305,11 +315,94 @@ describe('PropertiesService', () => {
     expect(transactionPropertyUpdateMany).not.toHaveBeenCalled();
   });
 
+  it('clones an approved version into a private working revision without replacing the published version', async () => {
+    transactionPropertyFindFirst.mockResolvedValue({
+      id: PROPERTY_ID,
+      lifecycleStatus: PropertyStatus.APPROVED,
+      activeVersionId: PUBLISHED_VERSION_ID,
+      workingVersionId: PUBLISHED_VERSION_ID,
+      activeVersion: {
+        id: PUBLISHED_VERSION_ID,
+        propertyType: PropertyType.HOTEL,
+        name: 'Published property',
+        organisation: null,
+        description: 'A complete published property description.',
+        accessNotes: 'Use the front entrance.',
+        isFree: true,
+        feeLkr: null,
+        phone: null,
+        email: null,
+        website: null,
+        address: '1 Coast Road',
+        district: 'Galle',
+        city: 'Galle',
+        latitude: new Prisma.Decimal(6.0329),
+        longitude: new Prisma.Decimal(80.2168),
+        amenities: [{ amenityId: 'amenity-1', notes: null }],
+        openingHours: [],
+        photos: [
+          {
+            url: 'https://images.example.test/property.jpg',
+            storageKey: 'property.jpg',
+            sortOrder: 0,
+            isCover: true,
+            altText: 'Published entrance',
+          },
+        ],
+      },
+      versions: [{ version: 1 }],
+    });
+    transactionVersionCreate.mockResolvedValueOnce({
+      id: VERSION_ID,
+      version: 2,
+    });
+    const response = createPropertyRecord(PropertyStatus.APPROVED);
+    response.activeVersionId = PUBLISHED_VERSION_ID;
+    response.workingVersionId = VERSION_ID;
+    mainPropertyFindFirst.mockResolvedValue(response);
+
+    const result = await service.startOwnedPropertyRevision(
+      USER_ID,
+      PROPERTY_ID,
+    );
+
+    expect(transactionPropertyUpdateMany).toHaveBeenCalledWith({
+      where: {
+        id: PROPERTY_ID,
+        ownerUserId: USER_ID,
+        lifecycleStatus: PropertyStatus.APPROVED,
+        activeVersionId: PUBLISHED_VERSION_ID,
+        workingVersionId: PUBLISHED_VERSION_ID,
+      },
+      data: { workingVersionId: VERSION_ID, updatedAt: expect.any(Date) },
+    });
+    expect(transactionAuditCreate).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          actorId: USER_ID,
+          action: 'PROPERTY_REVISION_STARTED',
+          targetId: PROPERTY_ID,
+          beforeSummary: expect.objectContaining({
+            activeVersionId: PUBLISHED_VERSION_ID,
+          }),
+          afterSummary: expect.objectContaining({
+            activeVersionId: PUBLISHED_VERSION_ID,
+            workingVersionId: VERSION_ID,
+            version: 2,
+          }),
+        }),
+      }),
+    );
+    expect(result.canEdit).toBe(true);
+    expect(result.canStartRevision).toBe(false);
+  });
+
   it('updates a DRAFT using owner-scoped version and property conditions', async () => {
     transactionPropertyFindFirst.mockResolvedValue({
       id: PROPERTY_ID,
       lifecycleStatus: PropertyStatus.DRAFT,
-      activeVersionId: VERSION_ID,
+      activeVersionId: null,
+      workingVersionId: VERSION_ID,
     });
     mainPropertyFindFirst.mockResolvedValue(
       createPropertyRecord(PropertyStatus.DRAFT),
@@ -407,17 +500,48 @@ describe('PropertiesService', () => {
       expect(propertyUpdate?.where).toEqual({
         id: PROPERTY_ID,
         ownerUserId: USER_ID,
-        lifecycleStatus: {
-          in: [PropertyStatus.DRAFT, PropertyStatus.CHANGES_REQUESTED],
-        },
+        lifecycleStatus: editableStatus,
+        workingVersionId: VERSION_ID,
       });
       expect(propertyUpdate?.data.lifecycleStatus).toBe(PropertyStatus.PENDING);
     },
   );
 
+  it.each([PropertyStatus.APPROVED, PropertyStatus.UPDATE_CHANGES_REQUESTED])(
+    'submits a private %s revision as PENDING_UPDATE',
+    async (status) => {
+      const revision = createPropertyRecord(status);
+      revision.activeVersionId = PUBLISHED_VERSION_ID;
+      revision.workingVersionId = VERSION_ID;
+      transactionPropertyFindFirst.mockResolvedValue(revision);
+      const pending = createPropertyRecord(PropertyStatus.PENDING_UPDATE);
+      pending.activeVersionId = PUBLISHED_VERSION_ID;
+      pending.workingVersionId = VERSION_ID;
+      mainPropertyFindFirst.mockResolvedValue(pending);
+
+      const result = await service.submitOwnedProperty(USER_ID, PROPERTY_ID, {
+        confirm: true,
+      });
+
+      expect(transactionPropertyUpdateMany).toHaveBeenCalledWith({
+        where: {
+          id: PROPERTY_ID,
+          ownerUserId: USER_ID,
+          lifecycleStatus: status,
+          workingVersionId: VERSION_ID,
+        },
+        data: {
+          lifecycleStatus: PropertyStatus.PENDING_UPDATE,
+          updatedAt: expect.any(Date),
+        },
+      });
+      expect(result.lifecycleStatus).toBe(PropertyStatus.PENDING_UPDATE);
+    },
+  );
+
   it('rejects an otherwise complete submission that has no photo', async () => {
     const property = createPropertyRecord(PropertyStatus.DRAFT);
-    property.activeVersion!.photos = [];
+    property.workingVersion!.photos = [];
     transactionPropertyFindFirst.mockResolvedValue(property);
 
     let submissionError: unknown;
@@ -443,7 +567,6 @@ describe('PropertiesService', () => {
 
   it.each([
     PropertyStatus.PENDING,
-    PropertyStatus.APPROVED,
     PropertyStatus.PENDING_UPDATE,
     PropertyStatus.REJECTED,
     PropertyStatus.SUSPENDED,
@@ -453,6 +576,7 @@ describe('PropertiesService', () => {
       id: PROPERTY_ID,
       lifecycleStatus: status,
       activeVersionId: VERSION_ID,
+      workingVersionId: VERSION_ID,
     });
 
     await expect(
@@ -466,6 +590,7 @@ describe('PropertiesService', () => {
       id: PROPERTY_ID,
       lifecycleStatus: PropertyStatus.APPROVED,
       activeVersionId: VERSION_ID,
+      workingVersionId: VERSION_ID,
     });
 
     await service.archiveOwnedProperty(USER_ID, PROPERTY_ID);

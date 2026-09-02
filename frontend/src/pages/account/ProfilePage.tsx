@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../components/common/ConfirmationDialog";
 import { FormField } from "../../components/common/FormField";
 import { LoadingScreen } from "../../components/common/LoadingScreen";
 import { useAuth } from "../../features/auth/hooks/useAuth";
@@ -52,6 +53,7 @@ export function ProfilePage() {
   const [profileSucceeded, setProfileSucceeded] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [isSigningOut, setIsSigningOut] = useState(false);
+  const [confirmSignOut, setConfirmSignOut] = useState(false);
   const profileForm = useForm<ProfileFormValues>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -180,7 +182,7 @@ export function ProfilePage() {
               className="min-h-11 rounded-xl px-4 text-sm font-bold text-red-700 transition hover:bg-red-50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-700 disabled:opacity-50"
               type="button"
               disabled={isSigningOut}
-              onClick={() => void signOut()}
+              onClick={() => setConfirmSignOut(true)}
             >
               {isSigningOut ? "Signing out…" : "Sign out"}
             </button>
@@ -438,6 +440,18 @@ export function ProfilePage() {
           </div>
         ) : null}
       </div>
+
+      {confirmSignOut ? (
+        <ConfirmationDialog
+          title="Sign out of ComfortGo?"
+          description="You will need to sign in again to manage your profile, ratings and property listings."
+          confirmLabel="Yes, sign out"
+          tone="danger"
+          isPending={isSigningOut}
+          onCancel={() => setConfirmSignOut(false)}
+          onConfirm={() => void signOut()}
+        />
+      ) : null}
     </section>
   );
 }

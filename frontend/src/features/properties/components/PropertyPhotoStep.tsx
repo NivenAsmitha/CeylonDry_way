@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { ErrorMessage } from "../../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { normalizeApiError } from "../../../types/api.types";
 import {
   useRemovePropertyPhoto,
@@ -150,6 +151,9 @@ export function PropertyPhotoStep({
   const [validationErrors, setValidationErrors] = useState<string[]>([]);
   const [operationError, setOperationError] = useState<string[] | null>(null);
   const [progress, setProgress] = useState<number | null>(null);
+  const [photoToRemove, setPhotoToRemove] = useState<PropertyPhoto | null>(
+    null,
+  );
 
   const orderedPhotos = [...photos].sort(
     (left, right) => left.sortOrder - right.sortOrder,
@@ -237,8 +241,7 @@ export function PropertyPhotoStep({
   }
 
   function removePhoto(photo: PropertyPhoto): void {
-    if (!window.confirm("Remove this photo from the property listing?")) return;
-    void run(() => remove.mutateAsync(photo.id));
+    setPhotoToRemove(photo);
   }
 
   return (
@@ -360,6 +363,22 @@ export function PropertyPhotoStep({
           submission.
         </div>
       )}
+
+      {photoToRemove ? (
+        <ConfirmationDialog
+          title="Remove this property photo?"
+          description="The photo will be removed from the working property version. This cannot be undone after the change is saved."
+          confirmLabel="Remove photo"
+          tone="danger"
+          isPending={remove.isPending}
+          onCancel={() => setPhotoToRemove(null)}
+          onConfirm={() =>
+            void run(() => remove.mutateAsync(photoToRemove.id)).then(() =>
+              setPhotoToRemove(null),
+            )
+          }
+        />
+      ) : null}
     </div>
   );
 }

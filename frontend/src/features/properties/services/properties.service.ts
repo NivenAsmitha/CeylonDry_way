@@ -73,6 +73,16 @@ export async function updatePropertyDraft(
   return ownerPropertySchema.parse(response.data);
 }
 
+export async function startPropertyRevision(
+  propertyId: string,
+): Promise<OwnerProperty> {
+  const response = await apiClient.post<unknown>(
+    `/owner/properties/${propertyId}/revision`,
+  );
+
+  return ownerPropertySchema.parse(response.data);
+}
+
 export async function submitPropertyDraft(
   propertyId: string,
   workflow: PropertyWorkflow = "owner",

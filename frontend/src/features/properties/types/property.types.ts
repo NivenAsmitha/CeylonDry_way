@@ -15,6 +15,7 @@ export const PROPERTY_STATUSES = [
   "CHANGES_REQUESTED",
   "APPROVED",
   "PENDING_UPDATE",
+  "UPDATE_CHANGES_REQUESTED",
   "REJECTED",
   "SUSPENDED",
   "ARCHIVED",
@@ -81,6 +82,7 @@ export interface OwnerProperty {
   updatedAt: string;
   canEdit: boolean;
   canSubmit: boolean;
+  canStartRevision: boolean;
   latestDecision: {
     decision: ReviewDecisionType;
     reason: string | null;

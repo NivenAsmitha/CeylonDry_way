@@ -9,6 +9,7 @@ import type {
   UserListQuery,
   UserListResponse,
 } from "../types/user-management.types";
+import type { RoleName } from "../../auth/types/auth.types";
 
 function toParams(query: UserListQuery): URLSearchParams {
   const params = new URLSearchParams({
@@ -63,6 +64,18 @@ export async function changeStatus(
   const response = await apiClient.patch<unknown>(
     `/management/users/${userId}/status`,
     { status, reason },
+  );
+  return managedUserDetailsSchema.parse(response.data);
+}
+
+export async function changeRoles(
+  userId: string,
+  roles: RoleName[],
+  reason: string,
+): Promise<ManagedUserDetails> {
+  const response = await apiClient.patch<unknown>(
+    `/management/users/${userId}/roles`,
+    { roles, reason },
   );
   return managedUserDetailsSchema.parse(response.data);
 }

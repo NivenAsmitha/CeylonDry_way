@@ -9,6 +9,7 @@ import {
 export const USER_MANAGEMENT_ACTIONS = [
   'VIEW',
   'EDIT_PROFILE',
+  'CHANGE_ROLES',
   'CHANGE_STATUS',
   'SOFT_DELETE',
   'RESTORE',
@@ -26,6 +27,7 @@ export type UserManagementDenialCategory =
   | 'ADMIN_TARGET_OUTSIDE_AUTHORITY';
 
 const DESTRUCTIVE_ACTIONS = new Set<UserManagementAction>([
+  'CHANGE_ROLES',
   'CHANGE_STATUS',
   'SOFT_DELETE',
   'RESTORE',

@@ -85,8 +85,13 @@ describe('user-management hierarchy policy', () => {
     }
   });
 
-  it('blocks Developer self status, deletion, and restore operations', () => {
-    for (const action of ['CHANGE_STATUS', 'SOFT_DELETE', 'RESTORE'] as const) {
+  it('blocks Developer self role, status, deletion, and restore operations', () => {
+    for (const action of [
+      'CHANGE_ROLES',
+      'CHANGE_STATUS',
+      'SOFT_DELETE',
+      'RESTORE',
+    ] as const) {
       expect(
         canManageUser(
           'developer',

@@ -156,6 +156,9 @@ export class OwnerPropertyResponseDto {
   @ApiProperty()
   canSubmit!: boolean;
 
+  @ApiProperty()
+  canStartRevision!: boolean;
+
   @ApiProperty({ type: LatestReviewDecisionResponseDto, nullable: true })
   latestDecision!: LatestReviewDecisionResponseDto | null;
 

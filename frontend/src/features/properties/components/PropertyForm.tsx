@@ -8,6 +8,7 @@ import {
 } from "react-hook-form";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { ErrorMessage } from "../../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { FormField } from "../../../components/common/FormField";
 import { normalizeApiError } from "../../../types/api.types";
 import {
@@ -234,7 +235,7 @@ export function PropertyForm({
   const [visitedStep, setVisitedStep] = useState(property ? 7 : 1);
   const [serverError, setServerError] = useState<string[] | null>(null);
   const [saveSucceeded, setSaveSucceeded] = useState(false);
-  const [submissionConfirmed, setSubmissionConfirmed] = useState(false);
+  const [confirmSubmission, setConfirmSubmission] = useState(false);
   const createMutation = useCreatePropertyDraft(workflow);
   const updateMutation = useUpdatePropertyDraft(
     property?.id ?? "new",
@@ -393,7 +394,7 @@ export function PropertyForm({
     }
   }
 
-  async function submitProperty(): Promise<void> {
+  async function submitProperty(confirmed = false): Promise<void> {
     if (submissionInFlight.current || !property) {
       return;
     }
@@ -419,8 +420,8 @@ export function PropertyForm({
         return;
       }
 
-      if (!submissionConfirmed) {
-        setServerError(["Confirm that the listing is ready for review."]);
+      if (!confirmed) {
+        setConfirmSubmission(true);
         return;
       }
 
@@ -438,9 +439,10 @@ export function PropertyForm({
       try {
         const submitted = await submitMutation.mutateAsync();
         reset(getDefaultValues(submitted));
-        setSubmissionConfirmed(false);
+        setConfirmSubmission(false);
         setCurrentStep(7);
       } catch (error: unknown) {
+        setConfirmSubmission(false);
         applyBackendErrors(error);
       }
     })().finally(() => {
@@ -475,8 +477,8 @@ export function PropertyForm({
 
       {!isEditable ? (
         <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950">
-          This listing is {property?.lifecycleStatus.toLowerCase()}. Changes
-          are disabled while it is in this state.
+          This listing is {property?.lifecycleStatus.toLowerCase()}. Changes are
+          disabled while it is in this state.
         </div>
       ) : null}
       {property?.latestDecision ? (
@@ -966,22 +968,6 @@ export function PropertyForm({
                     {values.description || "Not provided"}
                   </p>
                 </div>
-                {property?.canSubmit ? (
-                  <label className="flex items-start gap-3 rounded-2xl border border-amber-300 bg-amber-50 p-4 font-semibold text-amber-950">
-                    <input
-                      className="mt-1 size-5 accent-brand-700"
-                      type="checkbox"
-                      checked={submissionConfirmed}
-                      onChange={(event) =>
-                        setSubmissionConfirmed(event.target.checked)
-                      }
-                    />
-                    <span>
-                      I confirm this listing is complete and ready for reviewer
-                      approval.
-                    </span>
-                  </label>
-                ) : null}
               </div>
             ) : null}
           </div>
@@ -1035,6 +1021,28 @@ export function PropertyForm({
           </div>
         </div>
       </form>
+
+      {confirmSubmission ? (
+        <ConfirmationDialog
+          title="Submit this property for review?"
+          description="You will not be able to edit this version while a reviewer is checking it."
+          confirmLabel="Submit for review"
+          isPending={submitMutation.isPending}
+          details={
+            <div className="space-y-2">
+              <p className="font-bold text-slate-950">{selectedName}</p>
+              <p>
+                {property?.activeVersion.version &&
+                property.activeVersion.version > 1
+                  ? `Revision ${property.activeVersion.version} will be reviewed. The currently published version stays visible until approval.`
+                  : "The listing will become public only after reviewer approval."}
+              </p>
+            </div>
+          }
+          onCancel={() => setConfirmSubmission(false)}
+          onConfirm={() => void submitProperty(true)}
+        />
+      ) : null}
     </div>
   );
 }

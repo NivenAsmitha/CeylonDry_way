@@ -5,8 +5,10 @@ import { PropertyStatus } from '../../../generated/prisma/client.js';
 
 export const reviewerQueueStatuses = [
   PropertyStatus.PENDING,
+  PropertyStatus.PENDING_UPDATE,
   PropertyStatus.APPROVED,
   PropertyStatus.CHANGES_REQUESTED,
+  PropertyStatus.UPDATE_CHANGES_REQUESTED,
   PropertyStatus.REJECTED,
   PropertyStatus.SUSPENDED,
 ] as const;

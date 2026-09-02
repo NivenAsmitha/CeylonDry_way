@@ -1,4 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+  within,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { PropertyPhoto } from "../types/property.types";
@@ -152,7 +158,6 @@ describe("PropertyPhotoStep", () => {
   });
 
   it("provides accessible cover, reorder, and confirmed remove actions", async () => {
-    vi.spyOn(window, "confirm").mockReturnValue(true);
     render(
       <PropertyPhotoStep
         propertyId="property-1"
@@ -180,7 +185,12 @@ describe("PropertyPhotoStep", () => {
     await userEvent.click(
       screen.getAllByRole("button", { name: "Remove photo" })[0],
     );
-    expect(window.confirm).toHaveBeenCalledTimes(1);
+    expect(mutations.remove.mutateAsync).not.toHaveBeenCalled();
+    await userEvent.click(
+      within(screen.getByRole("alertdialog")).getByRole("button", {
+        name: "Remove photo",
+      }),
+    );
     expect(mutations.remove.mutateAsync).toHaveBeenCalledWith(PHOTO_A.id);
   });
 

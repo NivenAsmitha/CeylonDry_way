@@ -68,7 +68,10 @@ describe('PropertyPhotosService', () => {
       Promise.resolve({
         id: PROPERTY_ID,
         lifecycleStatus: currentStatus,
-        activeVersion: {
+        activeVersionId:
+          currentStatus === PropertyStatus.APPROVED ? VERSION_ID : null,
+        workingVersionId: VERSION_ID,
+        workingVersion: {
           id: VERSION_ID,
           version: 1,
           photos: currentPhotos,
@@ -112,6 +115,7 @@ describe('PropertyPhotosService', () => {
         currentPhotos = currentPhotos.filter((item) => item.id !== where.id);
         return Promise.resolve(removed);
       });
+    const propertyPhotoCount = jest.fn().mockResolvedValue(0);
     const transaction = {
       property: {
         findFirst: propertyFindFirst,
@@ -122,10 +126,12 @@ describe('PropertyPhotosService', () => {
         update: propertyPhotoUpdate,
         updateMany: propertyPhotoUpdateMany,
         delete: propertyPhotoDelete,
+        count: propertyPhotoCount,
       },
     };
     const prisma = {
       property: { findFirst: propertyFindFirst },
+      propertyPhoto: { count: propertyPhotoCount },
       $transaction: jest.fn((work: (client: typeof transaction) => unknown) =>
         work(transaction),
       ),
@@ -160,6 +166,7 @@ describe('PropertyPhotosService', () => {
       propertyPhotoUpdate,
       propertyPhotoUpdateMany,
       propertyPhotoDelete,
+      propertyPhotoCount,
       uploadPropertyPhoto,
       deletePropertyPhoto,
       setStatus: (next: PropertyStatus) => {

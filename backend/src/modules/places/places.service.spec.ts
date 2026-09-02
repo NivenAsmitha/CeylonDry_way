@@ -117,7 +117,7 @@ describe('PlacesService', () => {
 
     const listQuery = getSqlCall(queryRaw, 0);
     const text = sqlText(listQuery);
-    expect(text).toContain('p."lifecycleStatus" = ?::"PropertyStatus"');
+    expect(text).toContain('p."lifecycleStatus" IN (');
     expect(text).toContain('pv.id = p."activeVersionId"');
     expect(text).toContain('pv."propertyId" = p.id');
     expect(text).toContain('pv."submittedAt" IS NOT NULL');

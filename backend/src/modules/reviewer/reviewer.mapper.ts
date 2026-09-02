@@ -9,7 +9,7 @@ export const reviewerQueueSelect = {
   id: true,
   lifecycleStatus: true,
   owner: { select: { name: true } },
-  activeVersion: {
+  workingVersion: {
     select: {
       id: true,
       version: true,
@@ -27,7 +27,7 @@ export const reviewerListingSelect = {
   ownerUserId: true,
   lifecycleStatus: true,
   owner: { select: { name: true } },
-  activeVersion: {
+  workingVersion: {
     select: {
       id: true,
       propertyId: true,
@@ -127,7 +127,7 @@ function mapFieldNotes(value: Prisma.JsonValue | null): SafeFieldNote[] | null {
 export function mapReviewerQueueItem(
   property: ReviewerQueueRecord,
 ): ReviewerQueueItemDto {
-  const version = property.activeVersion;
+  const version = property.workingVersion;
 
   if (!version?.submittedAt) {
     throw new Error('Reviewer queue record has no submitted version');
@@ -151,7 +151,7 @@ export function mapReviewerListing(
   property: ReviewerListingRecord,
   reviewerId: string,
 ): ReviewerListingDetailDto {
-  const version = property.activeVersion;
+  const version = property.workingVersion;
 
   if (!version?.submittedAt) {
     throw new Error('Reviewer listing has no submitted version');

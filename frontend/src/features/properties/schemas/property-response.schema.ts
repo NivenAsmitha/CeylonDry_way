@@ -63,6 +63,7 @@ export const ownerPropertySchema = z.object({
   updatedAt: z.string(),
   canEdit: z.boolean(),
   canSubmit: z.boolean(),
+  canStartRevision: z.boolean(),
   latestDecision: z
     .object({
       decision: z.enum(REVIEW_DECISIONS),

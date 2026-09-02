@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   ForbiddenException,
   Injectable,
@@ -15,11 +16,13 @@ import { PrismaService } from '../../prisma/prisma.service';
 import {
   assertAllowedRoleCombination,
   hasExactRoleSet,
+  isAllowedRoleCombination,
   normalizeRoleSet,
 } from '../roles/role-combination.policy';
 import { hashPasswordResetToken } from '../password-reset/password-reset.service';
 import { PasswordResetDeliveryService } from '../password-reset/password-reset-delivery.service';
 import type { ChangeUserStatusDto } from './dto/change-user-status.dto';
+import type { ChangeUserRolesDto } from './dto/change-user-roles.dto';
 import type { ManagementReasonDto } from './dto/management-reason.dto';
 import type { UserListQueryDto, UserSort } from './dto/user-list-query.dto';
 import type { UpdateManagedUserDto } from './dto/update-managed-user.dto';
@@ -439,6 +442,102 @@ export class UserManagementService {
           },
         });
         await this.notifyStatusChange(transaction, targetId, input.status);
+      },
+      { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
+    );
+
+    return this.getUser(actorId, targetId);
+  }
+
+  async changeRoles(
+    actorId: string,
+    targetId: string,
+    input: ChangeUserRolesDto,
+  ) {
+    const nextRoles = normalizeRoleSet(input.roles);
+    if (!isAllowedRoleCombination(nextRoles)) {
+      throw new BadRequestException(
+        'Account role combination is not permitted',
+      );
+    }
+
+    await this.authorizeTarget(actorId, targetId, 'CHANGE_ROLES');
+    await this.prisma.$transaction(
+      async (transaction) => {
+        const { actor, target, targetRoles } = await this.loadParticipants(
+          transaction,
+          actorId,
+          targetId,
+          'CHANGE_ROLES',
+        );
+        assertCanManageUser(
+          actor.id,
+          roleNames(actor),
+          target.id,
+          nextRoles,
+          'CHANGE_ROLES',
+        );
+        if (target.deletedAt) {
+          throw new ConflictException(
+            'Restore the account before changing roles',
+          );
+        }
+        if (hasExactRoleSet(targetRoles, nextRoles)) {
+          throw new ConflictException('Account already has this role set');
+        }
+
+        const propertiesOwned = await transaction.property.count({
+          where: { ownerUserId: targetId },
+        });
+        if (propertiesOwned > 0) {
+          throw new ConflictException(
+            'Roles cannot be changed while the account owns property records',
+          );
+        }
+        if (
+          hasExactRoleSet(targetRoles, [RoleName.DEVELOPER]) &&
+          !hasExactRoleSet(nextRoles, [RoleName.DEVELOPER])
+        ) {
+          await this.protectFinalDeveloper(transaction, target, targetRoles);
+        }
+
+        const roles = await transaction.role.findMany({
+          where: { name: { in: nextRoles } },
+          select: { id: true, name: true },
+        });
+        if (roles.length !== nextRoles.length) {
+          throw new ConflictException('One or more roles are not configured');
+        }
+
+        const now = new Date();
+        await transaction.userRole.deleteMany({ where: { userId: targetId } });
+        await transaction.userRole.createMany({
+          data: roles.map((role) => ({
+            userId: targetId,
+            roleId: role.id,
+            assignedById: actor.id,
+            systemReason: input.reason,
+          })),
+        });
+        const sessions = await transaction.refreshSession.updateMany({
+          where: { userId: targetId, revokedAt: null },
+          data: { revokedAt: now },
+        });
+        await this.revokeResetTokens(transaction, targetId, now);
+        await transaction.auditLog.create({
+          data: {
+            actorId: actor.id,
+            action: 'USER_ROLES_CHANGED',
+            targetType: 'User',
+            targetId,
+            beforeSummary: { roles: targetRoles },
+            afterSummary: {
+              roles: nextRoles,
+              reason: input.reason,
+              revokedSessionCount: sessions.count,
+            },
+          },
+        });
       },
       { isolationLevel: Prisma.TransactionIsolationLevel.Serializable },
     );

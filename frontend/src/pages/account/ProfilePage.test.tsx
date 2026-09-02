@@ -36,7 +36,9 @@ vi.mock("../../features/auth/hooks/useAuth", () => ({
 
 function LocationProbe() {
   const location = useLocation();
-  return <span data-testid="location">{`${location.pathname}${location.search}`}</span>;
+  return (
+    <span data-testid="location">{`${location.pathname}${location.search}`}</span>
+  );
 }
 
 function renderProfile(entry = "/profile") {
@@ -78,6 +80,14 @@ describe("ProfilePage settings navigation", () => {
       screen.getByRole("link", { name: "My properties" }).getAttribute("href"),
     ).toBe("/owner/properties");
     await userEvent.click(screen.getByRole("button", { name: "Sign out" }));
+
+    expect(logout).not.toHaveBeenCalled();
+    expect(
+      screen.getByRole("alertdialog", { name: "Sign out of ComfortGo?" }),
+    ).toBeTruthy();
+    await userEvent.click(
+      screen.getByRole("button", { name: "Yes, sign out" }),
+    );
 
     expect(logout).toHaveBeenCalledTimes(1);
     await waitFor(() =>

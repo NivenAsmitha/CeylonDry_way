@@ -53,9 +53,7 @@ export function useOwnerProperty(
   });
 }
 
-export function useCreatePropertyDraft(
-  workflow: PropertyWorkflow = "owner",
-) {
+export function useCreatePropertyDraft(workflow: PropertyWorkflow = "owner") {
   const queryClient = useQueryClient();
   const { refetchUser } = useAuth();
 
@@ -97,6 +95,24 @@ export function useUpdatePropertyDraft(
           queryKey: OWNER_PROPERTIES_QUERY_KEY,
         }),
       ]);
+    },
+  });
+}
+
+export function useStartPropertyRevision() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (propertyId: string) =>
+      propertiesService.startPropertyRevision(propertyId),
+    onSuccess: async (property) => {
+      queryClient.setQueryData(
+        ownerPropertyQueryKey(property.id, "owner"),
+        property,
+      );
+      await queryClient.invalidateQueries({
+        queryKey: OWNER_PROPERTIES_QUERY_KEY,
+      });
     },
   });
 }

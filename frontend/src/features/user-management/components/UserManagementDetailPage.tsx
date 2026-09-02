@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Link, useParams } from "react-router-dom";
 import { ErrorMessage } from "../../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { FormField } from "../../../components/common/FormField";
 import { LoadingScreen } from "../../../components/common/LoadingScreen";
 import { getApiErrorMessage } from "../../../types/api.types";
@@ -13,12 +14,14 @@ import {
 import { isTargetVisibleToScope } from "../management-authority";
 import * as usersService from "../services/user-management.service";
 import type { ManagedProfileInput } from "../types/user-management.types";
+import type { RoleName } from "../../auth/types/auth.types";
 import { ManagementActionDialog } from "./ManagementActionDialog";
 import { UserStatusBadge } from "./UserStatusBadge";
 
 type DialogAction =
   | "suspend"
   | "disable"
+  | "change-roles"
   | "soft-delete"
   | "restore"
   | "password-reset"
@@ -32,6 +35,13 @@ interface ActionDefinition {
 }
 
 const actionDefinitions: Record<DialogAction, ActionDefinition> = {
+  "change-roles": {
+    title: "Change account roles",
+    description:
+      "This replaces the current role set, revokes active sessions and records the reason. Accounts that own property records cannot be converted to another account type.",
+    confirmLabel: "Change roles",
+    tone: "danger",
+  },
   suspend: {
     title: "Suspend account",
     description:
@@ -106,6 +116,9 @@ export function UserManagementDetailPage({
   const user = userQuery.data;
   const [dialogAction, setDialogAction] = useState<DialogAction | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
+  const [pendingProfile, setPendingProfile] =
+    useState<ManagedProfileInput | null>(null);
+  const [pendingRoles, setPendingRoles] = useState<RoleName[] | null>(null);
   const profileForm = useForm<ManagedProfileInput>({
     values: {
       name: user?.name ?? "",
@@ -132,10 +145,13 @@ export function UserManagementDetailPage({
   const actionMutation = useMutation<
     unknown,
     unknown,
-    { action: DialogAction; reason: string }
+    { action: DialogAction; reason: string; roles?: RoleName[] }
   >({
-    mutationFn: ({ action, reason }) => {
+    mutationFn: ({ action, reason, roles }) => {
       switch (action) {
+        case "change-roles":
+          if (!roles) throw new Error("Select a valid role set");
+          return usersService.changeRoles(id, roles, reason);
         case "suspend":
           return usersService.changeStatus(id, "SUSPENDED", reason);
         case "disable":
@@ -155,6 +171,7 @@ export function UserManagementDetailPage({
         queryKey: USER_MANAGEMENT_QUERY_KEY,
       });
       setDialogAction(null);
+      setPendingRoles(null);
       setSuccess(
         variables.action === "password-reset"
           ? "Password-reset instructions were accepted for delivery. No token or password was exposed."
@@ -193,6 +210,19 @@ export function UserManagementDetailPage({
   const can = (action: (typeof user.allowedActions)[number]) =>
     user.allowedActions.includes(action);
   const definition = dialogAction ? actionDefinitions[dialogAction] : null;
+  const roleOptions: Array<{ label: string; roles: RoleName[] }> = [
+    { label: "Client", roles: ["CLIENT"] },
+    { label: "Client + property owner", roles: ["CLIENT", "OWNER"] },
+    { label: "Reviewer", roles: ["REVIEWER"] },
+    ...(scope === "developer"
+      ? [
+          { label: "Administrator", roles: ["ADMIN"] as RoleName[] },
+          { label: "Developer", roles: ["DEVELOPER"] as RoleName[] },
+        ]
+      : []),
+  ];
+  const currentRoleSignature = user.roles.join("+");
+  const selectedRoleSignature = (pendingRoles ?? user.roles).join("+");
 
   return (
     <section className="mx-auto max-w-6xl px-4 py-10 sm:px-6 sm:py-14 lg:px-8">
@@ -245,12 +275,13 @@ export function UserManagementDetailPage({
           <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
             <h2 className="text-2xl font-black">Safe profile fields</h2>
             <p className="mt-2 text-sm text-slate-600">
-              Email, password, roles, and status cannot be changed here.
+              Email, password, roles, and status are managed through separate
+              protected actions.
             </p>
             <form
               className="mt-6 space-y-5"
               onSubmit={profileForm.handleSubmit((values) =>
-                profileMutation.mutate({
+                setPendingProfile({
                   name: values.name?.trim(),
                   phone: values.phone?.trim() || null,
                   language: values.language,
@@ -387,6 +418,47 @@ export function UserManagementDetailPage({
               record.
             </p>
             <div className="mt-5 grid gap-3">
+              {can("CHANGE_ROLES") && !user.isDeleted ? (
+                <div className="rounded-2xl border border-slate-200 bg-slate-50 p-4">
+                  <label
+                    className="text-sm font-bold"
+                    htmlFor="managed-role-set"
+                  >
+                    Account role set
+                  </label>
+                  <select
+                    className="mt-2 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-3"
+                    id="managed-role-set"
+                    value={selectedRoleSignature}
+                    onChange={(event) => {
+                      const option = roleOptions.find(
+                        ({ roles }) => roles.join("+") === event.target.value,
+                      );
+                      setPendingRoles(option?.roles ?? null);
+                    }}
+                  >
+                    {roleOptions.map((option) => (
+                      <option
+                        key={option.roles.join("+")}
+                        value={option.roles.join("+")}
+                      >
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                  <button
+                    className="mt-3 min-h-11 w-full rounded-xl border border-slate-300 bg-white px-4 font-bold disabled:opacity-50"
+                    type="button"
+                    disabled={
+                      !pendingRoles ||
+                      selectedRoleSignature === currentRoleSignature
+                    }
+                    onClick={() => setDialogAction("change-roles")}
+                  >
+                    Review role change
+                  </button>
+                </div>
+              ) : null}
               {can("CHANGE_STATUS") && user.status === "ACTIVE" ? (
                 <button
                   className="min-h-11 rounded-xl border border-amber-300 bg-amber-50 px-4 font-bold text-amber-950"
@@ -463,7 +535,40 @@ export function UserManagementDetailPage({
             }
           }}
           onConfirm={(reason) =>
-            actionMutation.mutate({ action: dialogAction, reason })
+            actionMutation.mutate({
+              action: dialogAction,
+              reason,
+              ...(dialogAction === "change-roles" && pendingRoles
+                ? { roles: pendingRoles }
+                : {}),
+            })
+          }
+        />
+      ) : null}
+
+      {pendingProfile ? (
+        <ConfirmationDialog
+          title="Save these user details?"
+          description="The user’s safe profile fields will be updated and the change will be recorded in the audit history."
+          confirmLabel="Save user details"
+          isPending={profileMutation.isPending}
+          details={
+            <dl className="space-y-2">
+              <div>
+                <dt className="font-bold text-slate-950">Name</dt>
+                <dd>{pendingProfile.name}</dd>
+              </div>
+              <div>
+                <dt className="font-bold text-slate-950">Phone</dt>
+                <dd>{pendingProfile.phone || "Not provided"}</dd>
+              </div>
+            </dl>
+          }
+          onCancel={() => setPendingProfile(null)}
+          onConfirm={() =>
+            profileMutation.mutate(pendingProfile, {
+              onSuccess: () => setPendingProfile(null),
+            })
           }
         />
       ) : null}

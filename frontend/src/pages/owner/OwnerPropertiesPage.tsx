@@ -1,12 +1,14 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ErrorMessage } from "../../components/common/ErrorMessage";
+import { ConfirmationDialog } from "../../components/common/ConfirmationDialog";
 import { LoadingScreen } from "../../components/common/LoadingScreen";
 import { PropertyStatusBadge } from "../../features/properties/components/PropertyStatusBadge";
 import { PlacePhoto } from "../../features/places/components/PlacePhoto";
 import {
   useDeleteOwnedProperty,
   useOwnerProperties,
+  useStartPropertyRevision,
 } from "../../features/properties/hooks/useOwnerProperties";
 import { getPropertyStatusLabel } from "../../features/properties/property.constants";
 import { getApiErrorMessage } from "../../types/api.types";
@@ -36,9 +38,15 @@ export function OwnerPropertiesPage({
 }: {
   workflow?: PropertyWorkflow;
 }) {
+  const navigate = useNavigate();
   const propertiesQuery = useOwnerProperties(workflow);
   const deleteProperty = useDeleteOwnedProperty();
+  const startRevision = useStartPropertyRevision();
   const [propertyToDelete, setPropertyToDelete] = useState<{
+    id: string;
+    name: string;
+  } | null>(null);
+  const [propertyToRevise, setPropertyToRevise] = useState<{
     id: string;
     name: string;
   } | null>(null);
@@ -82,6 +90,15 @@ export function OwnerPropertiesPage({
           <ErrorMessage
             title="Properties could not be loaded"
             message={getApiErrorMessage(propertiesQuery.error)}
+          />
+        </div>
+      ) : null}
+
+      {startRevision.isError ? (
+        <div className="mt-8">
+          <ErrorMessage
+            title="Property revision could not be started"
+            message={getApiErrorMessage(startRevision.error)}
           />
         </div>
       ) : null}
@@ -167,7 +184,8 @@ export function OwnerPropertiesPage({
                         No reviewer reason was provided.
                       </p>
                     )}
-                    {property.lifecycleStatus === "CHANGES_REQUESTED" ? (
+                    {property.lifecycleStatus === "CHANGES_REQUESTED" ||
+                    property.lifecycleStatus === "UPDATE_CHANGES_REQUESTED" ? (
                       <p className="mt-2 font-semibold">
                         Editing and resubmission are available after you address
                         this feedback.
@@ -176,12 +194,33 @@ export function OwnerPropertiesPage({
                   </div>
                 ) : null}
                 <div className="mt-auto flex flex-wrap gap-2 pt-5">
-                  <Link
-                    className="inline-flex min-h-10 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white"
-                    to={`${collectionPath}/${property.id}/edit`}
-                  >
-                    {property.canEdit ? "Edit" : "View"}
-                  </Link>
+                  {property.canStartRevision && !isReviewer ? (
+                    <button
+                      className="inline-flex min-h-10 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white disabled:opacity-50"
+                      type="button"
+                      disabled={startRevision.isPending}
+                      onClick={() => {
+                        startRevision.reset();
+                        setPropertyToRevise({
+                          id: property.id,
+                          name:
+                            property.activeVersion.name || "Untitled property",
+                        });
+                      }}
+                    >
+                      {startRevision.isPending &&
+                      startRevision.variables === property.id
+                        ? "Preparing…"
+                        : "Edit property"}
+                    </button>
+                  ) : (
+                    <Link
+                      className="inline-flex min-h-10 items-center rounded-xl bg-slate-950 px-4 text-sm font-bold text-white"
+                      to={`${collectionPath}/${property.id}/edit`}
+                    >
+                      {property.canEdit ? "Edit" : "View"}
+                    </Link>
+                  )}
                   {property.canSubmit ? (
                     <Link
                       className="inline-flex min-h-10 items-center rounded-xl border border-amber-400 bg-amber-50 px-3 text-sm font-bold text-amber-950"
@@ -212,6 +251,26 @@ export function OwnerPropertiesPage({
             </article>
           ))}
         </div>
+      ) : null}
+
+      {propertyToRevise ? (
+        <ConfirmationDialog
+          title={`Edit ${propertyToRevise.name}?`}
+          description="A private revision will be created for your changes. The currently approved version will remain public until a reviewer approves the revision."
+          confirmLabel="Create private revision"
+          isPending={startRevision.isPending}
+          onCancel={() => setPropertyToRevise(null)}
+          onConfirm={() =>
+            void startRevision
+              .mutateAsync(propertyToRevise.id)
+              .then(() => {
+                const propertyId = propertyToRevise.id;
+                setPropertyToRevise(null);
+                navigate(`${collectionPath}/${propertyId}/edit`);
+              })
+              .catch(() => undefined)
+          }
+        />
       ) : null}
 
       {propertyToDelete ? (

@@ -16,8 +16,10 @@ export type ReviewDecisionType = (typeof REVIEW_DECISIONS)[number];
 
 export const REVIEWER_QUEUE_STATUSES = [
   "PENDING",
+  "PENDING_UPDATE",
   "APPROVED",
   "CHANGES_REQUESTED",
+  "UPDATE_CHANGES_REQUESTED",
   "REJECTED",
   "SUSPENDED",
 ] as const satisfies readonly PropertyStatus[];

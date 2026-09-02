@@ -47,7 +47,21 @@ describe('UserManagementService security invariants', () => {
       notification: {
         create: jest.fn().mockResolvedValue({ id: 'notification-id' }),
       },
-      property: { updateMany: jest.fn() },
+      property: {
+        updateMany: jest.fn(),
+        count: jest.fn().mockResolvedValue(0),
+      },
+      role: {
+        findMany: jest
+          .fn()
+          .mockResolvedValue([
+            { id: 'reviewer-role', name: RoleName.REVIEWER },
+          ]),
+      },
+      userRole: {
+        deleteMany: jest.fn().mockResolvedValue({ count: 1 }),
+        createMany: jest.fn().mockResolvedValue({ count: 1 }),
+      },
     };
     const transactionRunner = jest.fn(
       async (
@@ -117,6 +131,7 @@ describe('UserManagementService security invariants', () => {
   it.each([
     [RoleName.ADMIN, 'VIEW'],
     [RoleName.ADMIN, 'EDIT_PROFILE'],
+    [RoleName.ADMIN, 'CHANGE_ROLES'],
     [RoleName.ADMIN, 'CHANGE_STATUS'],
     [RoleName.ADMIN, 'SOFT_DELETE'],
     [RoleName.ADMIN, 'RESTORE'],
@@ -124,6 +139,7 @@ describe('UserManagementService security invariants', () => {
     [RoleName.ADMIN, 'REVOKE_SESSIONS'],
     [RoleName.DEVELOPER, 'VIEW'],
     [RoleName.DEVELOPER, 'EDIT_PROFILE'],
+    [RoleName.DEVELOPER, 'CHANGE_ROLES'],
     [RoleName.DEVELOPER, 'CHANGE_STATUS'],
     [RoleName.DEVELOPER, 'SOFT_DELETE'],
     [RoleName.DEVELOPER, 'RESTORE'],
@@ -144,6 +160,11 @@ describe('UserManagementService security invariants', () => {
           case 'EDIT_PROFILE':
             return fixture.service.updateUser('admin', 'restricted', {
               name: 'Restricted account',
+            });
+          case 'CHANGE_ROLES':
+            return fixture.service.changeRoles('admin', 'restricted', {
+              roles: [RoleName.REVIEWER],
+              reason: 'Policy verification',
             });
           case 'CHANGE_STATUS':
             return fixture.service.changeStatus('admin', 'restricted', {
@@ -198,6 +219,46 @@ describe('UserManagementService security invariants', () => {
       });
     },
   );
+
+  it('changes an eligible role set atomically, revokes sessions, and audits the reason', async () => {
+    const fixture = createFixture(
+      participant('admin', RoleName.ADMIN),
+      participant('target', RoleName.CLIENT),
+    );
+    jest.spyOn(fixture.service, 'getUser').mockResolvedValue({} as never);
+
+    await fixture.service.changeRoles('admin', 'target', {
+      roles: [RoleName.REVIEWER],
+      reason: 'Assign trained reviewer duties',
+    });
+
+    expect(fixture.transaction.userRole.deleteMany).toHaveBeenCalledWith({
+      where: { userId: 'target' },
+    });
+    expect(fixture.transaction.userRole.createMany).toHaveBeenCalledWith({
+      data: [
+        {
+          userId: 'target',
+          roleId: 'reviewer-role',
+          assignedById: 'admin',
+          systemReason: 'Assign trained reviewer duties',
+        },
+      ],
+    });
+    expect(fixture.transaction.refreshSession.updateMany).toHaveBeenCalled();
+    expect(fixture.transaction.auditLog.create).toHaveBeenCalledWith({
+      data: expect.objectContaining({
+        actorId: 'admin',
+        action: 'USER_ROLES_CHANGED',
+        targetId: 'target',
+        beforeSummary: { roles: [RoleName.CLIENT] },
+        afterSummary: expect.objectContaining({
+          roles: [RoleName.REVIEWER],
+          reason: 'Assign trained reviewer duties',
+        }),
+      }),
+    });
+  });
 
   it('applies Admin list authority before role filters and search', async () => {
     const fixture = createFixture();

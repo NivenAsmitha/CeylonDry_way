@@ -33,7 +33,6 @@ import type {
 import type { SubmitPropertyDto } from './dto/submit-property.dto';
 import type { UpdatePropertyDto } from './dto/update-property.dto';
 import {
-  editablePropertyStatuses,
   isOwnerEditableStatus,
   mapOwnerProperty,
   ownerPropertySelect,
@@ -170,9 +169,9 @@ export class PropertiesService {
           id: property.id,
           ownerUserId: userId,
           lifecycleStatus: PropertyStatus.DRAFT,
-          activeVersionId: null,
+          workingVersionId: null,
         },
-        data: { activeVersionId: version.id },
+        data: { workingVersionId: version.id },
       });
 
       if (activated.count !== 1) {
@@ -261,7 +260,7 @@ export class PropertiesService {
       });
       await transaction.property.update({
         where: { id: property.id },
-        data: { activeVersionId: version.id },
+        data: { workingVersionId: version.id },
       });
       await this.syncRelatedDraftData(
         transaction,
@@ -328,6 +327,155 @@ export class PropertiesService {
     }
   }
 
+  async startOwnedPropertyRevision(
+    userId: string,
+    propertyId: string,
+  ): Promise<OwnerPropertyResponseDto> {
+    await this.prisma.$transaction(async (transaction) => {
+      const property = await transaction.property.findFirst({
+        where: { id: propertyId, ownerUserId: userId },
+        select: {
+          id: true,
+          lifecycleStatus: true,
+          activeVersionId: true,
+          workingVersionId: true,
+          activeVersion: {
+            select: {
+              id: true,
+              propertyType: true,
+              name: true,
+              organisation: true,
+              description: true,
+              accessNotes: true,
+              isFree: true,
+              feeLkr: true,
+              phone: true,
+              email: true,
+              website: true,
+              address: true,
+              district: true,
+              city: true,
+              latitude: true,
+              longitude: true,
+              amenities: {
+                select: { amenityId: true, notes: true },
+              },
+              openingHours: {
+                select: {
+                  weekday: true,
+                  openTime: true,
+                  closeTime: true,
+                  isClosed: true,
+                  is24Hours: true,
+                },
+              },
+              photos: {
+                select: {
+                  url: true,
+                  storageKey: true,
+                  sortOrder: true,
+                  isCover: true,
+                  altText: true,
+                },
+              },
+            },
+          },
+          versions: {
+            orderBy: { version: 'desc' },
+            take: 1,
+            select: { version: true },
+          },
+        },
+      });
+
+      if (!property?.activeVersionId || !property.activeVersion) {
+        throw new NotFoundException('Approved property not found');
+      }
+      if (property.lifecycleStatus !== PropertyStatus.APPROVED) {
+        throw new ConflictException(
+          'Only an approved property can start a new revision',
+        );
+      }
+      if (property.workingVersionId !== property.activeVersionId) {
+        throw new ConflictException(
+          'A property revision is already in progress',
+        );
+      }
+
+      const source = property.activeVersion;
+      const revision = await transaction.propertyVersion.create({
+        data: {
+          propertyId: property.id,
+          version: (property.versions[0]?.version ?? 0) + 1,
+          propertyType: source.propertyType,
+          name: source.name,
+          organisation: source.organisation,
+          description: source.description,
+          accessNotes: source.accessNotes,
+          isFree: source.isFree,
+          feeLkr: source.feeLkr,
+          phone: source.phone,
+          email: source.email,
+          website: source.website,
+          address: source.address,
+          district: source.district,
+          city: source.city,
+          latitude: source.latitude,
+          longitude: source.longitude,
+          amenities: {
+            create: source.amenities.map((amenity) => ({
+              amenityId: amenity.amenityId,
+              notes: amenity.notes,
+            })),
+          },
+          openingHours: {
+            create: source.openingHours.map((openingHour) => openingHour),
+          },
+          photos: {
+            create: source.photos.map((photo) => photo),
+          },
+        },
+        select: { id: true, version: true },
+      });
+
+      const updated = await transaction.property.updateMany({
+        where: {
+          id: property.id,
+          ownerUserId: userId,
+          lifecycleStatus: PropertyStatus.APPROVED,
+          activeVersionId: property.activeVersionId,
+          workingVersionId: property.activeVersionId,
+        },
+        data: { workingVersionId: revision.id, updatedAt: new Date() },
+      });
+      if (updated.count !== 1) {
+        throw new ConflictException(
+          'Property status changed before the revision was created',
+        );
+      }
+
+      await transaction.auditLog.create({
+        data: {
+          actorId: userId,
+          action: 'PROPERTY_REVISION_STARTED',
+          targetType: 'PROPERTY',
+          targetId: property.id,
+          beforeSummary: {
+            activeVersionId: property.activeVersionId,
+            workingVersionId: property.workingVersionId,
+          },
+          afterSummary: {
+            activeVersionId: property.activeVersionId,
+            workingVersionId: revision.id,
+            version: revision.version,
+          },
+        },
+      });
+    });
+
+    return this.getOwnedProperty(userId, propertyId);
+  }
+
   async updateOwnedProperty(
     userId: string,
     propertyId: string,
@@ -342,14 +490,22 @@ export class PropertiesService {
           id: true,
           lifecycleStatus: true,
           activeVersionId: true,
+          workingVersionId: true,
         },
       });
 
-      if (!property || !property.activeVersionId) {
+      if (!property || !property.workingVersionId) {
         throw new NotFoundException('Property not found');
       }
 
-      if (!isOwnerEditableStatus(property.lifecycleStatus)) {
+      const hasUnpublishedRevision =
+        property.activeVersionId !== property.workingVersionId;
+      const canEdit =
+        isOwnerEditableStatus(property.lifecycleStatus) ||
+        (property.lifecycleStatus === PropertyStatus.APPROVED &&
+          hasUnpublishedRevision);
+
+      if (!canEdit) {
         throw new ConflictException(
           `Properties with status ${property.lifecycleStatus} cannot be edited`,
         );
@@ -360,7 +516,7 @@ export class PropertiesService {
       if (Object.keys(versionData).length > 0) {
         const updatedVersion = await transaction.propertyVersion.updateMany({
           where: {
-            id: property.activeVersionId,
+            id: property.workingVersionId,
             property: { id: propertyId, ownerUserId: userId },
           },
           data: versionData,
@@ -375,7 +531,7 @@ export class PropertiesService {
         transaction,
         userId,
         propertyId,
-        property.activeVersionId,
+        property.workingVersionId,
         updatePropertyDto,
       );
       const touchedProperty = await transaction.property.updateMany({
@@ -410,11 +566,18 @@ export class PropertiesService {
         select: ownerPropertySelect,
       });
 
-      if (!property || !property.activeVersion) {
+      if (!property || !property.workingVersion) {
         throw new NotFoundException('Property not found');
       }
 
-      if (!isOwnerEditableStatus(property.lifecycleStatus)) {
+      const hasUnpublishedRevision =
+        property.activeVersionId !== property.workingVersionId;
+      const canSubmit =
+        isOwnerEditableStatus(property.lifecycleStatus) ||
+        (property.lifecycleStatus === PropertyStatus.APPROVED &&
+          hasUnpublishedRevision);
+
+      if (!canSubmit) {
         throw new ConflictException(
           `Properties with status ${property.lifecycleStatus} cannot be submitted`,
         );
@@ -433,19 +596,25 @@ export class PropertiesService {
       const submittedAt = new Date();
       const updatedVersion = await transaction.propertyVersion.updateMany({
         where: {
-          id: property.activeVersion.id,
+          id: property.workingVersion.id,
           property: { id: propertyId, ownerUserId: userId },
         },
         data: { submittedAt },
       });
+      const nextStatus =
+        property.lifecycleStatus === PropertyStatus.APPROVED ||
+        property.lifecycleStatus === PropertyStatus.UPDATE_CHANGES_REQUESTED
+          ? PropertyStatus.PENDING_UPDATE
+          : PropertyStatus.PENDING;
       const updatedProperty = await transaction.property.updateMany({
         where: {
           id: propertyId,
           ownerUserId: userId,
-          lifecycleStatus: { in: [...editablePropertyStatuses] },
+          lifecycleStatus: property.lifecycleStatus,
+          workingVersionId: property.workingVersion.id,
         },
         data: {
-          lifecycleStatus: PropertyStatus.PENDING,
+          lifecycleStatus: nextStatus,
           updatedAt: submittedAt,
         },
       });
@@ -734,11 +903,11 @@ export class PropertiesService {
   private getSubmissionIssues(
     property: OwnerPropertyRecord,
   ): ValidationIssue[] {
-    const version = property.activeVersion;
+    const version = property.workingVersion;
 
     if (!version) {
       return [
-        { field: 'activeVersion', message: 'An active draft is required' },
+        { field: 'workingVersion', message: 'A working draft is required' },
       ];
     }
 

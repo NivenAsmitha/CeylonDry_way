@@ -28,6 +28,7 @@ enum PropertyStatus {
   CHANGES_REQUESTED
   APPROVED
   PENDING_UPDATE
+  UPDATE_CHANGES_REQUESTED
   REJECTED
   SUSPENDED
   ARCHIVED
@@ -171,16 +172,18 @@ model UserRole {
 }
 
 model Property {
-  id              String         @id @default(uuid())
-  ownerUserId     String
-  lifecycleStatus PropertyStatus @default(DRAFT)
-  activeVersionId String?        @unique
-  createdAt       DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  id               String         @id @default(uuid())
+  ownerUserId      String
+  lifecycleStatus  PropertyStatus @default(DRAFT)
+  activeVersionId  String?        @unique
+  workingVersionId String?        @unique
+  createdAt        DateTime       @default(now())
+  updatedAt        DateTime       @updatedAt
 
   owner           User              @relation(fields: [ownerUserId], references: [id], onDelete: Restrict)
   versions        PropertyVersion[] @relation("PropertyVersions")
   activeVersion   PropertyVersion?  @relation("ActivePropertyVersion", fields: [activeVersionId], references: [id], onDelete: SetNull)
+  workingVersion  PropertyVersion?  @relation("WorkingPropertyVersion", fields: [workingVersionId], references: [id], onDelete: SetNull)
   reviewDecisions ReviewDecision[]
   reports         PropertyReport[]
   ratings         FacilityRating[]
@@ -214,13 +217,14 @@ model PropertyVersion {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  property          Property          @relation("PropertyVersions", fields: [propertyId], references: [id], onDelete: Cascade)
-  activeForProperty Property?         @relation("ActivePropertyVersion")
-  photos            PropertyPhoto[]
-  amenities         PropertyAmenity[]
-  openingHours      OpeningHour[]
-  reviewDecisions   ReviewDecision[]
-  reports           PropertyReport[]
+  property           Property          @relation("PropertyVersions", fields: [propertyId], references: [id], onDelete: Cascade)
+  activeForProperty  Property?         @relation("ActivePropertyVersion")
+  workingForProperty Property?         @relation("WorkingPropertyVersion")
+  photos             PropertyPhoto[]
+  amenities          PropertyAmenity[]
+  openingHours       OpeningHour[]
+  reviewDecisions    ReviewDecision[]
+  reports            PropertyReport[]
 
   @@unique([propertyId, version])
   @@index([propertyId])

@@ -22,7 +22,11 @@ const actionStatus: Readonly<
   >
 > = {
   [AdminPropertyAction.SUSPEND]: {
-    from: [PropertyStatus.APPROVED],
+    from: [
+      PropertyStatus.APPROVED,
+      PropertyStatus.PENDING_UPDATE,
+      PropertyStatus.UPDATE_CHANGES_REQUESTED,
+    ],
     to: PropertyStatus.SUSPENDED,
   },
   [AdminPropertyAction.REACTIVATE]: {
@@ -36,6 +40,7 @@ const actionStatus: Readonly<
       PropertyStatus.CHANGES_REQUESTED,
       PropertyStatus.APPROVED,
       PropertyStatus.PENDING_UPDATE,
+      PropertyStatus.UPDATE_CHANGES_REQUESTED,
       PropertyStatus.REJECTED,
       PropertyStatus.SUSPENDED,
     ],

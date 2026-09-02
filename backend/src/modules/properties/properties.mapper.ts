@@ -4,9 +4,11 @@ import type { OwnerPropertyResponseDto } from './dto/property-response.dto';
 export const ownerPropertySelect = {
   id: true,
   lifecycleStatus: true,
+  activeVersionId: true,
+  workingVersionId: true,
   createdAt: true,
   updatedAt: true,
-  activeVersion: {
+  workingVersion: {
     select: {
       id: true,
       version: true,
@@ -76,6 +78,7 @@ export type OwnerPropertyRecord = Prisma.PropertyGetPayload<{
 export const editablePropertyStatuses = [
   PropertyStatus.DRAFT,
   PropertyStatus.CHANGES_REQUESTED,
+  PropertyStatus.UPDATE_CHANGES_REQUESTED,
 ] as const;
 
 export function isOwnerEditableStatus(status: PropertyStatus): boolean {
@@ -87,12 +90,17 @@ export function isOwnerEditableStatus(status: PropertyStatus): boolean {
 export function mapOwnerProperty(
   property: OwnerPropertyRecord,
 ): OwnerPropertyResponseDto {
-  if (!property.activeVersion) {
-    throw new Error('Property has no active version');
+  if (!property.workingVersion) {
+    throw new Error('Property has no working version');
   }
 
-  const version = property.activeVersion;
-  const canEdit = isOwnerEditableStatus(property.lifecycleStatus);
+  const version = property.workingVersion;
+  const hasUnpublishedRevision =
+    property.activeVersionId !== property.workingVersionId;
+  const canEdit =
+    isOwnerEditableStatus(property.lifecycleStatus) ||
+    (property.lifecycleStatus === PropertyStatus.APPROVED &&
+      hasUnpublishedRevision);
   const latestDecision = property.reviewDecisions?.[0];
 
   return {
@@ -102,6 +110,9 @@ export function mapOwnerProperty(
     updatedAt: property.updatedAt.toISOString(),
     canEdit,
     canSubmit: canEdit,
+    canStartRevision:
+      property.lifecycleStatus === PropertyStatus.APPROVED &&
+      !hasUnpublishedRevision,
     latestDecision: latestDecision
       ? {
           decision: latestDecision.decision,

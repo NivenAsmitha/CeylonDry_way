@@ -3,6 +3,7 @@ import type { RoleName, UserStatus } from "../../auth/types/auth.types";
 export const USER_MANAGEMENT_ACTIONS = [
   "VIEW",
   "EDIT_PROFILE",
+  "CHANGE_ROLES",
   "CHANGE_STATUS",
   "SOFT_DELETE",
   "RESTORE",

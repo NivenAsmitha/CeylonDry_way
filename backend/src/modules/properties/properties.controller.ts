@@ -95,6 +95,27 @@ export class PropertiesController {
     return this.propertiesService.getOwnedProperty(currentUser.id, propertyId);
   }
 
+  @Post(':id/revision')
+  @HttpCode(HttpStatus.OK)
+  @Roles(RoleName.OWNER)
+  @ApiOperation({
+    summary: 'Create a private revision from an approved published version',
+  })
+  @ApiOkResponse({ type: OwnerPropertyResponseDto })
+  @ApiNotFoundResponse({ description: 'Approved property not found' })
+  @ApiConflictResponse({
+    description: 'Property cannot start another revision',
+  })
+  startOwnedPropertyRevision(
+    @CurrentUser() currentUser: AuthenticatedUser,
+    @Param('id', new ParseUUIDPipe()) propertyId: string,
+  ): Promise<OwnerPropertyResponseDto> {
+    return this.propertiesService.startOwnedPropertyRevision(
+      currentUser.id,
+      propertyId,
+    );
+  }
+
   @Patch(':id')
   @Roles(RoleName.OWNER)
   @ApiOkResponse({ type: OwnerPropertyResponseDto })
