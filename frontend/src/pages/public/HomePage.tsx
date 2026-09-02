@@ -57,10 +57,10 @@ function HeroVideo() {
   const { t } = useLanguage();
 
   return (
-    <div className="relative mx-auto w-full max-w-3xl lg:translate-x-4 lg:justify-self-end">
+    <div className="relative mx-auto w-full max-w-4xl lg:translate-x-4 lg:justify-self-end">
       <div className="absolute -inset-3 -z-10 rounded-[2.5rem] bg-gradient-to-br from-brand-200/60 via-white to-amber-200/60" />
 
-      <div className="relative overflow-hidden rounded-[2rem] border-[6px] border-white bg-slate-950 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/5">
+      <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/5">
         <video
           className="aspect-video w-full object-cover"
           autoPlay
@@ -114,7 +114,7 @@ export function HomePage() {
       <section className="relative isolate overflow-hidden bg-gradient-to-br from-white via-brand-50 to-amber-50">
         <div className="absolute -left-36 top-24 -z-10 size-80 rounded-full bg-brand-200/55 blur-3xl" />
         <div className="absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-amber-200/50 blur-3xl" />
-        <div className="mx-auto grid min-h-[46rem] max-w-7xl gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.88fr_1.12fr] lg:items-center lg:gap-10 lg:px-8">
+        <div className="mx-auto grid min-h-[46rem] max-w-[88rem] gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-10 lg:px-8">
           <div>
             <h1 className="max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
               {t("Find a restroom.")}
