@@ -18,10 +18,10 @@ import {
 } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { AdminReportQueryDto } from './dto/admin-report-query.dto';
 import { CreatePropertyReportDto } from './dto/create-property-report.dto';
@@ -49,8 +49,8 @@ export class PublicReportsController {
 @ApiTags('Admin report moderation')
 @ApiBearerAuth()
 @ApiForbiddenResponse({ description: 'ADMIN role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.ADMIN)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.REPORT_MANAGEMENT)
 @Controller('admin/reports')
 export class AdminReportsController {
   constructor(private readonly reports: ReportsService) {}

@@ -24,10 +24,29 @@ export function getSafeRedirectPath(
   return destination;
 }
 
-export function getRoleLandingPath(roles: readonly string[]): string {
+export function getRoleLandingPath(
+  roles: readonly string[],
+  permissions: readonly string[] = [],
+): string {
   if (roles.includes("DEVELOPER")) return "/developer/operations";
-  if (roles.includes("ADMIN")) return "/admin/reports";
-  if (roles.includes("REVIEWER")) return "/reviewer";
+  if (roles.includes("ADMIN")) {
+    if (permissions.includes("USER_MANAGEMENT")) return "/admin/users";
+    if (permissions.includes("REVIEWER_MANAGEMENT")) return "/admin/reviewers";
+    if (permissions.includes("PROPERTY_MANAGEMENT")) return "/admin/properties";
+    if (permissions.includes("REPORT_MANAGEMENT")) return "/admin/reports";
+    if (permissions.includes("REVIEW_MODERATION")) return "/staff/reviews";
+    if (permissions.includes("SUPPORT_MANAGEMENT")) return "/staff/support";
+    return "/profile";
+  }
+  if (roles.includes("REVIEWER")) {
+    if (permissions.includes("LISTING_REVIEW")) return "/reviewer";
+    if (permissions.includes("MANUAL_PROPERTY_MANAGEMENT")) {
+      return "/reviewer/properties";
+    }
+    if (permissions.includes("REVIEW_MODERATION")) return "/staff/reviews";
+    if (permissions.includes("SUPPORT_MANAGEMENT")) return "/staff/support";
+    return "/profile";
+  }
   return "/";
 }
 

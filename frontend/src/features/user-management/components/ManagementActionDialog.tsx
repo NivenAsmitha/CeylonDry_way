@@ -1,4 +1,10 @@
-import { useEffect, useRef, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type FormEvent,
+  type ReactNode,
+} from "react";
 
 interface ManagementActionDialogProps {
   title: string;
@@ -7,6 +13,7 @@ interface ManagementActionDialogProps {
   tone?: "default" | "danger";
   isPending: boolean;
   error?: string | null;
+  details?: ReactNode;
   minimumReasonLength?: number;
   onCancel: () => void;
   onConfirm: (reason: string) => void;
@@ -19,6 +26,7 @@ export function ManagementActionDialog({
   tone = "default",
   isPending,
   error,
+  details,
   minimumReasonLength = 5,
   onCancel,
   onConfirm,
@@ -53,6 +61,11 @@ export function ManagementActionDialog({
           {title}
         </h2>
         <p className="mt-3 text-sm leading-6 text-slate-600">{description}</p>
+        {details ? (
+          <div className="mt-5 rounded-2xl border border-slate-200 bg-slate-50 p-4 text-sm text-slate-700">
+            {details}
+          </div>
+        ) : null}
         <label className="mt-6 block text-sm font-bold" htmlFor="action-reason">
           Reason
         </label>

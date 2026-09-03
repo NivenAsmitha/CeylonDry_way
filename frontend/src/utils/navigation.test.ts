@@ -8,9 +8,18 @@ describe("navigation destinations", () => {
   });
 
   it("routes staff to their own workspace", () => {
-    expect(getRoleLandingPath(["REVIEWER"])).toBe("/reviewer");
-    expect(getRoleLandingPath(["ADMIN"])).toBe("/admin/reports");
+    expect(getRoleLandingPath(["REVIEWER"], ["LISTING_REVIEW"])).toBe(
+      "/reviewer",
+    );
+    expect(getRoleLandingPath(["ADMIN"], ["REPORT_MANAGEMENT"])).toBe(
+      "/admin/reports",
+    );
     expect(getRoleLandingPath(["DEVELOPER"])).toBe("/developer/operations");
+  });
+
+  it("sends staff without operational permissions to their profile", () => {
+    expect(getRoleLandingPath(["ADMIN"], [])).toBe("/profile");
+    expect(getRoleLandingPath(["REVIEWER"], [])).toBe("/profile");
   });
 
   it("preserves a safe protected-route destination", () => {

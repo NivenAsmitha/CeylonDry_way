@@ -15,6 +15,7 @@ const authValue: AuthContextValue = {
     language: "en",
     status: "ACTIVE",
     roles: ["CLIENT"],
+    permissions: [],
     createdAt: "2026-08-25T00:00:00.000Z",
   },
   isAuthenticated: true,

@@ -16,6 +16,17 @@ enum RoleName {
   DEVELOPER
 }
 
+enum PermissionKey {
+  USER_MANAGEMENT
+  REVIEWER_MANAGEMENT
+  PROPERTY_MANAGEMENT
+  REPORT_MANAGEMENT
+  LISTING_REVIEW
+  MANUAL_PROPERTY_MANAGEMENT
+  REVIEW_MODERATION
+  SUPPORT_MANAGEMENT
+}
+
 enum UserStatus {
   ACTIVE
   SUSPENDED
@@ -143,6 +154,7 @@ model User {
   supportTickets      SupportTicket[]       @relation("SupportTicketCreator")
   assignedTickets     SupportTicket[]       @relation("SupportTicketAssignee")
   supportMessages     SupportMessage[]
+  permissionGrants    RolePermission[]      @relation("PermissionGrantor")
 
   @@index([status])
   @@index([deletedAt])
@@ -193,7 +205,37 @@ model Role {
   description String?
   createdAt   DateTime @default(now())
 
-  users UserRole[]
+  users       UserRole[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String        @id @default(uuid())
+  key         PermissionKey @unique
+  name        String
+  description String
+  sortOrder   Int           @default(0)
+  createdAt   DateTime      @default(now())
+
+  roles RolePermission[]
+
+  @@index([sortOrder])
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  grantedAt    DateTime @default(now())
+  grantedById  String?
+  reason       String?  @db.VarChar(1000)
+
+  role       Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+  grantedBy  User?      @relation("PermissionGrantor", fields: [grantedById], references: [id], onDelete: SetNull)
+
+  @@id([roleId, permissionId])
+  @@index([permissionId])
+  @@index([grantedById])
 }
 
 model UserRole {

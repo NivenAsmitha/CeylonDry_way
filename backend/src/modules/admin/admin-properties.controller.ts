@@ -10,10 +10,10 @@ import {
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { AdminPropertiesService } from './admin-properties.service';
 import { AdminPropertyActionDto } from './dto/admin-property-action.dto';
@@ -22,8 +22,8 @@ import { AdminPropertyQueryDto } from './dto/admin-property-query.dto';
 @ApiTags('Admin property management')
 @ApiBearerAuth()
 @ApiForbiddenResponse({ description: 'ADMIN role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.ADMIN)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.PROPERTY_MANAGEMENT)
 @Controller('admin/properties')
 export class AdminPropertiesController {
   constructor(private readonly properties: AdminPropertiesService) {}

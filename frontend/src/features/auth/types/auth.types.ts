@@ -8,6 +8,19 @@ export const ROLE_NAMES = [
 
 export type RoleName = (typeof ROLE_NAMES)[number];
 
+export const PERMISSION_KEYS = [
+  "USER_MANAGEMENT",
+  "REVIEWER_MANAGEMENT",
+  "PROPERTY_MANAGEMENT",
+  "REPORT_MANAGEMENT",
+  "LISTING_REVIEW",
+  "MANUAL_PROPERTY_MANAGEMENT",
+  "REVIEW_MODERATION",
+  "SUPPORT_MANAGEMENT",
+] as const;
+
+export type PermissionKey = (typeof PERMISSION_KEYS)[number];
+
 export const USER_STATUSES = ["ACTIVE", "SUSPENDED", "DISABLED"] as const;
 export type UserStatus = (typeof USER_STATUSES)[number];
 
@@ -22,6 +35,7 @@ export interface CurrentUser {
   language: string;
   status: UserStatus;
   roles: RoleName[];
+  permissions: PermissionKey[];
   createdAt: string;
 }
 

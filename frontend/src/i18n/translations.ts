@@ -16,6 +16,7 @@ const japanese: Record<string, string> = {
   "Review queue": "審査キュー",
   "Add properties": "施設を追加",
   Users: "ユーザー",
+  "Access Management": "アクセス管理",
   Reviewers: "審査担当者",
   Properties: "施設",
   Reports: "報告",

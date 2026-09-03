@@ -25,7 +25,7 @@ export function LoginPage() {
   const locationState: unknown = location.state;
   const destination = getSafeRedirectPath(
     locationState,
-    getRoleLandingPath(user?.roles ?? []),
+    getRoleLandingPath(user?.roles ?? [], user?.permissions ?? []),
   );
   const registrationSucceeded = hasRegistrationSuccessNotice(locationState);
   const passwordChanged =
@@ -55,7 +55,10 @@ export function LoginPage() {
       navigate(
         getSafeRedirectPath(
           locationState,
-          getRoleLandingPath(authenticatedUser.roles),
+          getRoleLandingPath(
+            authenticatedUser.roles,
+            authenticatedUser.permissions,
+          ),
         ),
         { replace: true },
       );

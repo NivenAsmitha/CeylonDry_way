@@ -62,14 +62,37 @@ export function Navbar() {
   const hasReviewerRole = user?.roles.includes("REVIEWER") ?? false;
   const hasAdminRole = user?.roles.includes("ADMIN") ?? false;
   const hasDeveloperRole = user?.roles.includes("DEVELOPER") ?? false;
+  const hasPermission = (
+    permission: NonNullable<typeof user>["permissions"][number],
+  ) => user?.permissions.includes(permission) ?? false;
   const showPublicNavigation =
     !isAuthenticated || hasClientRole || hasOwnerRole;
   const workspaceHome = hasDeveloperRole
     ? "/developer/operations"
     : hasAdminRole
-      ? "/admin/reports"
+      ? hasPermission("USER_MANAGEMENT")
+        ? "/admin/users"
+        : hasPermission("REVIEWER_MANAGEMENT")
+          ? "/admin/reviewers"
+          : hasPermission("PROPERTY_MANAGEMENT")
+            ? "/admin/properties"
+            : hasPermission("REPORT_MANAGEMENT")
+              ? "/admin/reports"
+              : hasPermission("REVIEW_MODERATION")
+                ? "/staff/reviews"
+                : hasPermission("SUPPORT_MANAGEMENT")
+                  ? "/staff/support"
+                  : "/profile"
       : hasReviewerRole
-        ? "/reviewer"
+        ? hasPermission("LISTING_REVIEW")
+          ? "/reviewer"
+          : hasPermission("MANUAL_PROPERTY_MANAGEMENT")
+            ? "/reviewer/properties"
+            : hasPermission("REVIEW_MODERATION")
+              ? "/staff/reviews"
+              : hasPermission("SUPPORT_MANAGEMENT")
+                ? "/staff/support"
+                : "/profile"
         : "/";
 
   return (
@@ -155,80 +178,60 @@ export function Navbar() {
             ) : null}
             {isAuthenticated && hasReviewerRole ? (
               <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/reviewer"
-                  onClick={closeMenu}
-                >
-                  {t("Review queue")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/reviewer/properties"
-                  onClick={closeMenu}
-                >
-                  {t("Add properties")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/staff/reviews"
-                  onClick={closeMenu}
-                >
-                  {t("Reviews")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/staff/support"
-                  onClick={closeMenu}
-                >
-                  {t("Support")}
-                </NavLink>
+                {hasPermission("LISTING_REVIEW") ? (
+                  <NavLink className={navLinkClass} to="/reviewer" onClick={closeMenu}>
+                    {t("Review queue")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("MANUAL_PROPERTY_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/reviewer/properties" onClick={closeMenu}>
+                    {t("Add properties")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("REVIEW_MODERATION") ? (
+                  <NavLink className={navLinkClass} to="/staff/reviews" onClick={closeMenu}>
+                    {t("Reviews")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("SUPPORT_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/staff/support" onClick={closeMenu}>
+                    {t("Support")}
+                  </NavLink>
+                ) : null}
               </>
             ) : null}
             {isAuthenticated && hasAdminRole ? (
               <>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/users"
-                  onClick={closeMenu}
-                >
-                  {t("Users")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/reviewers"
-                  onClick={closeMenu}
-                >
-                  {t("Reviewers")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/properties"
-                  onClick={closeMenu}
-                >
-                  {t("Properties")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/admin/reports"
-                  onClick={closeMenu}
-                >
-                  {t("Reports")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/staff/reviews"
-                  onClick={closeMenu}
-                >
-                  {t("Reviews")}
-                </NavLink>
-                <NavLink
-                  className={navLinkClass}
-                  to="/staff/support"
-                  onClick={closeMenu}
-                >
-                  {t("Support")}
-                </NavLink>
+                {hasPermission("USER_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/admin/users" onClick={closeMenu}>
+                    {t("Users")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("REVIEWER_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/admin/reviewers" onClick={closeMenu}>
+                    {t("Reviewers")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("PROPERTY_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/admin/properties" onClick={closeMenu}>
+                    {t("Properties")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("REPORT_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/admin/reports" onClick={closeMenu}>
+                    {t("Reports")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("REVIEW_MODERATION") ? (
+                  <NavLink className={navLinkClass} to="/staff/reviews" onClick={closeMenu}>
+                    {t("Reviews")}
+                  </NavLink>
+                ) : null}
+                {hasPermission("SUPPORT_MANAGEMENT") ? (
+                  <NavLink className={navLinkClass} to="/staff/support" onClick={closeMenu}>
+                    {t("Support")}
+                  </NavLink>
+                ) : null}
               </>
             ) : null}
             {isAuthenticated && hasDeveloperRole ? (
@@ -253,6 +256,13 @@ export function Navbar() {
                   onClick={closeMenu}
                 >
                   {t("Operations")}
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/developer/access"
+                  onClick={closeMenu}
+                >
+                  {t("Access Management")}
                 </NavLink>
               </>
             ) : null}

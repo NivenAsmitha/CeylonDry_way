@@ -14,10 +14,10 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiOkResponse, ApiTags } from '@nestjs/swagger';
 import { memoryStorage } from 'multer';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import {
   MAX_PROPERTY_PHOTO_BYTES,
@@ -31,8 +31,8 @@ import { PropertyPhotoResponseDto } from '../properties/dto/property-response.dt
 
 @ApiTags('Reviewer-created property photos')
 @ApiBearerAuth()
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.REVIEWER)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.MANUAL_PROPERTY_MANAGEMENT)
 @Controller('reviewer/properties/:id/photos')
 export class ReviewerPropertyPhotosController {
   constructor(private readonly photos: PropertyPhotosService) {}

@@ -1,5 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RoleName, UserStatus } from '../../../generated/prisma/client.js';
+import {
+  PermissionKey,
+  RoleName,
+  UserStatus,
+} from '../../../generated/prisma/client.js';
 import type { AuthenticatedUser } from '../../auth/types/authenticated-user.type';
 
 export class CurrentUserResponseDto implements AuthenticatedUser {
@@ -23,6 +27,9 @@ export class CurrentUserResponseDto implements AuthenticatedUser {
 
   @ApiProperty({ enum: RoleName, isArray: true })
   roles!: RoleName[];
+
+  @ApiProperty({ enum: PermissionKey, isArray: true })
+  permissions!: PermissionKey[];
 
   @ApiProperty({ format: 'date-time', type: String })
   createdAt!: Date;

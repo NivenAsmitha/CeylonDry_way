@@ -12,9 +12,11 @@ import {
 import { ApiBearerAuth, ApiForbiddenResponse, ApiTags } from '@nestjs/swagger';
 import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { Permissions } from '../../common/decorators/permissions.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { PermissionKey, RoleName } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreateSupportTicketDto } from './dto/create-support-ticket.dto';
@@ -81,8 +83,8 @@ export class ClientSupportController {
 @ApiTags('Staff support')
 @ApiBearerAuth()
 @ApiForbiddenResponse({ description: 'REVIEWER or ADMIN role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.REVIEWER, RoleName.ADMIN)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.SUPPORT_MANAGEMENT)
 @Controller('staff/support/tickets')
 export class StaffSupportController {
   constructor(private readonly support: SupportService) {}

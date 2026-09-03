@@ -5,6 +5,7 @@ import { AppLayout } from "../components/layout/AppLayout";
 import { ROLE_NAMES } from "../features/auth/types/auth.types";
 import { HomePage } from "../pages/public/HomePage";
 import { ProtectedRoute } from "./ProtectedRoute";
+import { PermissionRoute } from "./PermissionRoute";
 import { RoleRoute } from "./RoleRoute";
 
 const LoginPage = lazy(() =>
@@ -131,6 +132,11 @@ const DeveloperOperationsPage = lazy(() =>
     default: module.DeveloperOperationsPage,
   })),
 );
+const DeveloperAccessManagementPage = lazy(() =>
+  import("../pages/developer/DeveloperAccessManagementPage").then((module) => ({
+    default: module.DeveloperAccessManagementPage,
+  })),
+);
 const SupportPage = lazy(() =>
   import("../pages/support/SupportPage").then((module) => ({
     default: module.SupportPage,
@@ -192,39 +198,81 @@ export function AppRoutes() {
               />
             </Route>
             <Route element={<RoleRoute allowedRoles={["REVIEWER"]} />}>
-              <Route path="reviewer" element={<ReviewerQueuePage />} />
               <Route
-                path="reviewer/listings/:id"
-                element={<ReviewerListingPage />}
-              />
+                element={
+                  <PermissionRoute allowedPermissions={["LISTING_REVIEW"]} />
+                }
+              >
+                <Route path="reviewer" element={<ReviewerQueuePage />} />
+                <Route
+                  path="reviewer/listings/:id"
+                  element={<ReviewerListingPage />}
+                />
+              </Route>
               <Route
-                path="reviewer/properties"
-                element={<OwnerPropertiesPage workflow="reviewer" />}
-              />
-              <Route
-                path="reviewer/properties/new"
-                element={<ReviewerCreatePropertyPage />}
-              />
-              <Route
-                path="reviewer/properties/:id/edit"
-                element={<ReviewerEditPropertyPage />}
-              />
+                element={
+                  <PermissionRoute
+                    allowedPermissions={["MANUAL_PROPERTY_MANAGEMENT"]}
+                  />
+                }
+              >
+                <Route
+                  path="reviewer/properties"
+                  element={<OwnerPropertiesPage workflow="reviewer" />}
+                />
+                <Route
+                  path="reviewer/properties/new"
+                  element={<ReviewerCreatePropertyPage />}
+                />
+                <Route
+                  path="reviewer/properties/:id/edit"
+                  element={<ReviewerEditPropertyPage />}
+                />
+              </Route>
             </Route>
             <Route element={<RoleRoute allowedRoles={["ADMIN"]} />}>
               <Route
-                path="admin/users"
-                element={<UserManagementListPage scope="admin" />}
-              />
+                element={
+                  <PermissionRoute allowedPermissions={["USER_MANAGEMENT"]} />
+                }
+              >
+                <Route
+                  path="admin/users"
+                  element={<UserManagementListPage scope="admin" />}
+                />
+                <Route
+                  path="admin/users/:id"
+                  element={<UserManagementDetailPage scope="admin" />}
+                />
+              </Route>
               <Route
-                path="admin/users/:id"
-                element={<UserManagementDetailPage scope="admin" />}
-              />
-              <Route path="admin/reviewers" element={<AdminReviewersPage />} />
+                element={
+                  <PermissionRoute
+                    allowedPermissions={["REVIEWER_MANAGEMENT"]}
+                  />
+                }
+              >
+                <Route path="admin/reviewers" element={<AdminReviewersPage />} />
+              </Route>
               <Route
-                path="admin/properties"
-                element={<AdminPropertiesPage />}
-              />
-              <Route path="admin/reports" element={<AdminReportsPage />} />
+                element={
+                  <PermissionRoute
+                    allowedPermissions={["PROPERTY_MANAGEMENT"]}
+                  />
+                }
+              >
+                <Route
+                  path="admin/properties"
+                  element={<AdminPropertiesPage />}
+                />
+              </Route>
+              <Route
+                element={
+                  <PermissionRoute allowedPermissions={["REPORT_MANAGEMENT"]} />
+                }
+              >
+                <Route path="admin/reports" element={<AdminReportsPage />} />
+              </Route>
             </Route>
             <Route element={<RoleRoute allowedRoles={["DEVELOPER"]} />}>
               <Route
@@ -243,16 +291,32 @@ export function AppRoutes() {
                 path="developer/operations"
                 element={<DeveloperOperationsPage />}
               />
+              <Route
+                path="developer/access"
+                element={<DeveloperAccessManagementPage />}
+              />
             </Route>
             <Route
               element={<RoleRoute allowedRoles={["REVIEWER", "ADMIN"]} />}
             >
-              <Route path="staff/reviews" element={<StaffReviewsPage />} />
-              <Route path="staff/support" element={<StaffSupportPage />} />
               <Route
-                path="staff/support/:id"
-                element={<StaffSupportTicketPage />}
-              />
+                element={
+                  <PermissionRoute allowedPermissions={["REVIEW_MODERATION"]} />
+                }
+              >
+                <Route path="staff/reviews" element={<StaffReviewsPage />} />
+              </Route>
+              <Route
+                element={
+                  <PermissionRoute allowedPermissions={["SUPPORT_MANAGEMENT"]} />
+                }
+              >
+                <Route path="staff/support" element={<StaffSupportPage />} />
+                <Route
+                  path="staff/support/:id"
+                  element={<StaffSupportTicketPage />}
+                />
+              </Route>
             </Route>
           </Route>
 

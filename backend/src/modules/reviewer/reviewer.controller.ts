@@ -22,10 +22,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { ReviewDecisionDto } from './dto/review-decision.dto';
 import { ReviewerListQueryDto } from './dto/reviewer-list-query.dto';
@@ -39,8 +39,8 @@ import { ReviewerService } from './reviewer.service';
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: 'Access token is missing or invalid' })
 @ApiForbiddenResponse({ description: 'REVIEWER role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.REVIEWER)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.LISTING_REVIEW)
 @Controller('reviewer/listings')
 export class ReviewerController {
   constructor(private readonly reviewerService: ReviewerService) {}

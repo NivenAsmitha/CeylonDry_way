@@ -9,10 +9,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { CreateStaffAccountDto } from '../staff-accounts/dto/create-staff-account.dto';
 import { StaffAccountsService } from '../staff-accounts/staff-accounts.service';
@@ -22,8 +22,8 @@ import { CurrentUserResponseDto } from '../users/dto/current-user-response.dto';
 @ApiBearerAuth()
 @ApiUnauthorizedResponse({ description: 'Authentication is required' })
 @ApiForbiddenResponse({ description: 'ADMIN role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.ADMIN)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.REVIEWER_MANAGEMENT)
 @Controller('admin/reviewers')
 export class AdminController {
   constructor(private readonly staffAccounts: StaffAccountsService) {}

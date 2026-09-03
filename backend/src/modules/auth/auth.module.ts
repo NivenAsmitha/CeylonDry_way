@@ -8,6 +8,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import { PermissionsGuard } from './guards/permissions.guard';
 import { JwtStrategy } from './strategies/jwt.strategy';
 import { RefreshCookieService } from './refresh-cookie.service';
 
@@ -32,7 +33,14 @@ import { RefreshCookieService } from './refresh-cookie.service';
     JwtStrategy,
     JwtAuthGuard,
     RolesGuard,
+    PermissionsGuard,
   ],
-  exports: [AuthService, JwtAuthGuard, RolesGuard, PassportModule],
+  exports: [
+    AuthService,
+    JwtAuthGuard,
+    RolesGuard,
+    PermissionsGuard,
+    PassportModule,
+  ],
 })
 export class AuthModule {}

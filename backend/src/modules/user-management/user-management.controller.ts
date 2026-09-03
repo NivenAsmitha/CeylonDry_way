@@ -25,10 +25,10 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
-import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { Permissions } from '../../common/decorators/permissions.decorator';
+import { PermissionKey } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { RolesGuard } from '../auth/guards/roles.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import { ChangeUserStatusDto } from './dto/change-user-status.dto';
 import { ChangeUserRolesDto } from './dto/change-user-roles.dto';
@@ -44,8 +44,8 @@ import { UserManagementService } from './user-management.service';
   description: 'The actor or target is outside the management hierarchy',
 })
 @ApiNotFoundResponse({ description: 'User not found' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.ADMIN, RoleName.DEVELOPER)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.USER_MANAGEMENT)
 @Controller('management/users')
 export class UserManagementController {
   constructor(private readonly users: UserManagementService) {}

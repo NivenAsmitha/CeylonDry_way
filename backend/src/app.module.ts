@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { environmentValidationSchema } from './config/env.validation';
 import { AdminModule } from './modules/admin/admin.module';
+import { AccessManagementModule } from './modules/access-management/access-management.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { DeveloperModule } from './modules/developer/developer.module';
 import { PlacesModule } from './modules/places/places.module';
@@ -28,6 +29,7 @@ import { PrismaModule } from './prisma/prisma.module';
       },
     }),
     PrismaModule,
+    AccessManagementModule,
     AuthModule,
     AdminModule,
     DeveloperModule,

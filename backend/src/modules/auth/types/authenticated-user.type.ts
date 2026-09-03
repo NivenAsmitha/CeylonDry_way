@@ -1,4 +1,8 @@
-import type { RoleName, UserStatus } from '../../../generated/prisma/client.js';
+import type {
+  PermissionKey,
+  RoleName,
+  UserStatus,
+} from '../../../generated/prisma/client.js';
 
 export interface AuthenticatedUser {
   id: string;
@@ -8,5 +12,6 @@ export interface AuthenticatedUser {
   language: string;
   status: UserStatus;
   roles: RoleName[];
+  permissions: PermissionKey[];
   createdAt: Date;
 }

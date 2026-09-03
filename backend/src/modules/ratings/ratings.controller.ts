@@ -19,9 +19,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { CurrentUser } from '../../common/decorators/current-user.decorator';
+import { Permissions } from '../../common/decorators/permissions.decorator';
 import { Roles } from '../../common/decorators/roles.decorator';
-import { RoleName } from '../../generated/prisma/client.js';
+import { PermissionKey, RoleName } from '../../generated/prisma/client.js';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { PermissionsGuard } from '../auth/guards/permissions.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import type { AuthenticatedUser } from '../auth/types/authenticated-user.type';
 import {
@@ -93,8 +95,8 @@ export class OwnerRatingRepliesController {
 @ApiTags('Review moderation')
 @ApiBearerAuth()
 @ApiForbiddenResponse({ description: 'REVIEWER or ADMIN role is required' })
-@UseGuards(JwtAuthGuard, RolesGuard)
-@Roles(RoleName.REVIEWER, RoleName.ADMIN)
+@UseGuards(JwtAuthGuard, PermissionsGuard)
+@Permissions(PermissionKey.REVIEW_MODERATION)
 @Controller('staff/reviews')
 export class StaffRatingReviewsController {
   constructor(private readonly ratings: RatingsService) {}
