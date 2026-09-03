@@ -14,6 +14,7 @@ import {
   ApiConflictResponse,
   ApiCookieAuth,
   ApiCreatedResponse,
+  ApiAcceptedResponse,
   ApiNoContentResponse,
   ApiOkResponse,
   ApiOperation,
@@ -30,6 +31,7 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { CurrentUserResponseDto } from '../users/dto/current-user-response.dto';
 import { ResetPasswordDto } from '../password-reset/dto/reset-password.dto';
+import { RequestPasswordResetDto } from '../password-reset/dto/request-password-reset.dto';
 import { PasswordResetService } from '../password-reset/password-reset.service';
 import { RefreshCookieService } from './refresh-cookie.service';
 
@@ -93,6 +95,28 @@ export class AuthController {
   })
   register(@Body() registerDto: RegisterDto) {
     return this.authService.register(registerDto);
+  }
+
+  @Post('forgot-password')
+  @HttpCode(HttpStatus.ACCEPTED)
+  @UseGuards(ThrottlerGuard)
+  @Throttle({ auth: { limit: 3, ttl: 15 * 60_000 } })
+  @ApiOperation({ summary: 'Request a one-time password-reset link' })
+  @ApiAcceptedResponse({
+    schema: {
+      example: {
+        accepted: true,
+        message:
+          'If an active account exists for that email, password reset instructions have been sent.',
+      },
+    },
+  })
+  @ApiBadRequestResponse({ description: 'Email validation failed' })
+  @ApiTooManyRequestsResponse({
+    description: 'Password-reset request rate limit exceeded',
+  })
+  requestPasswordReset(@Body() input: RequestPasswordResetDto) {
+    return this.passwordResetService.request(input);
   }
 
   @Post('reset-password')

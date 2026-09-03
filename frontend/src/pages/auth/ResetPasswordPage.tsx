@@ -10,8 +10,10 @@ import {
   type ResetPasswordFormInput,
 } from "../../features/auth/schemas/reset-password.schema";
 import { getApiErrorMessage } from "../../types/api.types";
+import { useLanguage } from "../../i18n/useLanguage";
 
 export function ResetPasswordPage() {
+  const { t } = useLanguage();
   const [params] = useSearchParams();
   const token = params.get("token") ?? "";
   const tokenLooksValid = token.length >= 32 && token.length <= 512;
@@ -28,21 +30,22 @@ export function ResetPasswordPage() {
     <section className="mx-auto w-full max-w-xl px-4 py-12 sm:px-6 sm:py-16">
       <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm sm:p-8">
         <p className="text-sm font-bold uppercase tracking-[0.16em] text-brand-700">
-          Account recovery
+          {t("Account recovery")}
         </p>
         <h1 className="mt-2 text-3xl font-black text-slate-950">
-          Set a new password
+          {t("Set a new password")}
         </h1>
         <p className="mt-3 text-slate-600">
-          This one-time link expires quickly. Completing the reset revokes all
-          existing sessions and does not sign you in automatically.
+          {t(
+            "This one-time link expires quickly. Completing the reset revokes all existing sessions and does not sign you in automatically.",
+          )}
         </p>
 
         {!tokenLooksValid ? (
           <div className="mt-6">
             <ErrorMessage
-              title="Reset link is invalid"
-              message="Request a new reset link from account support."
+              title={t("Reset link is invalid")}
+              message={t("Request a new reset link from the login page.")}
             />
           </div>
         ) : mutation.isSuccess ? (
@@ -50,15 +53,17 @@ export function ResetPasswordPage() {
             className="mt-6 rounded-2xl border border-brand-200 bg-brand-50 p-5 text-brand-950"
             role="status"
           >
-            <p className="font-black">Password updated</p>
+            <p className="font-black">{t("Password updated")}</p>
             <p className="mt-1 text-sm">
-              Your old sessions are now invalid. Sign in with the new password.
+              {t(
+                "Your old sessions are now invalid. Sign in with the new password.",
+              )}
             </p>
             <Link
               className="mt-5 inline-flex min-h-11 items-center rounded-xl bg-brand-700 px-5 font-bold text-white"
               to="/login"
             >
-              Go to login
+              {t("Go to login")}
             </Link>
           </div>
         ) : (
@@ -68,7 +73,7 @@ export function ResetPasswordPage() {
           >
             <FormField
               id="reset-new-password"
-              label="New password"
+              label={t("New password")}
               type="password"
               autoComplete="new-password"
               error={form.formState.errors.newPassword?.message}
@@ -76,7 +81,7 @@ export function ResetPasswordPage() {
             />
             <FormField
               id="reset-confirm-password"
-              label="Confirm new password"
+              label={t("Confirm new password")}
               type="password"
               autoComplete="new-password"
               error={form.formState.errors.confirmPassword?.message}
@@ -90,7 +95,11 @@ export function ResetPasswordPage() {
               type="submit"
               disabled={mutation.isPending}
             >
-              {mutation.isPending ? "Updating password…" : "Update password"}
+              {t(
+                mutation.isPending
+                  ? "Updating password…"
+                  : "Update password",
+              )}
             </button>
           </form>
         )}

@@ -140,9 +140,14 @@ export function LoginPage() {
             error={errors.password?.message}
             {...register("password")}
           />
-          <p className="text-xs text-slate-500">
-            {t("Forgot password? Recovery is coming in a later phase.")}
-          </p>
+          <div className="flex justify-end">
+            <Link
+              className="text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 transition hover:text-brand-900"
+              to="/forgot-password"
+            >
+              {t("Forgot password?")}
+            </Link>
+          </div>
           <button
             className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-extrabold text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"
             type="submit"

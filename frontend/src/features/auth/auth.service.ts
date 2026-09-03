@@ -12,11 +12,22 @@ import type {
   AuthResponse,
   ChangePasswordInput,
   CurrentUser,
+  ForgotPasswordInput,
   LoginInput,
   RegisterInput,
   ResetPasswordInput,
   UpdateProfileInput,
 } from "./types/auth.types";
+
+export async function requestPasswordReset(
+  input: ForgotPasswordInput,
+): Promise<{ accepted: true; message: string }> {
+  const response = await apiClient.post<{
+    accepted: true;
+    message: string;
+  }>("/auth/forgot-password", input);
+  return response.data;
+}
 
 export async function resetPassword(
   input: ResetPasswordInput,

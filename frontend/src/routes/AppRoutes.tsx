@@ -23,6 +23,11 @@ const ResetPasswordPage = lazy(() =>
     default: module.ResetPasswordPage,
   })),
 );
+const ForgotPasswordPage = lazy(() =>
+  import("../pages/auth/ForgotPasswordPage").then((module) => ({
+    default: module.ForgotPasswordPage,
+  })),
+);
 const ExplorePage = lazy(() =>
   import("../pages/public/ExplorePage").then((module) => ({
     default: module.ExplorePage,
@@ -175,6 +180,7 @@ export function AppRoutes() {
           <Route path="places/:id" element={<PlaceDetailsPage />} />
           <Route path="login" element={<LoginPage />} />
           <Route path="register" element={<RegisterPage />} />
+          <Route path="forgot-password" element={<ForgotPasswordPage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="403" element={<ForbiddenPage />} />
 

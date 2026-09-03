@@ -331,8 +331,34 @@ const japanese: Record<string, string> = {
     "メールアドレスまたはパスワードが正しくありません。",
   "Email address": "メールアドレス",
   Password: "パスワード",
-  "Forgot password? Recovery is coming in a later phase.":
-    "パスワードをお忘れですか？復旧機能は今後追加予定です。",
+  "Forgot password?": "パスワードをお忘れですか？",
+  "Account recovery": "アカウント復旧",
+  "Reset your password": "パスワードをリセット",
+  "Enter your account email and we will send you a secure, one-time reset link.":
+    "アカウントのメールアドレスを入力すると、安全な使い捨てのリセットリンクを送信します。",
+  "Check your email": "メールをご確認ください",
+  "If an active account exists for that email, password reset instructions have been sent.":
+    "そのメールアドレスに有効なアカウントが存在する場合、パスワードのリセット手順を送信しました。",
+  "The reset link expires in 30 minutes and works only once.":
+    "リセットリンクの有効期限は30分で、一度だけ使用できます。",
+  "Request could not be sent": "リクエストを送信できませんでした",
+  "Sending reset link…": "リセットリンクを送信中…",
+  "Send reset link": "リセットリンクを送信",
+  "Back to login": "ログインに戻る",
+  "Set a new password": "新しいパスワードを設定",
+  "This one-time link expires quickly. Completing the reset revokes all existing sessions and does not sign you in automatically.":
+    "この使い捨てリンクの有効期限は短く設定されています。リセットが完了すると既存のすべてのセッションが無効になり、自動的にはログインされません。",
+  "Reset link is invalid": "リセットリンクが無効です",
+  "Request a new reset link from the login page.":
+    "ログインページから新しいリセットリンクを申請してください。",
+  "Password updated": "パスワードを更新しました",
+  "Your old sessions are now invalid. Sign in with the new password.":
+    "以前のセッションは無効になりました。新しいパスワードでログインしてください。",
+  "Go to login": "ログインへ移動",
+  "New password": "新しいパスワード",
+  "Confirm new password": "新しいパスワードを確認",
+  "Updating password…": "パスワードを更新中…",
+  "Update password": "パスワードを更新",
   "Signing in…": "ログイン中…",
   "Join ComfortGo": "ComfortGoに参加",
   "Create your account.": "アカウントを作成。",

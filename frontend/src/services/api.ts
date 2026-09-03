@@ -30,6 +30,7 @@ const unauthenticatedPaths = [
   "/auth/login",
   "/auth/refresh",
   "/auth/logout",
+  "/auth/forgot-password",
   "/auth/reset-password",
 ] as const;
 
