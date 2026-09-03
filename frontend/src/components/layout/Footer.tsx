@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import logo from "../../assets/logo.png";
 import { useLanguage } from "../../i18n/useLanguage";
+import { AuthLink } from "../../features/auth/components/AuthLink";
 
 const footerLinkClass =
   "inline-flex min-h-10 items-center rounded-md text-sm font-medium text-slate-600 transition hover:text-brand-700 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand-500";
@@ -72,12 +73,12 @@ export function Footer() {
               <Link className={footerLinkClass} to="/list-property">
                 {t("List a property")}
               </Link>
-              <Link className={footerLinkClass} to="/register">
+              <AuthLink className={footerLinkClass} to="/register">
                 {t("Create an account")}
-              </Link>
-              <Link className={footerLinkClass} to="/login">
+              </AuthLink>
+              <AuthLink className={footerLinkClass} to="/login">
                 {t("Sign in")}
-              </Link>
+              </AuthLink>
               <Link className={footerLinkClass} to="/support">
                 {t("Contact support")}
               </Link>

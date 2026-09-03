@@ -16,8 +16,19 @@ import {
   hasRegistrationSuccessNotice,
 } from "../../utils/navigation";
 import { useLanguage } from "../../i18n/useLanguage";
+import type { CurrentUser } from "../../features/auth/types/auth.types";
 
-export function LoginPage() {
+interface LoginPageProps {
+  embedded?: boolean;
+  onAuthenticated?: (user: CurrentUser) => void;
+  onViewChange?: (view: "register" | "forgot-password") => void;
+}
+
+export function LoginPage({
+  embedded = false,
+  onAuthenticated,
+  onViewChange,
+}: LoginPageProps = {}) {
   const { t } = useLanguage();
   const { login, isAuthenticated, user } = useAuth();
   const location = useLocation();
@@ -52,6 +63,10 @@ export function LoginPage() {
 
     try {
       const authenticatedUser = await login(values);
+      if (onAuthenticated) {
+        onAuthenticated(authenticatedUser);
+        return;
+      }
       navigate(
         getSafeRedirectPath(
           locationState,
@@ -73,22 +88,41 @@ export function LoginPage() {
   }
 
   return (
-    <section className="px-4 py-12 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-md rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl sm:p-9">
+    <section className={embedded ? "" : "px-4 py-12 sm:px-6 sm:py-16"}>
+      <div
+        className={
+          embedded
+            ? "p-6 pr-16 sm:p-9 sm:pr-16"
+            : "mx-auto max-w-md rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl sm:p-9"
+        }
+      >
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
           {t("Welcome back")}
         </p>
-        <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+        <h1
+          className="mt-3 text-3xl font-black tracking-tight text-slate-950"
+          id="auth-login-title"
+        >
           {t("Sign in to your account")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
           {t("New to ComfortGo?")}{" "}
-          <Link
-            className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
-            to="/register"
-          >
-            {t("Create an account")}
-          </Link>
+          {onViewChange ? (
+            <button
+              className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
+              type="button"
+              onClick={() => onViewChange("register")}
+            >
+              {t("Create an account")}
+            </button>
+          ) : (
+            <Link
+              className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
+              to="/register"
+            >
+              {t("Create an account")}
+            </Link>
+          )}
         </p>
 
         {registrationSucceeded ? (
@@ -141,12 +175,22 @@ export function LoginPage() {
             {...register("password")}
           />
           <div className="flex justify-end">
-            <Link
-              className="text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 transition hover:text-brand-900"
-              to="/forgot-password"
-            >
-              {t("Forgot password?")}
-            </Link>
+            {onViewChange ? (
+              <button
+                className="text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 transition hover:text-brand-900"
+                type="button"
+                onClick={() => onViewChange("forgot-password")}
+              >
+                {t("Forgot password?")}
+              </button>
+            ) : (
+              <Link
+                className="text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 transition hover:text-brand-900"
+                to="/forgot-password"
+              >
+                {t("Forgot password?")}
+              </Link>
+            )}
           </div>
           <button
             className="min-h-12 w-full rounded-xl bg-brand-700 px-5 py-3 font-extrabold text-white transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 disabled:cursor-wait disabled:opacity-60"

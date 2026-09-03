@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { MemoryRouter, useLocation } from "react-router-dom";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import type { AuthContextValue } from "../context/auth-context";
@@ -11,6 +12,9 @@ vi.mock("../features/auth/hooks/useAuth", () => ({
 }));
 vi.mock("../pages/public/MapPage", () => ({
   MapPage: () => <h1>Lazy map route</h1>,
+}));
+vi.mock("../pages/public/HomePage", () => ({
+  HomePage: () => <h1>Public home route</h1>,
 }));
 vi.mock("../pages/public/AboutPage", () => ({
   AboutPage: () => <h1>Lazy about route</h1>,
@@ -71,8 +75,30 @@ describe("lazy application routes", () => {
     ).toBeTruthy();
   });
 
+  it("opens login as a modal without replacing the current public page", async () => {
+    renderRoutes("/about");
+    expect(
+      await screen.findByRole("heading", { name: "Lazy about route" }),
+    ).toBeTruthy();
+
+    await userEvent.click(screen.getByRole("link", { name: "Login" }));
+
+    expect(await screen.findByRole("dialog")).toBeTruthy();
+    expect(
+      screen.getByRole("heading", { name: "Lazy about route" }),
+    ).toBeTruthy();
+    expect(screen.getByTestId("route-location").textContent).toBe("/login");
+
+    await userEvent.keyboard("{Escape}");
+    await waitFor(() =>
+      expect(screen.getByTestId("route-location").textContent).toBe("/about"),
+    );
+    expect(screen.queryByRole("dialog")).toBeNull();
+  });
+
   it("preserves ProtectedRoute redirect behavior for a direct owner URL", async () => {
     renderRoutes("/owner/properties");
+    expect(await screen.findByRole("dialog")).toBeTruthy();
     expect(
       await screen.findByRole("heading", { name: "Lazy login route" }),
     ).toBeTruthy();

@@ -58,9 +58,9 @@ function HeroVideo() {
 
   return (
     <div className="relative mx-auto w-full max-w-4xl lg:translate-x-4 lg:justify-self-end">
-      <div className="absolute -inset-3 -z-10 rounded-[2.5rem] bg-gradient-to-br from-brand-200/60 via-white to-amber-200/60" />
+      <div className="absolute -inset-3 -z-10 rounded-[2.5rem] bg-linear-to-br from-brand-200/60 via-white to-amber-200/60" />
 
-      <div className="relative overflow-hidden rounded-[2rem] bg-slate-950 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/5">
+      <div className="relative overflow-hidden rounded-4xl bg-slate-950 shadow-[0_30px_80px_-30px_rgba(15,23,42,0.45)] ring-1 ring-slate-900/5">
         <video
           className="aspect-video w-full object-cover"
           autoPlay
@@ -75,7 +75,7 @@ function HeroVideo() {
         </video>
 
         <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent"
+          className="pointer-events-none absolute inset-0 bg-linear-to-t from-slate-950/80 via-transparent to-transparent"
           aria-hidden="true"
         />
 
@@ -111,12 +111,12 @@ export function HomePage() {
 
   return (
     <>
-      <section className="relative isolate overflow-hidden bg-gradient-to-br from-white via-brand-50 to-amber-50">
+      <section className="relative isolate overflow-hidden bg-linear-to-br from-white via-brand-50 to-amber-50">
         <div className="absolute -left-36 top-24 -z-10 size-80 rounded-full bg-brand-200/55 blur-3xl" />
         <div className="absolute -right-20 bottom-0 -z-10 size-96 rounded-full bg-amber-200/50 blur-3xl" />
-        <div className="mx-auto grid min-h-[46rem] max-w-[88rem] gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-10 lg:px-8">
+        <div className="mx-auto grid min-h-184 max-w-352 gap-12 px-4 py-14 sm:px-6 sm:py-20 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-10 lg:px-8">
           <div>
-            <h1 className="max-w-3xl text-5xl font-black leading-[0.98] tracking-[-0.05em] text-slate-950 sm:text-6xl lg:text-7xl">
+            <h1 className="max-w-3xl text-5xl font-black leading-[0.98] tracking-tighter text-slate-950 sm:text-6xl lg:text-7xl">
               {t("Find a restroom.")}
               <span className="block text-brand-700">
                 {t("Continue the journey.")}
@@ -329,9 +329,9 @@ export function HomePage() {
 
       <section className="bg-white py-20 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="relative overflow-hidden rounded-[2rem] border border-brand-200 bg-gradient-to-r from-brand-50 to-amber-50 px-6 py-12 text-slate-950 shadow-lg shadow-brand-950/5 sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-14">
+          <div className="relative overflow-hidden rounded-4xl border border-brand-200 bg-linear-to-r from-brand-50 to-amber-50 px-6 py-12 text-slate-950 shadow-lg shadow-brand-950/5 sm:px-10 lg:flex lg:items-center lg:justify-between lg:gap-10 lg:px-14 lg:py-14">
             <div
-              className="absolute -right-20 -top-24 size-72 rounded-full border-[40px] border-brand-200/40"
+              className="absolute -right-20 -top-24 size-72 rounded-full border-40 border-brand-200/40"
               aria-hidden="true"
             />
             <div className="relative max-w-3xl">

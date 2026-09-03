@@ -1,31 +1,17 @@
 import { lazy, Suspense } from "react";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useLocation, type Location } from "react-router-dom";
 import { LoadingScreen } from "../components/common/LoadingScreen";
 import { AppLayout } from "../components/layout/AppLayout";
+import { AuthModal } from "../features/auth/components/AuthModal";
 import { ROLE_NAMES } from "../features/auth/types/auth.types";
 import { HomePage } from "../pages/public/HomePage";
 import { ProtectedRoute } from "./ProtectedRoute";
 import { PermissionRoute } from "./PermissionRoute";
 import { RoleRoute } from "./RoleRoute";
 
-const LoginPage = lazy(() =>
-  import("../pages/auth/LoginPage").then((module) => ({
-    default: module.LoginPage,
-  })),
-);
-const RegisterPage = lazy(() =>
-  import("../pages/auth/RegisterPage").then((module) => ({
-    default: module.RegisterPage,
-  })),
-);
 const ResetPasswordPage = lazy(() =>
   import("../pages/auth/ResetPasswordPage").then((module) => ({
     default: module.ResetPasswordPage,
-  })),
-);
-const ForgotPasswordPage = lazy(() =>
-  import("../pages/auth/ForgotPasswordPage").then((module) => ({
-    default: module.ForgotPasswordPage,
   })),
 );
 const ExplorePage = lazy(() =>
@@ -169,18 +155,21 @@ const StaffSupportTicketPage = lazy(() =>
 );
 
 export function AppRoutes() {
+  const location = useLocation();
+  const backgroundLocation = getBackgroundLocation(location.state);
+
   return (
     <Suspense fallback={<LoadingScreen message="Loading page…" />}>
-      <Routes>
+      <Routes location={backgroundLocation ?? location}>
         <Route element={<AppLayout />}>
           <Route index element={<HomePage />} />
           <Route path="explore" element={<ExplorePage />} />
           <Route path="about" element={<AboutPage />} />
           <Route path="map" element={<MapPage />} />
           <Route path="places/:id" element={<PlaceDetailsPage />} />
-          <Route path="login" element={<LoginPage />} />
-          <Route path="register" element={<RegisterPage />} />
-          <Route path="forgot-password" element={<ForgotPasswordPage />} />
+          <Route path="login" element={<HomePage />} />
+          <Route path="register" element={<HomePage />} />
+          <Route path="forgot-password" element={<HomePage />} />
           <Route path="reset-password" element={<ResetPasswordPage />} />
           <Route path="403" element={<ForbiddenPage />} />
 
@@ -329,6 +318,25 @@ export function AppRoutes() {
           <Route path="*" element={<NotFoundPage />} />
         </Route>
       </Routes>
+      <AuthModal />
     </Suspense>
   );
+}
+
+function getBackgroundLocation(state: unknown): Location | undefined {
+  if (
+    typeof state !== "object" ||
+    state === null ||
+    !("backgroundLocation" in state)
+  ) {
+    return undefined;
+  }
+
+  const background = state.backgroundLocation;
+  return typeof background === "object" &&
+    background !== null &&
+    "pathname" in background &&
+    typeof background.pathname === "string"
+    ? (background as Location)
+    : undefined;
 }

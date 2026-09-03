@@ -11,10 +11,21 @@ import {
 } from "../../features/auth/schemas/register.schema";
 import { getApiErrorMessage } from "../../types/api.types";
 import { useLanguage } from "../../i18n/useLanguage";
+import { getRoleLandingPath } from "../../utils/navigation";
 
-export function RegisterPage() {
+interface RegisterPageProps {
+  embedded?: boolean;
+  onRegistered?: () => void;
+  onViewChange?: (view: "login") => void;
+}
+
+export function RegisterPage({
+  embedded = false,
+  onRegistered,
+  onViewChange,
+}: RegisterPageProps = {}) {
   const { t } = useLanguage();
-  const { register: registerAccount, isAuthenticated } = useAuth();
+  const { register: registerAccount, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
   const [serverError, setServerError] = useState<string | null>(null);
   const {
@@ -33,7 +44,12 @@ export function RegisterPage() {
   });
 
   if (isAuthenticated) {
-    return <Navigate to="/profile" replace />;
+    return (
+      <Navigate
+        to={getRoleLandingPath(user?.roles ?? [], user?.permissions ?? [])}
+        replace
+      />
+    );
   }
 
   async function onSubmit(values: RegisterFormValues): Promise<void> {
@@ -47,6 +63,10 @@ export function RegisterPage() {
         password: values.password,
         ...(phone ? { phone } : {}),
       });
+      if (onRegistered) {
+        onRegistered();
+        return;
+      }
       navigate("/login", {
         replace: true,
         state: { notice: "registration-success" },
@@ -57,32 +77,83 @@ export function RegisterPage() {
   }
 
   return (
-    <section className="px-4 py-10 sm:px-6 sm:py-14">
-      <div className="mx-auto grid max-w-5xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white shadow-xl lg:grid-cols-[0.8fr_1.2fr]">
-        <aside className="bg-brand-950 p-7 text-white sm:p-10">
-          <p className="text-xs font-bold uppercase tracking-[0.18em] text-amber-300">
+    <section className={embedded ? "" : "px-4 py-10 sm:px-6 sm:py-14"}>
+      <div
+        className={`grid overflow-hidden lg:grid-cols-[0.8fr_1.2fr] ${
+          embedded
+            ? "rounded-[2rem] bg-white/20"
+            : "mx-auto max-w-5xl rounded-[2rem] border border-slate-200 bg-white shadow-xl"
+        }`}
+      >
+        <aside className="border-b border-white/70 bg-gradient-to-br from-brand-100/80 via-white/55 to-cyan-50/70 p-7 text-slate-950 backdrop-blur-xl sm:p-10 lg:border-b-0 lg:border-r">
+          <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
             {t("Join ComfortGo")}
           </p>
-          <h1 className="mt-4 text-3xl font-black tracking-tight sm:text-4xl">
+          <h1
+            className="mt-4 text-3xl font-black tracking-tight sm:text-4xl"
+            id="auth-register-title"
+          >
             {t("Create your account.")}
           </h1>
-          <p className="mt-4 leading-7 text-brand-100">
+          <p className="mt-4 leading-7 text-slate-600">
             {t(
-              "Your new account receives the safe Client role automatically. Additional roles are never selected during public registration.",
+              "Everything you need for a more comfortable journey, in one place.",
             )}
           </p>
-          <ul className="mt-8 space-y-4 text-sm text-brand-50">
-            <li className="flex gap-3">
-              <span aria-hidden="true" className="text-amber-300">
-                ✓
+          <ul className="mt-7 space-y-3">
+            <li className="flex gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(21,79,115,0.07)] backdrop-blur-md">
+              <span
+                aria-hidden="true"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-brand-700 text-[0.65rem] font-black tracking-wider text-white shadow-sm"
+              >
+                01
               </span>
-              {t("Passwords are protected by the backend and never displayed.")}
+              <span>
+                <strong className="block text-sm text-slate-900">
+                  {t("Find nearby facilities")}
+                </strong>
+                <span className="mt-1 block text-xs leading-5 text-slate-600">
+                  {t(
+                    "Search by location and compare the details that matter.",
+                  )}
+                </span>
+              </span>
             </li>
-            <li className="flex gap-3">
-              <span aria-hidden="true" className="text-amber-300">
-                ✓
+            <li className="flex gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(21,79,115,0.07)] backdrop-blur-md">
+              <span
+                aria-hidden="true"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-brand-700 text-[0.65rem] font-black tracking-wider text-white shadow-sm"
+              >
+                02
               </span>
-              {t("Session credentials remain outside browser storage.")}
+              <span>
+                <strong className="block text-sm text-slate-900">
+                  {t("Travel with confidence")}
+                </strong>
+                <span className="mt-1 block text-xs leading-5 text-slate-600">
+                  {t(
+                    "Check amenities, accessibility, ratings and recent photos.",
+                  )}
+                </span>
+              </span>
+            </li>
+            <li className="flex gap-3 rounded-2xl border border-white/80 bg-white/55 p-3.5 shadow-[0_10px_30px_rgba(21,79,115,0.07)] backdrop-blur-md">
+              <span
+                aria-hidden="true"
+                className="grid size-8 shrink-0 place-items-center rounded-full bg-brand-700 text-[0.65rem] font-black tracking-wider text-white shadow-sm"
+              >
+                03
+              </span>
+              <span>
+                <strong className="block text-sm text-slate-900">
+                  {t("Help the community")}
+                </strong>
+                <span className="mt-1 block text-xs leading-5 text-slate-600">
+                  {t(
+                    "Share ratings, report updates or list a useful facility.",
+                  )}
+                </span>
+              </span>
             </li>
           </ul>
         </aside>
@@ -94,12 +165,22 @@ export function RegisterPage() {
             </h2>
             <p className="mt-2 text-sm text-slate-600">
               {t("Already registered?")}{" "}
-              <Link
-                className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
-                to="/login"
-              >
-                {t("Sign in")}
-              </Link>
+              {onViewChange ? (
+                <button
+                  className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
+                  type="button"
+                  onClick={() => onViewChange("login")}
+                >
+                  {t("Sign in")}
+                </button>
+              ) : (
+                <Link
+                  className="font-bold text-brand-700 underline decoration-brand-300 underline-offset-4 hover:text-brand-900"
+                  to="/login"
+                >
+                  {t("Sign in")}
+                </Link>
+              )}
             </p>
           </div>
 

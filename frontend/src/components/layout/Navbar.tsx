@@ -4,6 +4,7 @@ import logo from "../../assets/logo.png";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { useLanguage } from "../../i18n/useLanguage";
 import { languageLabels, type Language } from "../../i18n/translations";
+import { AuthLink } from "../../features/auth/components/AuthLink";
 
 function navLinkClass({ isActive }: { isActive: boolean }): string {
   return `flex min-h-10 items-center rounded-xl px-3.5 py-2 text-sm font-bold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700 ${
@@ -332,20 +333,20 @@ export function Navbar() {
               </Link>
             ) : (
               <>
-                <NavLink
-                  className={navLinkClass}
+                <AuthLink
+                  className="flex min-h-10 items-center rounded-xl px-3.5 py-2 text-sm font-bold text-slate-600 transition hover:bg-brand-50 hover:text-brand-900 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                   to="/login"
                   onClick={closeMenu}
                 >
                   {t("Login")}
-                </NavLink>
-                <Link
+                </AuthLink>
+                <AuthLink
                   className="flex min-h-10 items-center justify-center rounded-xl bg-brand-700 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
                   to="/register"
                   onClick={closeMenu}
                 >
                   {t("Create account")}
-                </Link>
+                </AuthLink>
               </>
             )}
           </div>

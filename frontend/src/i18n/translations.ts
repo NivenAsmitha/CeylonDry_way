@@ -345,6 +345,7 @@ const japanese: Record<string, string> = {
   "Sending reset link…": "リセットリンクを送信中…",
   "Send reset link": "リセットリンクを送信",
   "Back to login": "ログインに戻る",
+  "Close authentication dialog": "認証ダイアログを閉じる",
   "Set a new password": "新しいパスワードを設定",
   "This one-time link expires quickly. Completing the reset revokes all existing sessions and does not sign you in automatically.":
     "この使い捨てリンクの有効期限は短く設定されています。リセットが完了すると既存のすべてのセッションが無効になり、自動的にはログインされません。",
@@ -362,12 +363,17 @@ const japanese: Record<string, string> = {
   "Signing in…": "ログイン中…",
   "Join ComfortGo": "ComfortGoに参加",
   "Create your account.": "アカウントを作成。",
-  "Your new account receives the safe Client role automatically. Additional roles are never selected during public registration.":
-    "新しいアカウントには安全なクライアント権限が自動的に付与されます。一般登録で追加権限が選択されることはありません。",
-  "Passwords are protected by the backend and never displayed.":
-    "パスワードはサーバー側で保護され、表示されることはありません。",
-  "Session credentials remain outside browser storage.":
-    "セッション認証情報はブラウザストレージに保存されません。",
+  "Everything you need for a more comfortable journey, in one place.":
+    "より快適な旅に必要な情報を、ひとつの場所で。",
+  "Find nearby facilities": "近くの施設を見つける",
+  "Search by location and compare the details that matter.":
+    "場所から検索し、大切な情報を比較できます。",
+  "Travel with confidence": "安心して移動する",
+  "Check amenities, accessibility, ratings and recent photos.":
+    "設備、バリアフリー、評価、最近の写真を確認できます。",
+  "Help the community": "コミュニティに役立つ",
+  "Share ratings, report updates or list a useful facility.":
+    "評価の共有、情報の報告、便利な施設の登録ができます。",
   "Your details": "お客様情報",
   "Already registered?": "すでに登録済みですか？",
   "Registration failed": "登録できませんでした",

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { useAuth } from "../../auth/hooks/useAuth";
 import {
   useDeleteRating,
@@ -12,6 +11,7 @@ import { getApiErrorMessage } from "../../../types/api.types";
 import { useLanguage } from "../../../i18n/useLanguage";
 import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
 import { useOwnerProperties } from "../../properties/hooks/useOwnerProperties";
+import { AuthLink } from "../../auth/components/AuthLink";
 
 type RatingCategory = keyof FacilityRatingScores;
 
@@ -321,13 +321,13 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
         </p>
       ) : !isAuthenticated ? (
         <p className="mt-6 text-sm text-slate-600">
-          <Link
+          <AuthLink
             className="font-black text-brand-800 underline"
             to="/login"
             state={{ from: `/places/${propertyId}` }}
           >
             {t("Sign in")}
-          </Link>{" "}
+          </AuthLink>{" "}
           {t("with a client account to rate this facility.")}
         </p>
       ) : null}

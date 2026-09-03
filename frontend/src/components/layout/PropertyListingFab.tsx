@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../features/auth/hooks/useAuth";
 import { useLanguage } from "../../i18n/useLanguage";
+import { AuthLink } from "../../features/auth/components/AuthLink";
 
 export function PropertyListingFab() {
   const { user, isAuthenticated } = useAuth();
@@ -145,21 +146,21 @@ export function PropertyListingFab() {
               </div>
             ) : (
               <div className="mt-7 grid gap-3 sm:grid-cols-2">
-                <Link
+                <AuthLink
                   className="inline-flex min-h-12 items-center justify-center rounded-xl bg-brand-700 px-5 font-black text-white"
                   to="/login"
                   state={{ from: "/list-property" }}
                   onClick={() => setOpen(false)}
                 >
                   {t("Sign in to continue")}
-                </Link>
-                <Link
+                </AuthLink>
+                <AuthLink
                   className="inline-flex min-h-12 items-center justify-center rounded-xl border border-slate-300 px-5 font-black text-slate-800"
                   to="/register"
                   onClick={() => setOpen(false)}
                 >
                   {t("Create account")}
-                </Link>
+                </AuthLink>
               </div>
             )}
           </div>

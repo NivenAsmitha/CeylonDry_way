@@ -12,7 +12,15 @@ import {
 import { useLanguage } from "../../i18n/useLanguage";
 import { getApiErrorMessage } from "../../types/api.types";
 
-export function ForgotPasswordPage() {
+interface ForgotPasswordPageProps {
+  embedded?: boolean;
+  onViewChange?: (view: "login") => void;
+}
+
+export function ForgotPasswordPage({
+  embedded = false,
+  onViewChange,
+}: ForgotPasswordPageProps = {}) {
   const { t } = useLanguage();
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordSchema),
@@ -23,12 +31,21 @@ export function ForgotPasswordPage() {
   });
 
   return (
-    <section className="px-4 py-12 sm:px-6 sm:py-16">
-      <div className="mx-auto max-w-md rounded-[2rem] border border-slate-200 bg-white p-6 shadow-xl sm:p-9">
+    <section className={embedded ? "" : "px-4 py-12 sm:px-6 sm:py-16"}>
+      <div
+        className={
+          embedded
+            ? "p-6 pr-16 sm:p-9 sm:pr-16"
+            : "mx-auto max-w-md rounded-4xl border border-slate-200 bg-white p-6 shadow-xl sm:p-9"
+        }
+      >
         <p className="text-xs font-bold uppercase tracking-[0.18em] text-brand-700">
           {t("Account recovery")}
         </p>
-        <h1 className="mt-3 text-3xl font-black tracking-tight text-slate-950">
+        <h1
+          className="mt-3 text-3xl font-black tracking-tight text-slate-950"
+          id="auth-forgot-password-title"
+        >
           {t("Reset your password")}
         </h1>
         <p className="mt-3 text-sm leading-6 text-slate-600">
@@ -82,12 +99,22 @@ export function ForgotPasswordPage() {
           </form>
         )}
 
-        <Link
-          className="mt-6 inline-flex text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 hover:text-brand-900"
-          to="/login"
-        >
-          {t("Back to login")}
-        </Link>
+        {onViewChange ? (
+          <button
+            className="mt-6 inline-flex text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 hover:text-brand-900"
+            type="button"
+            onClick={() => onViewChange("login")}
+          >
+            {t("Back to login")}
+          </button>
+        ) : (
+          <Link
+            className="mt-6 inline-flex text-sm font-bold text-brand-700 underline decoration-brand-200 underline-offset-4 hover:text-brand-900"
+            to="/login"
+          >
+            {t("Back to login")}
+          </Link>
+        )}
       </div>
     </section>
   );
