@@ -131,6 +131,31 @@ const DeveloperOperationsPage = lazy(() =>
     default: module.DeveloperOperationsPage,
   })),
 );
+const SupportPage = lazy(() =>
+  import("../pages/support/SupportPage").then((module) => ({
+    default: module.SupportPage,
+  })),
+);
+const SupportTicketPage = lazy(() =>
+  import("../pages/support/SupportTicketPage").then((module) => ({
+    default: module.SupportTicketPage,
+  })),
+);
+const StaffReviewsPage = lazy(() =>
+  import("../pages/staff/StaffReviewsPage").then((module) => ({
+    default: module.StaffReviewsPage,
+  })),
+);
+const StaffSupportPage = lazy(() =>
+  import("../pages/staff/StaffSupportPage").then((module) => ({
+    default: module.StaffSupportPage,
+  })),
+);
+const StaffSupportTicketPage = lazy(() =>
+  import("../pages/staff/StaffSupportTicketPage").then((module) => ({
+    default: module.StaffSupportTicketPage,
+  })),
+);
 
 export function AppRoutes() {
   return (
@@ -150,6 +175,8 @@ export function AppRoutes() {
           <Route element={<ProtectedRoute />}>
             <Route element={<RoleRoute allowedRoles={["CLIENT"]} />}>
               <Route path="list-property" element={<ListPropertyPage />} />
+              <Route path="support" element={<SupportPage />} />
+              <Route path="support/:id" element={<SupportTicketPage />} />
             </Route>
             <Route element={<RoleRoute allowedRoles={ROLE_NAMES} />}>
               <Route path="profile" element={<ProfilePage />} />
@@ -215,6 +242,16 @@ export function AppRoutes() {
               <Route
                 path="developer/operations"
                 element={<DeveloperOperationsPage />}
+              />
+            </Route>
+            <Route
+              element={<RoleRoute allowedRoles={["REVIEWER", "ADMIN"]} />}
+            >
+              <Route path="staff/reviews" element={<StaffReviewsPage />} />
+              <Route path="staff/support" element={<StaffSupportPage />} />
+              <Route
+                path="staff/support/:id"
+                element={<StaffSupportTicketPage />}
               />
             </Route>
           </Route>

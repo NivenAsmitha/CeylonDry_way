@@ -172,6 +172,14 @@ export function ProfilePage() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
+            {user.roles.includes("CLIENT") ? (
+              <Link
+                className="inline-flex min-h-11 items-center justify-center rounded-xl border border-brand-200 bg-brand-50 px-4 text-sm font-bold text-brand-800 transition hover:bg-brand-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
+                to="/support"
+              >
+                Contact support
+              </Link>
+            ) : null}
             <Link
               className="inline-flex min-h-11 items-center justify-center rounded-xl border border-slate-300 bg-white px-4 text-sm font-bold text-slate-700 transition hover:border-brand-300 hover:text-brand-800 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-700"
               to={workspace.to}

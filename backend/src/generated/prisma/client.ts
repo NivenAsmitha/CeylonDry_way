@@ -94,6 +94,21 @@ export type PropertyReport = Prisma.PropertyReportModel
  */
 export type FacilityRating = Prisma.FacilityRatingModel
 /**
+ * Model FacilityRatingReply
+ * 
+ */
+export type FacilityRatingReply = Prisma.FacilityRatingReplyModel
+/**
+ * Model SupportTicket
+ * 
+ */
+export type SupportTicket = Prisma.SupportTicketModel
+/**
+ * Model SupportMessage
+ * 
+ */
+export type SupportMessage = Prisma.SupportMessageModel
+/**
  * Model Notification
  * 
  */

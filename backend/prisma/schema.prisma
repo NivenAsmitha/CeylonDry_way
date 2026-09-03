@@ -59,6 +59,41 @@ enum NotificationType {
   PROPERTY_REACTIVATED
   ACCOUNT_STATUS_CHANGED
   PASSWORD_CHANGED
+  REVIEW_OWNER_REPLY
+  SUPPORT_TICKET_REPLY
+  SUPPORT_TICKET_ASSIGNED
+}
+
+enum ReviewModerationStatus {
+  VISIBLE
+  HIDDEN
+}
+
+enum SupportTicketCategory {
+  ACCOUNT_LOGIN
+  PROPERTY_LISTING
+  REVIEW_RATING
+  INCORRECT_FACILITY
+  PHOTO_UPLOAD
+  ACCESSIBILITY
+  SAFETY
+  TECHNICAL
+  OTHER
+}
+
+enum SupportTicketStatus {
+  OPEN
+  ASSIGNED
+  WAITING_FOR_CLIENT
+  WAITING_FOR_STAFF
+  ESCALATED
+  RESOLVED
+  CLOSED
+}
+
+enum SupportTicketPriority {
+  NORMAL
+  URGENT
 }
 
 enum PropertyReportCategory {
@@ -92,16 +127,22 @@ model User {
   createdAt       DateTime   @default(now())
   updatedAt       DateTime   @updatedAt
 
-  roles               UserRole[]           @relation("UserRoles")
-  rolesAssigned       UserRole[]           @relation("AssignedRoles")
+  roles               UserRole[]            @relation("UserRoles")
+  rolesAssigned       UserRole[]            @relation("AssignedRoles")
   properties          Property[]
   refreshSessions     RefreshSession[]
-  reviewDecisions     ReviewDecision[]     @relation("ReviewDecisionReviewer")
-  auditLogs           AuditLog[]           @relation("AuditLogActor")
-  notifications       Notification[]       @relation("NotificationRecipient")
+  reviewDecisions     ReviewDecision[]      @relation("ReviewDecisionReviewer")
+  auditLogs           AuditLog[]            @relation("AuditLogActor")
+  notifications       Notification[]        @relation("NotificationRecipient")
   passwordResetTokens PasswordResetToken[]
-  moderatedReports    PropertyReport[]     @relation("PropertyReportModerator")
+  moderatedReports    PropertyReport[]      @relation("PropertyReportModerator")
   facilityRatings     FacilityRating[]
+  ratingReplies       FacilityRatingReply[] @relation("FacilityRatingReplyAuthor")
+  moderatedRatings    FacilityRating[]      @relation("FacilityRatingModerator")
+  moderatedReplies    FacilityRatingReply[] @relation("FacilityRatingReplyModerator")
+  supportTickets      SupportTicket[]       @relation("SupportTicketCreator")
+  assignedTickets     SupportTicket[]       @relation("SupportTicketAssignee")
+  supportMessages     SupportMessage[]
 
   @@index([status])
   @@index([deletedAt])
@@ -187,6 +228,7 @@ model Property {
   reviewDecisions ReviewDecision[]
   reports         PropertyReport[]
   ratings         FacilityRating[]
+  supportTickets  SupportTicket[]
 
   @@index([ownerUserId])
   @@index([lifecycleStatus])
@@ -294,22 +336,93 @@ model PropertyReport {
 }
 
 model FacilityRating {
-  id            String   @id @default(uuid())
-  propertyId    String
-  userId        String
-  cleanliness   Int
-  safety        Int
-  accessibility Int
-  accuracy      Int
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  id               String                 @id @default(uuid())
+  propertyId       String
+  userId           String
+  cleanliness      Int
+  safety           Int
+  accessibility    Int
+  accuracy         Int
+  reviewText       String?                @db.VarChar(1000)
+  visitDate        DateTime?              @db.Date
+  moderationStatus ReviewModerationStatus @default(VISIBLE)
+  moderationReason String?                @db.VarChar(1000)
+  moderatedById    String?
+  moderatedAt      DateTime?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
 
-  property Property @relation(fields: [propertyId], references: [id], onDelete: Cascade)
-  user     User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  property    Property             @relation(fields: [propertyId], references: [id], onDelete: Cascade)
+  user        User                 @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reply       FacilityRatingReply?
+  moderatedBy User?                @relation("FacilityRatingModerator", fields: [moderatedById], references: [id], onDelete: SetNull)
 
   @@unique([propertyId, userId])
   @@index([propertyId, updatedAt])
   @@index([userId, updatedAt])
+  @@index([moderationStatus, updatedAt])
+  @@index([moderatedById, moderatedAt])
+}
+
+model FacilityRatingReply {
+  id               String                 @id @default(uuid())
+  ratingId         String                 @unique
+  authorId         String
+  message          String                 @db.VarChar(1000)
+  moderationStatus ReviewModerationStatus @default(VISIBLE)
+  moderationReason String?                @db.VarChar(1000)
+  moderatedById    String?
+  moderatedAt      DateTime?
+  createdAt        DateTime               @default(now())
+  updatedAt        DateTime               @updatedAt
+
+  rating      FacilityRating @relation(fields: [ratingId], references: [id], onDelete: Cascade)
+  author      User           @relation("FacilityRatingReplyAuthor", fields: [authorId], references: [id], onDelete: Restrict)
+  moderatedBy User?          @relation("FacilityRatingReplyModerator", fields: [moderatedById], references: [id], onDelete: SetNull)
+
+  @@index([authorId, updatedAt])
+  @@index([moderationStatus, updatedAt])
+  @@index([moderatedById, moderatedAt])
+}
+
+model SupportTicket {
+  id                 String                @id @default(uuid())
+  ticketNumber       Int                   @unique @default(autoincrement())
+  createdById        String
+  assignedReviewerId String?
+  relatedPropertyId  String?
+  category           SupportTicketCategory
+  priority           SupportTicketPriority @default(NORMAL)
+  status             SupportTicketStatus   @default(OPEN)
+  subject            String                @db.VarChar(140)
+  closedAt           DateTime?
+  createdAt          DateTime              @default(now())
+  updatedAt          DateTime              @updatedAt
+
+  createdBy        User             @relation("SupportTicketCreator", fields: [createdById], references: [id], onDelete: Restrict)
+  assignedReviewer User?            @relation("SupportTicketAssignee", fields: [assignedReviewerId], references: [id], onDelete: SetNull)
+  relatedProperty  Property?        @relation(fields: [relatedPropertyId], references: [id], onDelete: SetNull)
+  messages         SupportMessage[]
+
+  @@index([createdById, updatedAt])
+  @@index([assignedReviewerId, status, updatedAt])
+  @@index([status, priority, createdAt])
+  @@index([relatedPropertyId])
+}
+
+model SupportMessage {
+  id          String   @id @default(uuid())
+  ticketId    String
+  authorId    String
+  message     String   @db.VarChar(2000)
+  isStaffNote Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  ticket SupportTicket @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  author User          @relation(fields: [authorId], references: [id], onDelete: Restrict)
+
+  @@index([ticketId, createdAt])
+  @@index([authorId, createdAt])
 }
 
 model Notification {

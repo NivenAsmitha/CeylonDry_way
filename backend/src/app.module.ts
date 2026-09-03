@@ -11,6 +11,7 @@ import { PropertiesModule } from './modules/properties/properties.module';
 import { ReviewerModule } from './modules/reviewer/reviewer.module';
 import { ReportsModule } from './modules/reports/reports.module';
 import { RatingsModule } from './modules/ratings/ratings.module';
+import { SupportModule } from './modules/support/support.module';
 import { UsersModule } from './modules/users/users.module';
 import { UserManagementModule } from './modules/user-management/user-management.module';
 import { PrismaModule } from './prisma/prisma.module';
@@ -37,6 +38,7 @@ import { PrismaModule } from './prisma/prisma.module';
     ReviewerModule,
     ReportsModule,
     RatingsModule,
+    SupportModule,
   ],
   controllers: [AppController],
   providers: [AppService],

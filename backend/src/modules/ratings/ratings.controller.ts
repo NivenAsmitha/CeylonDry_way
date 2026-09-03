@@ -5,7 +5,9 @@ import {
   Get,
   Param,
   ParseUUIDPipe,
+  Patch,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -28,6 +30,12 @@ import {
   FacilityRatingSummaryDto,
 } from './dto/facility-rating-response.dto';
 import { UpsertFacilityRatingDto } from './dto/upsert-facility-rating.dto';
+import { ModerateRatingReviewDto } from './dto/moderate-rating-review.dto';
+import {
+  PublicRatingReviewQueryDto,
+  StaffRatingReviewQueryDto,
+} from './dto/rating-review-query.dto';
+import { UpsertRatingReplyDto } from './dto/rating-reply.dto';
 import { RatingsService } from './ratings.service';
 
 @ApiTags('Facility ratings')
@@ -41,6 +49,77 @@ export class PublicRatingsController {
   @ApiNotFoundResponse({ description: 'Place not found' })
   summary(@Param('propertyId', ParseUUIDPipe) propertyId: string) {
     return this.ratings.summary(propertyId);
+  }
+
+  @Get('reviews')
+  @ApiOperation({ summary: 'Get public written reviews and owner replies' })
+  reviews(
+    @Param('propertyId', ParseUUIDPipe) propertyId: string,
+    @Query() query: PublicRatingReviewQueryDto,
+  ) {
+    return this.ratings.publicReviews(propertyId, query);
+  }
+}
+
+@ApiTags('Property owner review replies')
+@ApiBearerAuth()
+@ApiForbiddenResponse({ description: 'The property owner role is required' })
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RoleName.OWNER)
+@Controller('reviews/:reviewId/reply')
+export class OwnerRatingRepliesController {
+  constructor(private readonly ratings: RatingsService) {}
+
+  @Put()
+  @ApiOperation({ summary: 'Create or update the property owner reply' })
+  upsert(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('reviewId', ParseUUIDPipe) reviewId: string,
+    @Body() input: UpsertRatingReplyDto,
+  ) {
+    return this.ratings.upsertOwnerReply(reviewId, user.id, input);
+  }
+
+  @Delete()
+  @ApiOperation({ summary: 'Delete the property owner reply' })
+  remove(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('reviewId', ParseUUIDPipe) reviewId: string,
+  ) {
+    return this.ratings.deleteOwnerReply(reviewId, user.id);
+  }
+}
+
+@ApiTags('Review moderation')
+@ApiBearerAuth()
+@ApiForbiddenResponse({ description: 'REVIEWER or ADMIN role is required' })
+@UseGuards(JwtAuthGuard, RolesGuard)
+@Roles(RoleName.REVIEWER, RoleName.ADMIN)
+@Controller('staff/reviews')
+export class StaffRatingReviewsController {
+  constructor(private readonly ratings: RatingsService) {}
+
+  @Get()
+  list(@Query() query: StaffRatingReviewQueryDto) {
+    return this.ratings.staffReviews(query);
+  }
+
+  @Patch(':reviewId/moderation')
+  moderateReview(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('reviewId', ParseUUIDPipe) reviewId: string,
+    @Body() input: ModerateRatingReviewDto,
+  ) {
+    return this.ratings.moderateReview(user.id, reviewId, input);
+  }
+
+  @Patch('replies/:replyId/moderation')
+  moderateReply(
+    @CurrentUser() user: AuthenticatedUser,
+    @Param('replyId', ParseUUIDPipe) replyId: string,
+    @Body() input: ModerateRatingReviewDto,
+  ) {
+    return this.ratings.moderateReply(user.id, replyId, input);
   }
 }
 

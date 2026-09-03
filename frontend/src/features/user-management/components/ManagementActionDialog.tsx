@@ -7,6 +7,7 @@ interface ManagementActionDialogProps {
   tone?: "default" | "danger";
   isPending: boolean;
   error?: string | null;
+  minimumReasonLength?: number;
   onCancel: () => void;
   onConfirm: (reason: string) => void;
 }
@@ -18,6 +19,7 @@ export function ManagementActionDialog({
   tone = "default",
   isPending,
   error,
+  minimumReasonLength = 5,
   onCancel,
   onConfirm,
 }: ManagementActionDialogProps) {
@@ -59,14 +61,14 @@ export function ManagementActionDialog({
           className="mt-2 min-h-28 w-full rounded-xl border border-slate-300 p-3 outline-none focus:border-brand-700 focus:ring-4 focus:ring-brand-100"
           id="action-reason"
           maxLength={1000}
-          minLength={5}
+          minLength={minimumReasonLength}
           required
           value={reason}
           onChange={(event) => setReason(event.target.value)}
         />
         <p className="mt-1 text-xs text-slate-500">
-          Enter at least 5 characters. The reason is retained in the audit
-          trail.
+          Enter at least {minimumReasonLength} characters. The reason is
+          retained in the audit trail.
         </p>
         {error ? (
           <p className="mt-3 text-sm font-semibold text-red-700" role="alert">
@@ -89,7 +91,9 @@ export function ManagementActionDialog({
                 : "bg-brand-700 hover:bg-brand-800"
             }`}
             type="submit"
-            disabled={isPending || reason.trim().length < 5}
+            disabled={
+              isPending || reason.trim().length < minimumReasonLength
+            }
           >
             {isPending ? "Working…" : confirmLabel}
           </button>

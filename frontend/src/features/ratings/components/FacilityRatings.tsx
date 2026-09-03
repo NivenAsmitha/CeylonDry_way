@@ -11,6 +11,7 @@ import type { FacilityRatingScores } from "../types/rating.types";
 import { getApiErrorMessage } from "../../../types/api.types";
 import { useLanguage } from "../../../i18n/useLanguage";
 import { ConfirmationDialog } from "../../../components/common/ConfirmationDialog";
+import { useOwnerProperties } from "../../properties/hooks/useOwnerProperties";
 
 type RatingCategory = keyof FacilityRatingScores;
 
@@ -84,8 +85,19 @@ function StarInput({
 export function FacilityRatings({ propertyId }: { propertyId: string }) {
   const { t } = useLanguage();
   const { user, isAuthenticated } = useAuth();
+  const hasOwnerRole = user?.roles.includes("OWNER") ?? false;
+  const ownerProperties = useOwnerProperties(
+    "owner",
+    isAuthenticated && hasOwnerRole,
+  );
+  const ownsProperty =
+    hasOwnerRole &&
+    (ownerProperties.data?.items.some((property) => property.id === propertyId) ??
+      false);
   const canRate =
     isAuthenticated &&
+    (!hasOwnerRole || !ownerProperties.isPending) &&
+    !ownsProperty &&
     Boolean(user?.roles.some((role) => role === "CLIENT" || role === "OWNER"));
   const summaryQuery = useRatingSummary(propertyId);
   const myRatingQuery = useMyRating(propertyId, canRate);
@@ -94,6 +106,7 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
   const [draftScores, setDraftScores] = useState<FacilityRatingScores | null>(
     null,
   );
+  const [draftReviewText, setDraftReviewText] = useState<string | null>(null);
   const [saved, setSaved] = useState(false);
   const [confirmRemoval, setConfirmRemoval] = useState(false);
   const scores =
@@ -106,6 +119,7 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
           accuracy: myRatingQuery.data.accuracy,
         }
       : emptyScores);
+  const reviewText = draftReviewText ?? myRatingQuery.data?.reviewText ?? "";
 
   const complete = Object.values(scores).every((score) => score >= 1);
   const busy = saveRating.isPending || deleteRating.isPending;
@@ -113,7 +127,10 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
   async function submitRating(): Promise<void> {
     if (!complete || busy) return;
     setSaved(false);
-    await saveRating.mutateAsync(scores);
+    await saveRating.mutateAsync({
+      ...scores,
+      reviewText: reviewText.trim() || null,
+    });
     setSaved(true);
   }
 
@@ -123,6 +140,7 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
     try {
       await deleteRating.mutateAsync();
       setDraftScores(null);
+      setDraftReviewText(null);
       setConfirmRemoval(false);
     } catch {
       setConfirmRemoval(false);
@@ -203,7 +221,9 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
             )}
           </h3>
           <p className="mt-1 text-sm leading-6 text-slate-500">
-            {t("Select one score for every category based on your own visit.")}
+            {t(
+              "Select one score for every category and optionally share a written review.",
+            )}
           </p>
           <div className="mt-5 grid gap-5 sm:grid-cols-2">
             {categories.map((category) => (
@@ -230,6 +250,29 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
             ))}
           </div>
 
+          <div className="mt-6">
+            <label className="text-sm font-black text-slate-900">
+              {t("Written review (optional)")}
+              <textarea
+                className="mt-2 min-h-32 w-full rounded-xl border border-slate-300 px-4 py-3 font-normal leading-6"
+                maxLength={1000}
+                value={reviewText}
+                placeholder={t(
+                  "Describe cleanliness, accessibility, safety, or whether the listing matched your visit.",
+                )}
+                onChange={(event) => {
+                  setSaved(false);
+                  setDraftReviewText(event.target.value);
+                }}
+              />
+              <span className="mt-1 block text-xs font-normal text-slate-500">
+                {reviewText.length > 0 && reviewText.trim().length < 10
+                  ? t("Write at least 10 characters or leave this blank.")
+                  : `${reviewText.length}/1000`}
+              </span>
+            </label>
+          </div>
+
           {saveRating.isError || deleteRating.isError ? (
             <p className="mt-5 text-sm font-semibold text-red-700" role="alert">
               {getApiErrorMessage(saveRating.error ?? deleteRating.error)}
@@ -250,7 +293,12 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
             <button
               className="min-h-11 rounded-xl bg-brand-700 px-5 text-sm font-black text-white transition hover:bg-brand-800 disabled:cursor-not-allowed disabled:opacity-50"
               type="button"
-              disabled={!complete || busy || myRatingQuery.isPending}
+              disabled={
+                !complete ||
+                busy ||
+                myRatingQuery.isPending ||
+                (reviewText.trim().length > 0 && reviewText.trim().length < 10)
+              }
               onClick={() => void submitRating()}
             >
               {t(saveRating.isPending ? "Saving…" : "Save rating")}
@@ -267,6 +315,10 @@ export function FacilityRatings({ propertyId }: { propertyId: string }) {
             ) : null}
           </div>
         </div>
+      ) : ownsProperty ? (
+        <p className="mt-6 rounded-2xl bg-slate-50 p-4 text-sm text-slate-600">
+          {t("Property owners cannot review their own facilities.")}
+        </p>
       ) : !isAuthenticated ? (
         <p className="mt-6 text-sm text-slate-600">
           <Link

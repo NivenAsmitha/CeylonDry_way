@@ -73,10 +73,57 @@ export const NotificationType = {
   PROPERTY_SUSPENDED: 'PROPERTY_SUSPENDED',
   PROPERTY_REACTIVATED: 'PROPERTY_REACTIVATED',
   ACCOUNT_STATUS_CHANGED: 'ACCOUNT_STATUS_CHANGED',
-  PASSWORD_CHANGED: 'PASSWORD_CHANGED'
+  PASSWORD_CHANGED: 'PASSWORD_CHANGED',
+  REVIEW_OWNER_REPLY: 'REVIEW_OWNER_REPLY',
+  SUPPORT_TICKET_REPLY: 'SUPPORT_TICKET_REPLY',
+  SUPPORT_TICKET_ASSIGNED: 'SUPPORT_TICKET_ASSIGNED'
 } as const
 
 export type NotificationType = (typeof NotificationType)[keyof typeof NotificationType]
+
+
+export const ReviewModerationStatus = {
+  VISIBLE: 'VISIBLE',
+  HIDDEN: 'HIDDEN'
+} as const
+
+export type ReviewModerationStatus = (typeof ReviewModerationStatus)[keyof typeof ReviewModerationStatus]
+
+
+export const SupportTicketCategory = {
+  ACCOUNT_LOGIN: 'ACCOUNT_LOGIN',
+  PROPERTY_LISTING: 'PROPERTY_LISTING',
+  REVIEW_RATING: 'REVIEW_RATING',
+  INCORRECT_FACILITY: 'INCORRECT_FACILITY',
+  PHOTO_UPLOAD: 'PHOTO_UPLOAD',
+  ACCESSIBILITY: 'ACCESSIBILITY',
+  SAFETY: 'SAFETY',
+  TECHNICAL: 'TECHNICAL',
+  OTHER: 'OTHER'
+} as const
+
+export type SupportTicketCategory = (typeof SupportTicketCategory)[keyof typeof SupportTicketCategory]
+
+
+export const SupportTicketStatus = {
+  OPEN: 'OPEN',
+  ASSIGNED: 'ASSIGNED',
+  WAITING_FOR_CLIENT: 'WAITING_FOR_CLIENT',
+  WAITING_FOR_STAFF: 'WAITING_FOR_STAFF',
+  ESCALATED: 'ESCALATED',
+  RESOLVED: 'RESOLVED',
+  CLOSED: 'CLOSED'
+} as const
+
+export type SupportTicketStatus = (typeof SupportTicketStatus)[keyof typeof SupportTicketStatus]
+
+
+export const SupportTicketPriority = {
+  NORMAL: 'NORMAL',
+  URGENT: 'URGENT'
+} as const
+
+export type SupportTicketPriority = (typeof SupportTicketPriority)[keyof typeof SupportTicketPriority]
 
 
 export const PropertyReportCategory = {

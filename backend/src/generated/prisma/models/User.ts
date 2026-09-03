@@ -247,6 +247,12 @@ export type UserWhereInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   moderatedReports?: Prisma.PropertyReportListRelationFilter
   facilityRatings?: Prisma.FacilityRatingListRelationFilter
+  ratingReplies?: Prisma.FacilityRatingReplyListRelationFilter
+  moderatedRatings?: Prisma.FacilityRatingListRelationFilter
+  moderatedReplies?: Prisma.FacilityRatingReplyListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  assignedTickets?: Prisma.SupportTicketListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }
 
 export type UserOrderByWithRelationInput = {
@@ -272,6 +278,12 @@ export type UserOrderByWithRelationInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenOrderByRelationAggregateInput
   moderatedReports?: Prisma.PropertyReportOrderByRelationAggregateInput
   facilityRatings?: Prisma.FacilityRatingOrderByRelationAggregateInput
+  ratingReplies?: Prisma.FacilityRatingReplyOrderByRelationAggregateInput
+  moderatedRatings?: Prisma.FacilityRatingOrderByRelationAggregateInput
+  moderatedReplies?: Prisma.FacilityRatingReplyOrderByRelationAggregateInput
+  supportTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
+  assignedTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
+  supportMessages?: Prisma.SupportMessageOrderByRelationAggregateInput
 }
 
 export type UserWhereUniqueInput = Prisma.AtLeast<{
@@ -300,6 +312,12 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
   passwordResetTokens?: Prisma.PasswordResetTokenListRelationFilter
   moderatedReports?: Prisma.PropertyReportListRelationFilter
   facilityRatings?: Prisma.FacilityRatingListRelationFilter
+  ratingReplies?: Prisma.FacilityRatingReplyListRelationFilter
+  moderatedRatings?: Prisma.FacilityRatingListRelationFilter
+  moderatedReplies?: Prisma.FacilityRatingReplyListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
+  assignedTickets?: Prisma.SupportTicketListRelationFilter
+  supportMessages?: Prisma.SupportMessageListRelationFilter
 }, "id" | "email">
 
 export type UserOrderByWithAggregationInput = {
@@ -361,6 +379,12 @@ export type UserCreateInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateInput = {
@@ -386,6 +410,12 @@ export type UserUncheckedCreateInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUpdateInput = {
@@ -411,6 +441,12 @@ export type UserUpdateInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateInput = {
@@ -436,6 +472,12 @@ export type UserUncheckedUpdateInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateManyInput = {
@@ -680,12 +722,102 @@ export type UserCreateNestedOneWithoutFacilityRatingsInput = {
   connect?: Prisma.UserWhereUniqueInput
 }
 
+export type UserCreateNestedOneWithoutModeratedRatingsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutModeratedRatingsInput, Prisma.UserUncheckedCreateWithoutModeratedRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutModeratedRatingsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
 export type UserUpdateOneRequiredWithoutFacilityRatingsNestedInput = {
   create?: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
   connectOrCreate?: Prisma.UserCreateOrConnectWithoutFacilityRatingsInput
   upsert?: Prisma.UserUpsertWithoutFacilityRatingsInput
   connect?: Prisma.UserWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutFacilityRatingsInput, Prisma.UserUpdateWithoutFacilityRatingsInput>, Prisma.UserUncheckedUpdateWithoutFacilityRatingsInput>
+}
+
+export type UserUpdateOneWithoutModeratedRatingsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutModeratedRatingsInput, Prisma.UserUncheckedCreateWithoutModeratedRatingsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutModeratedRatingsInput
+  upsert?: Prisma.UserUpsertWithoutModeratedRatingsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutModeratedRatingsInput, Prisma.UserUpdateWithoutModeratedRatingsInput>, Prisma.UserUncheckedUpdateWithoutModeratedRatingsInput>
+}
+
+export type UserCreateNestedOneWithoutRatingRepliesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRatingRepliesInput, Prisma.UserUncheckedCreateWithoutRatingRepliesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRatingRepliesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutModeratedRepliesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutModeratedRepliesInput, Prisma.UserUncheckedCreateWithoutModeratedRepliesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutModeratedRepliesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutRatingRepliesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutRatingRepliesInput, Prisma.UserUncheckedCreateWithoutRatingRepliesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutRatingRepliesInput
+  upsert?: Prisma.UserUpsertWithoutRatingRepliesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutRatingRepliesInput, Prisma.UserUpdateWithoutRatingRepliesInput>, Prisma.UserUncheckedUpdateWithoutRatingRepliesInput>
+}
+
+export type UserUpdateOneWithoutModeratedRepliesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutModeratedRepliesInput, Prisma.UserUncheckedCreateWithoutModeratedRepliesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutModeratedRepliesInput
+  upsert?: Prisma.UserUpsertWithoutModeratedRepliesInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutModeratedRepliesInput, Prisma.UserUpdateWithoutModeratedRepliesInput>, Prisma.UserUncheckedUpdateWithoutModeratedRepliesInput>
+}
+
+export type UserCreateNestedOneWithoutSupportTicketsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportTicketsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserCreateNestedOneWithoutAssignedTicketsInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTicketsInput, Prisma.UserUncheckedCreateWithoutAssignedTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTicketsInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSupportTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportTicketsInput
+  upsert?: Prisma.UserUpsertWithoutSupportTicketsInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportTicketsInput, Prisma.UserUpdateWithoutSupportTicketsInput>, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type UserUpdateOneWithoutAssignedTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutAssignedTicketsInput, Prisma.UserUncheckedCreateWithoutAssignedTicketsInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutAssignedTicketsInput
+  upsert?: Prisma.UserUpsertWithoutAssignedTicketsInput
+  disconnect?: Prisma.UserWhereInput | boolean
+  delete?: Prisma.UserWhereInput | boolean
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutAssignedTicketsInput, Prisma.UserUpdateWithoutAssignedTicketsInput>, Prisma.UserUncheckedUpdateWithoutAssignedTicketsInput>
+}
+
+export type UserCreateNestedOneWithoutSupportMessagesInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+}
+
+export type UserUpdateOneRequiredWithoutSupportMessagesNestedInput = {
+  create?: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  connectOrCreate?: Prisma.UserCreateOrConnectWithoutSupportMessagesInput
+  upsert?: Prisma.UserUpsertWithoutSupportMessagesInput
+  connect?: Prisma.UserWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.UserUpdateToOneWithWhereWithoutSupportMessagesInput, Prisma.UserUpdateWithoutSupportMessagesInput>, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
 }
 
 export type UserCreateNestedOneWithoutNotificationsInput = {
@@ -724,6 +856,12 @@ export type UserCreateWithoutPasswordResetTokensInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
@@ -748,6 +886,12 @@ export type UserUncheckedCreateWithoutPasswordResetTokensInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutPasswordResetTokensInput = {
@@ -788,6 +932,12 @@ export type UserUpdateWithoutPasswordResetTokensInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
@@ -812,6 +962,12 @@ export type UserUncheckedUpdateWithoutPasswordResetTokensInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutRefreshSessionsInput = {
@@ -836,6 +992,12 @@ export type UserCreateWithoutRefreshSessionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutRefreshSessionsInput = {
@@ -860,6 +1022,12 @@ export type UserUncheckedCreateWithoutRefreshSessionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutRefreshSessionsInput = {
@@ -900,6 +1068,12 @@ export type UserUpdateWithoutRefreshSessionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
@@ -924,6 +1098,12 @@ export type UserUncheckedUpdateWithoutRefreshSessionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutRolesInput = {
@@ -948,6 +1128,12 @@ export type UserCreateWithoutRolesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutRolesInput = {
@@ -972,6 +1158,12 @@ export type UserUncheckedCreateWithoutRolesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutRolesInput = {
@@ -1001,6 +1193,12 @@ export type UserCreateWithoutRolesAssignedInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutRolesAssignedInput = {
@@ -1025,6 +1223,12 @@ export type UserUncheckedCreateWithoutRolesAssignedInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutRolesAssignedInput = {
@@ -1065,6 +1269,12 @@ export type UserUpdateWithoutRolesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesInput = {
@@ -1089,6 +1299,12 @@ export type UserUncheckedUpdateWithoutRolesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUpsertWithoutRolesAssignedInput = {
@@ -1124,6 +1340,12 @@ export type UserUpdateWithoutRolesAssignedInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutRolesAssignedInput = {
@@ -1148,6 +1370,12 @@ export type UserUncheckedUpdateWithoutRolesAssignedInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutPropertiesInput = {
@@ -1172,6 +1400,12 @@ export type UserCreateWithoutPropertiesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutPropertiesInput = {
@@ -1196,6 +1430,12 @@ export type UserUncheckedCreateWithoutPropertiesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutPropertiesInput = {
@@ -1236,6 +1476,12 @@ export type UserUpdateWithoutPropertiesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutPropertiesInput = {
@@ -1260,6 +1506,12 @@ export type UserUncheckedUpdateWithoutPropertiesInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutReviewDecisionsInput = {
@@ -1284,6 +1536,12 @@ export type UserCreateWithoutReviewDecisionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutReviewDecisionsInput = {
@@ -1308,6 +1566,12 @@ export type UserUncheckedCreateWithoutReviewDecisionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutReviewDecisionsInput = {
@@ -1348,6 +1612,12 @@ export type UserUpdateWithoutReviewDecisionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutReviewDecisionsInput = {
@@ -1372,6 +1642,12 @@ export type UserUncheckedUpdateWithoutReviewDecisionsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutAuditLogsInput = {
@@ -1396,6 +1672,12 @@ export type UserCreateWithoutAuditLogsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutAuditLogsInput = {
@@ -1420,6 +1702,12 @@ export type UserUncheckedCreateWithoutAuditLogsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutAuditLogsInput = {
@@ -1460,6 +1748,12 @@ export type UserUpdateWithoutAuditLogsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutAuditLogsInput = {
@@ -1484,6 +1778,12 @@ export type UserUncheckedUpdateWithoutAuditLogsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutModeratedReportsInput = {
@@ -1508,6 +1808,12 @@ export type UserCreateWithoutModeratedReportsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutModeratedReportsInput = {
@@ -1532,6 +1838,12 @@ export type UserUncheckedCreateWithoutModeratedReportsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutModeratedReportsInput = {
@@ -1572,6 +1884,12 @@ export type UserUpdateWithoutModeratedReportsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutModeratedReportsInput = {
@@ -1596,6 +1914,12 @@ export type UserUncheckedUpdateWithoutModeratedReportsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserCreateWithoutFacilityRatingsInput = {
@@ -1620,6 +1944,12 @@ export type UserCreateWithoutFacilityRatingsInput = {
   notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutFacilityRatingsInput = {
@@ -1644,11 +1974,82 @@ export type UserUncheckedCreateWithoutFacilityRatingsInput = {
   notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutFacilityRatingsInput = {
   where: Prisma.UserWhereUniqueInput
   create: Prisma.XOR<Prisma.UserCreateWithoutFacilityRatingsInput, Prisma.UserUncheckedCreateWithoutFacilityRatingsInput>
+}
+
+export type UserCreateWithoutModeratedRatingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutModeratedRatingsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutModeratedRatingsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutModeratedRatingsInput, Prisma.UserUncheckedCreateWithoutModeratedRatingsInput>
 }
 
 export type UserUpsertWithoutFacilityRatingsInput = {
@@ -1684,6 +2085,12 @@ export type UserUpdateWithoutFacilityRatingsInput = {
   notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutFacilityRatingsInput = {
@@ -1708,6 +2115,763 @@ export type UserUncheckedUpdateWithoutFacilityRatingsInput = {
   notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUpsertWithoutModeratedRatingsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutModeratedRatingsInput, Prisma.UserUncheckedUpdateWithoutModeratedRatingsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutModeratedRatingsInput, Prisma.UserUncheckedCreateWithoutModeratedRatingsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutModeratedRatingsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutModeratedRatingsInput, Prisma.UserUncheckedUpdateWithoutModeratedRatingsInput>
+}
+
+export type UserUpdateWithoutModeratedRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutModeratedRatingsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutRatingRepliesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutRatingRepliesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutRatingRepliesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutRatingRepliesInput, Prisma.UserUncheckedCreateWithoutRatingRepliesInput>
+}
+
+export type UserCreateWithoutModeratedRepliesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutModeratedRepliesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutModeratedRepliesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutModeratedRepliesInput, Prisma.UserUncheckedCreateWithoutModeratedRepliesInput>
+}
+
+export type UserUpsertWithoutRatingRepliesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutRatingRepliesInput, Prisma.UserUncheckedUpdateWithoutRatingRepliesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutRatingRepliesInput, Prisma.UserUncheckedCreateWithoutRatingRepliesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutRatingRepliesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutRatingRepliesInput, Prisma.UserUncheckedUpdateWithoutRatingRepliesInput>
+}
+
+export type UserUpdateWithoutRatingRepliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutRatingRepliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUpsertWithoutModeratedRepliesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutModeratedRepliesInput, Prisma.UserUncheckedUpdateWithoutModeratedRepliesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutModeratedRepliesInput, Prisma.UserUncheckedCreateWithoutModeratedRepliesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutModeratedRepliesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutModeratedRepliesInput, Prisma.UserUncheckedUpdateWithoutModeratedRepliesInput>
+}
+
+export type UserUpdateWithoutModeratedRepliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutModeratedRepliesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutSupportTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutSupportTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutSupportTicketsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+}
+
+export type UserCreateWithoutAssignedTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
+}
+
+export type UserUncheckedCreateWithoutAssignedTicketsInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
+}
+
+export type UserCreateOrConnectWithoutAssignedTicketsInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTicketsInput, Prisma.UserUncheckedCreateWithoutAssignedTicketsInput>
+}
+
+export type UserUpsertWithoutSupportTicketsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupportTicketsInput, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportTicketsInput, Prisma.UserUncheckedCreateWithoutSupportTicketsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupportTicketsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupportTicketsInput, Prisma.UserUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type UserUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUpsertWithoutAssignedTicketsInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTicketsInput, Prisma.UserUncheckedUpdateWithoutAssignedTicketsInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutAssignedTicketsInput, Prisma.UserUncheckedCreateWithoutAssignedTicketsInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutAssignedTicketsInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutAssignedTicketsInput, Prisma.UserUncheckedUpdateWithoutAssignedTicketsInput>
+}
+
+export type UserUpdateWithoutAssignedTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserUncheckedUpdateWithoutAssignedTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
+}
+
+export type UserCreateWithoutSupportMessagesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+}
+
+export type UserUncheckedCreateWithoutSupportMessagesInput = {
+  id?: string
+  email: string
+  passwordHash: string
+  name: string
+  phone?: string | null
+  language?: string
+  status?: $Enums.UserStatus
+  statusChangedAt?: Date | string
+  deletedAt?: Date | string | null
+  deletionReason?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  roles?: Prisma.UserRoleUncheckedCreateNestedManyWithoutUserInput
+  rolesAssigned?: Prisma.UserRoleUncheckedCreateNestedManyWithoutAssignedByInput
+  properties?: Prisma.PropertyUncheckedCreateNestedManyWithoutOwnerInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedCreateNestedManyWithoutUserInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutReviewerInput
+  auditLogs?: Prisma.AuditLogUncheckedCreateNestedManyWithoutActorInput
+  notifications?: Prisma.NotificationUncheckedCreateNestedManyWithoutRecipientInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
+  moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+}
+
+export type UserCreateOrConnectWithoutSupportMessagesInput = {
+  where: Prisma.UserWhereUniqueInput
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+}
+
+export type UserUpsertWithoutSupportMessagesInput = {
+  update: Prisma.XOR<Prisma.UserUpdateWithoutSupportMessagesInput, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
+  create: Prisma.XOR<Prisma.UserCreateWithoutSupportMessagesInput, Prisma.UserUncheckedCreateWithoutSupportMessagesInput>
+  where?: Prisma.UserWhereInput
+}
+
+export type UserUpdateToOneWithWhereWithoutSupportMessagesInput = {
+  where?: Prisma.UserWhereInput
+  data: Prisma.XOR<Prisma.UserUpdateWithoutSupportMessagesInput, Prisma.UserUncheckedUpdateWithoutSupportMessagesInput>
+}
+
+export type UserUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+}
+
+export type UserUncheckedUpdateWithoutSupportMessagesInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  email?: Prisma.StringFieldUpdateOperationsInput | string
+  passwordHash?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.StringFieldUpdateOperationsInput | string
+  phone?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  language?: Prisma.StringFieldUpdateOperationsInput | string
+  status?: Prisma.EnumUserStatusFieldUpdateOperationsInput | $Enums.UserStatus
+  statusChangedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  deletedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  deletionReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  roles?: Prisma.UserRoleUncheckedUpdateManyWithoutUserNestedInput
+  rolesAssigned?: Prisma.UserRoleUncheckedUpdateManyWithoutAssignedByNestedInput
+  properties?: Prisma.PropertyUncheckedUpdateManyWithoutOwnerNestedInput
+  refreshSessions?: Prisma.RefreshSessionUncheckedUpdateManyWithoutUserNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutReviewerNestedInput
+  auditLogs?: Prisma.AuditLogUncheckedUpdateManyWithoutActorNestedInput
+  notifications?: Prisma.NotificationUncheckedUpdateManyWithoutRecipientNestedInput
+  passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
+  moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
+  facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
 }
 
 export type UserCreateWithoutNotificationsInput = {
@@ -1732,6 +2896,12 @@ export type UserCreateWithoutNotificationsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageCreateNestedManyWithoutAuthorInput
 }
 
 export type UserUncheckedCreateWithoutNotificationsInput = {
@@ -1756,6 +2926,12 @@ export type UserUncheckedCreateWithoutNotificationsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedCreateNestedManyWithoutUserInput
   moderatedReports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutModeratorInput
   facilityRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutUserInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutAuthorInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedCreateNestedManyWithoutModeratedByInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutCreatedByInput
+  assignedTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutAssignedReviewerInput
+  supportMessages?: Prisma.SupportMessageUncheckedCreateNestedManyWithoutAuthorInput
 }
 
 export type UserCreateOrConnectWithoutNotificationsInput = {
@@ -1796,6 +2972,12 @@ export type UserUpdateWithoutNotificationsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUpdateManyWithoutAuthorNestedInput
 }
 
 export type UserUncheckedUpdateWithoutNotificationsInput = {
@@ -1820,6 +3002,12 @@ export type UserUncheckedUpdateWithoutNotificationsInput = {
   passwordResetTokens?: Prisma.PasswordResetTokenUncheckedUpdateManyWithoutUserNestedInput
   moderatedReports?: Prisma.PropertyReportUncheckedUpdateManyWithoutModeratorNestedInput
   facilityRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutUserNestedInput
+  ratingReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutAuthorNestedInput
+  moderatedRatings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput
+  moderatedReplies?: Prisma.FacilityRatingReplyUncheckedUpdateManyWithoutModeratedByNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutCreatedByNestedInput
+  assignedTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutAssignedReviewerNestedInput
+  supportMessages?: Prisma.SupportMessageUncheckedUpdateManyWithoutAuthorNestedInput
 }
 
 
@@ -1838,6 +3026,12 @@ export type UserCountOutputType = {
   passwordResetTokens: number
   moderatedReports: number
   facilityRatings: number
+  ratingReplies: number
+  moderatedRatings: number
+  moderatedReplies: number
+  supportTickets: number
+  assignedTickets: number
+  supportMessages: number
 }
 
 export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1851,6 +3045,12 @@ export type UserCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.I
   passwordResetTokens?: boolean | UserCountOutputTypeCountPasswordResetTokensArgs
   moderatedReports?: boolean | UserCountOutputTypeCountModeratedReportsArgs
   facilityRatings?: boolean | UserCountOutputTypeCountFacilityRatingsArgs
+  ratingReplies?: boolean | UserCountOutputTypeCountRatingRepliesArgs
+  moderatedRatings?: boolean | UserCountOutputTypeCountModeratedRatingsArgs
+  moderatedReplies?: boolean | UserCountOutputTypeCountModeratedRepliesArgs
+  supportTickets?: boolean | UserCountOutputTypeCountSupportTicketsArgs
+  assignedTickets?: boolean | UserCountOutputTypeCountAssignedTicketsArgs
+  supportMessages?: boolean | UserCountOutputTypeCountSupportMessagesArgs
 }
 
 /**
@@ -1933,6 +3133,48 @@ export type UserCountOutputTypeCountFacilityRatingsArgs<ExtArgs extends runtime.
   where?: Prisma.FacilityRatingWhereInput
 }
 
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountRatingRepliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityRatingReplyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountModeratedRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityRatingWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountModeratedRepliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.FacilityRatingReplyWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountAssignedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
+/**
+ * UserCountOutputType without action
+ */
+export type UserCountOutputTypeCountSupportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportMessageWhereInput
+}
+
 
 export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1957,6 +3199,12 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   moderatedReports?: boolean | Prisma.User$moderatedReportsArgs<ExtArgs>
   facilityRatings?: boolean | Prisma.User$facilityRatingsArgs<ExtArgs>
+  ratingReplies?: boolean | Prisma.User$ratingRepliesArgs<ExtArgs>
+  moderatedRatings?: boolean | Prisma.User$moderatedRatingsArgs<ExtArgs>
+  moderatedReplies?: boolean | Prisma.User$moderatedRepliesArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
+  assignedTickets?: boolean | Prisma.User$assignedTicketsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.User$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["user"]>
 
@@ -2017,6 +3265,12 @@ export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   passwordResetTokens?: boolean | Prisma.User$passwordResetTokensArgs<ExtArgs>
   moderatedReports?: boolean | Prisma.User$moderatedReportsArgs<ExtArgs>
   facilityRatings?: boolean | Prisma.User$facilityRatingsArgs<ExtArgs>
+  ratingReplies?: boolean | Prisma.User$ratingRepliesArgs<ExtArgs>
+  moderatedRatings?: boolean | Prisma.User$moderatedRatingsArgs<ExtArgs>
+  moderatedReplies?: boolean | Prisma.User$moderatedRepliesArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.User$supportTicketsArgs<ExtArgs>
+  assignedTickets?: boolean | Prisma.User$assignedTicketsArgs<ExtArgs>
+  supportMessages?: boolean | Prisma.User$supportMessagesArgs<ExtArgs>
   _count?: boolean | Prisma.UserCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type UserIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
@@ -2035,6 +3289,12 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     passwordResetTokens: Prisma.$PasswordResetTokenPayload<ExtArgs>[]
     moderatedReports: Prisma.$PropertyReportPayload<ExtArgs>[]
     facilityRatings: Prisma.$FacilityRatingPayload<ExtArgs>[]
+    ratingReplies: Prisma.$FacilityRatingReplyPayload<ExtArgs>[]
+    moderatedRatings: Prisma.$FacilityRatingPayload<ExtArgs>[]
+    moderatedReplies: Prisma.$FacilityRatingReplyPayload<ExtArgs>[]
+    supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+    assignedTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
+    supportMessages: Prisma.$SupportMessagePayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -2453,6 +3713,12 @@ export interface Prisma__UserClient<T, Null = never, ExtArgs extends runtime.Typ
   passwordResetTokens<T extends Prisma.User$passwordResetTokensArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$passwordResetTokensArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PasswordResetTokenPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   moderatedReports<T extends Prisma.User$moderatedReportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderatedReportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   facilityRatings<T extends Prisma.User$facilityRatingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$facilityRatingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  ratingReplies<T extends Prisma.User$ratingRepliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$ratingRepliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  moderatedRatings<T extends Prisma.User$moderatedRatingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderatedRatingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  moderatedReplies<T extends Prisma.User$moderatedRepliesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$moderatedRepliesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingReplyPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTickets<T extends Prisma.User$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  assignedTickets<T extends Prisma.User$assignedTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$assignedTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportMessages<T extends Prisma.User$supportMessagesArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.User$supportMessagesArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportMessagePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -3124,6 +4390,150 @@ export type User$facilityRatingsArgs<ExtArgs extends runtime.Types.Extensions.In
   take?: number
   skip?: number
   distinct?: Prisma.FacilityRatingScalarFieldEnum | Prisma.FacilityRatingScalarFieldEnum[]
+}
+
+/**
+ * User.ratingReplies
+ */
+export type User$ratingRepliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRatingReply
+   */
+  select?: Prisma.FacilityRatingReplySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRatingReply
+   */
+  omit?: Prisma.FacilityRatingReplyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingReplyInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingReplyWhereInput
+  orderBy?: Prisma.FacilityRatingReplyOrderByWithRelationInput | Prisma.FacilityRatingReplyOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityRatingReplyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityRatingReplyScalarFieldEnum | Prisma.FacilityRatingReplyScalarFieldEnum[]
+}
+
+/**
+ * User.moderatedRatings
+ */
+export type User$moderatedRatingsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRating
+   */
+  select?: Prisma.FacilityRatingSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRating
+   */
+  omit?: Prisma.FacilityRatingOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingWhereInput
+  orderBy?: Prisma.FacilityRatingOrderByWithRelationInput | Prisma.FacilityRatingOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityRatingWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityRatingScalarFieldEnum | Prisma.FacilityRatingScalarFieldEnum[]
+}
+
+/**
+ * User.moderatedReplies
+ */
+export type User$moderatedRepliesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRatingReply
+   */
+  select?: Prisma.FacilityRatingReplySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRatingReply
+   */
+  omit?: Prisma.FacilityRatingReplyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingReplyInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingReplyWhereInput
+  orderBy?: Prisma.FacilityRatingReplyOrderByWithRelationInput | Prisma.FacilityRatingReplyOrderByWithRelationInput[]
+  cursor?: Prisma.FacilityRatingReplyWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.FacilityRatingReplyScalarFieldEnum | Prisma.FacilityRatingReplyScalarFieldEnum[]
+}
+
+/**
+ * User.supportTickets
+ */
+export type User$supportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * User.assignedTickets
+ */
+export type User$assignedTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
+}
+
+/**
+ * User.supportMessages
+ */
+export type User$supportMessagesArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportMessage
+   */
+  select?: Prisma.SupportMessageSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportMessage
+   */
+  omit?: Prisma.SupportMessageOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportMessageInclude<ExtArgs> | null
+  where?: Prisma.SupportMessageWhereInput
+  orderBy?: Prisma.SupportMessageOrderByWithRelationInput | Prisma.SupportMessageOrderByWithRelationInput[]
+  cursor?: Prisma.SupportMessageWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportMessageScalarFieldEnum | Prisma.SupportMessageScalarFieldEnum[]
 }
 
 /**

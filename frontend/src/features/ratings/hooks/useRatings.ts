@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { PRIVATE_QUERY_KEY } from "../../../services/queryClient";
 import * as ratingsService from "../services/ratings.service";
-import type { FacilityRatingScores } from "../types/rating.types";
+import type { FacilityRatingInput } from "../types/rating.types";
 
 const PUBLIC_RATINGS_QUERY_KEY = ["public", "facility-ratings"] as const;
 
@@ -32,14 +32,48 @@ export function useMyRating(propertyId: string, enabled: boolean) {
 export function useSaveRating(propertyId: string) {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (scores: FacilityRatingScores) =>
+    mutationFn: (scores: FacilityRatingInput) =>
       ratingsService.saveMyRating(propertyId, scores),
     onSuccess: async (rating) => {
       queryClient.setQueryData(myRatingQueryKey(propertyId), rating);
       await queryClient.invalidateQueries({
         queryKey: ratingSummaryQueryKey(propertyId),
       });
+      await queryClient.invalidateQueries({
+        queryKey: [...PUBLIC_RATINGS_QUERY_KEY, propertyId, "reviews"],
+      });
     },
+  });
+}
+
+export function useFacilityReviews(propertyId: string, page = 1) {
+  return useQuery({
+    queryKey: [...PUBLIC_RATINGS_QUERY_KEY, propertyId, "reviews", page],
+    queryFn: ({ signal }) =>
+      ratingsService.getFacilityReviews(propertyId, page, signal),
+  });
+}
+
+export function useSaveOwnerReply(propertyId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ reviewId, message }: { reviewId: string; message: string }) =>
+      ratingsService.saveOwnerReply(reviewId, message),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [...PUBLIC_RATINGS_QUERY_KEY, propertyId, "reviews"],
+      }),
+  });
+}
+
+export function useDeleteOwnerReply(propertyId: string) {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (reviewId: string) => ratingsService.deleteOwnerReply(reviewId),
+    onSuccess: () =>
+      queryClient.invalidateQueries({
+        queryKey: [...PUBLIC_RATINGS_QUERY_KEY, propertyId, "reviews"],
+      }),
   });
 }
 

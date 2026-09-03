@@ -36,6 +36,12 @@ export class FacilityRatingDto {
   @ApiProperty({ minimum: 1, maximum: 5 })
   accuracy!: number;
 
+  @ApiProperty({ nullable: true })
+  reviewText!: string | null;
+
+  @ApiProperty({ format: 'date', nullable: true })
+  visitDate!: string | null;
+
   @ApiProperty({ format: 'date-time' })
   createdAt!: string;
 

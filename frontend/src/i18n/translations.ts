@@ -373,6 +373,79 @@ const japanese: Record<string, string> = {
     "カードを選択すると地図上のマーカーに移動します。設備、写真、道順は詳細ページで確認できます。",
   "No verified places match these filters. Try a broader city, district, or radius.":
     "条件に一致する確認済み施設がありません。市、地区、検索範囲を広げてください。",
+  Support: "サポート",
+  Reviews: "レビュー",
+  "Contact support": "サポートに問い合わせる",
+  "Select one score for every category and optionally share a written review.":
+    "各項目を評価し、必要に応じてレビューを投稿してください。",
+  "Written review (optional)": "レビュー（任意）",
+  "Describe cleanliness, accessibility, safety, or whether the listing matched your visit.":
+    "清潔さ、バリアフリー、安全性、掲載情報が実際と一致していたかをお書きください。",
+  "Write at least 10 characters or leave this blank.":
+    "10文字以上入力するか、空欄にしてください。",
+  "Visit date (optional)": "訪問日（任意）",
+  "Property owners cannot review their own facilities.":
+    "施設所有者は自分の施設をレビューできません。",
+  "Visitor feedback": "利用者の声",
+  "Written reviews": "レビュー",
+  reviews: "件のレビュー",
+  Visited: "訪問日",
+  Edited: "編集済み",
+  Accuracy: "情報の正確さ",
+  "Response from the property owner": "施設所有者からの返信",
+  "Edit reply": "返信を編集",
+  "Delete reply": "返信を削除",
+  "Reply as property owner": "施設所有者として返信",
+  "Public owner reply": "公開返信",
+  Cancel: "キャンセル",
+  "Publish reply": "返信を公開",
+  "No written reviews have been shared yet.":
+    "まだレビューは投稿されていません。",
+  "Delete your public reply?": "公開返信を削除しますか？",
+  "The reply will be removed from this review.":
+    "このレビューから返信が削除されます。",
+  "Help centre": "ヘルプセンター",
+  "Send a private message to the ComfortGo review team and follow every reply in one place.":
+    "ComfortGoの審査チームへ非公開メッセージを送り、すべての返信を一か所で確認できます。",
+  "You can expect a reply within 24 hours.":
+    "通常24時間以内に返信いたします。",
+  "Cancel new request": "新規問い合わせをキャンセル",
+  "New support request": "新しい問い合わせ",
+  "How can we help?": "どのようなことでお困りですか？",
+  "Problem category": "問題の種類",
+  Priority: "優先度",
+  Normal: "通常",
+  "Urgent safety or access problem": "緊急の安全・アクセス問題",
+  Subject: "件名",
+  Message: "メッセージ",
+  "Explain what happened, what you expected, and which facility or feature is affected.":
+    "発生したこと、期待していたこと、影響を受けた施設や機能を詳しくお書きください。",
+  "Sending…": "送信中…",
+  "Send support request": "問い合わせを送信",
+  "My support requests": "サポート履歴",
+  messages: "件のメッセージ",
+  Updated: "更新",
+  "You have not created any support requests yet.":
+    "サポートへの問い合わせはまだありません。",
+  "Account or login problem": "アカウントまたはログインの問題",
+  "Property listing problem": "施設掲載の問題",
+  "Review or rating problem": "レビューまたは評価の問題",
+  "Incorrect facility information": "施設情報の誤り",
+  "Photo-upload problem": "写真アップロードの問題",
+  "Accessibility concern": "バリアフリーに関する問題",
+  "Safety concern": "安全性に関する問題",
+  "Technical problem": "技術的な問題",
+  "Assigned to": "担当者",
+  "Waiting for a reviewer": "審査担当者の対応待ち",
+  "ComfortGo support": "ComfortGoサポート",
+  You: "あなた",
+  Reply: "返信",
+  "Close request": "問い合わせを終了",
+  "Send reply": "返信を送信",
+  "This support request is closed.": "この問い合わせは終了しています。",
+  "Close this support request?": "この問い合わせを終了しますか？",
+  "You will no longer be able to add messages to this conversation.":
+    "終了後はこの会話にメッセージを追加できません。",
 };
 
 export function translate(

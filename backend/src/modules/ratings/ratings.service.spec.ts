@@ -1,4 +1,4 @@
-import { NotFoundException } from '@nestjs/common';
+import { ForbiddenException, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../../prisma/prisma.service';
 import { RatingsService } from './ratings.service';
 
@@ -103,5 +103,23 @@ describe('RatingsService', () => {
       NotFoundException,
     );
     expect(facilityRating.aggregate).not.toHaveBeenCalled();
+  });
+
+  it('prevents a property owner from reviewing their own facility', async () => {
+    property.findFirst.mockResolvedValue({
+      id: 'property-1',
+      ownerUserId: 'owner-1',
+    });
+
+    await expect(
+      service.upsert('property-1', 'owner-1', {
+        cleanliness: 5,
+        safety: 5,
+        accessibility: 5,
+        accuracy: 5,
+        reviewText: 'This should not be accepted.',
+      }),
+    ).rejects.toBeInstanceOf(ForbiddenException);
+    expect(facilityRating.upsert).not.toHaveBeenCalled();
   });
 });

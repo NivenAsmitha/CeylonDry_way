@@ -33,11 +33,15 @@ export function usePropertyAmenities() {
   });
 }
 
-export function useOwnerProperties(workflow: PropertyWorkflow = "owner") {
+export function useOwnerProperties(
+  workflow: PropertyWorkflow = "owner",
+  enabled = true,
+) {
   return useQuery({
     queryKey: [...OWNER_PROPERTIES_QUERY_KEY, workflow],
     queryFn: ({ signal }) =>
       propertiesService.listOwnerProperties(signal, workflow),
+    enabled,
   });
 }
 

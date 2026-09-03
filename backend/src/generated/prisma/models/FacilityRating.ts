@@ -47,6 +47,12 @@ export type FacilityRatingMinAggregateOutputType = {
   safety: number | null
   accessibility: number | null
   accuracy: number | null
+  reviewText: string | null
+  visitDate: Date | null
+  moderationStatus: $Enums.ReviewModerationStatus | null
+  moderationReason: string | null
+  moderatedById: string | null
+  moderatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -59,6 +65,12 @@ export type FacilityRatingMaxAggregateOutputType = {
   safety: number | null
   accessibility: number | null
   accuracy: number | null
+  reviewText: string | null
+  visitDate: Date | null
+  moderationStatus: $Enums.ReviewModerationStatus | null
+  moderationReason: string | null
+  moderatedById: string | null
+  moderatedAt: Date | null
   createdAt: Date | null
   updatedAt: Date | null
 }
@@ -71,6 +83,12 @@ export type FacilityRatingCountAggregateOutputType = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText: number
+  visitDate: number
+  moderationStatus: number
+  moderationReason: number
+  moderatedById: number
+  moderatedAt: number
   createdAt: number
   updatedAt: number
   _all: number
@@ -99,6 +117,12 @@ export type FacilityRatingMinAggregateInputType = {
   safety?: true
   accessibility?: true
   accuracy?: true
+  reviewText?: true
+  visitDate?: true
+  moderationStatus?: true
+  moderationReason?: true
+  moderatedById?: true
+  moderatedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -111,6 +135,12 @@ export type FacilityRatingMaxAggregateInputType = {
   safety?: true
   accessibility?: true
   accuracy?: true
+  reviewText?: true
+  visitDate?: true
+  moderationStatus?: true
+  moderationReason?: true
+  moderatedById?: true
+  moderatedAt?: true
   createdAt?: true
   updatedAt?: true
 }
@@ -123,6 +153,12 @@ export type FacilityRatingCountAggregateInputType = {
   safety?: true
   accessibility?: true
   accuracy?: true
+  reviewText?: true
+  visitDate?: true
+  moderationStatus?: true
+  moderationReason?: true
+  moderatedById?: true
+  moderatedAt?: true
   createdAt?: true
   updatedAt?: true
   _all?: true
@@ -222,6 +258,12 @@ export type FacilityRatingGroupByOutputType = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText: string | null
+  visitDate: Date | null
+  moderationStatus: $Enums.ReviewModerationStatus
+  moderationReason: string | null
+  moderatedById: string | null
+  moderatedAt: Date | null
   createdAt: Date
   updatedAt: Date
   _count: FacilityRatingCountAggregateOutputType | null
@@ -257,10 +299,18 @@ export type FacilityRatingWhereInput = {
   safety?: Prisma.IntFilter<"FacilityRating"> | number
   accessibility?: Prisma.IntFilter<"FacilityRating"> | number
   accuracy?: Prisma.IntFilter<"FacilityRating"> | number
+  reviewText?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  visitDate?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFilter<"FacilityRating"> | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedById?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedAt?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  reply?: Prisma.XOR<Prisma.FacilityRatingReplyNullableScalarRelationFilter, Prisma.FacilityRatingReplyWhereInput> | null
+  moderatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }
 
 export type FacilityRatingOrderByWithRelationInput = {
@@ -271,10 +321,18 @@ export type FacilityRatingOrderByWithRelationInput = {
   safety?: Prisma.SortOrder
   accessibility?: Prisma.SortOrder
   accuracy?: Prisma.SortOrder
+  reviewText?: Prisma.SortOrderInput | Prisma.SortOrder
+  visitDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderationStatus?: Prisma.SortOrder
+  moderationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   property?: Prisma.PropertyOrderByWithRelationInput
   user?: Prisma.UserOrderByWithRelationInput
+  reply?: Prisma.FacilityRatingReplyOrderByWithRelationInput
+  moderatedBy?: Prisma.UserOrderByWithRelationInput
 }
 
 export type FacilityRatingWhereUniqueInput = Prisma.AtLeast<{
@@ -289,10 +347,18 @@ export type FacilityRatingWhereUniqueInput = Prisma.AtLeast<{
   safety?: Prisma.IntFilter<"FacilityRating"> | number
   accessibility?: Prisma.IntFilter<"FacilityRating"> | number
   accuracy?: Prisma.IntFilter<"FacilityRating"> | number
+  reviewText?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  visitDate?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFilter<"FacilityRating"> | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedById?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedAt?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
   property?: Prisma.XOR<Prisma.PropertyScalarRelationFilter, Prisma.PropertyWhereInput>
   user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  reply?: Prisma.XOR<Prisma.FacilityRatingReplyNullableScalarRelationFilter, Prisma.FacilityRatingReplyWhereInput> | null
+  moderatedBy?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
 }, "id" | "propertyId_userId">
 
 export type FacilityRatingOrderByWithAggregationInput = {
@@ -303,6 +369,12 @@ export type FacilityRatingOrderByWithAggregationInput = {
   safety?: Prisma.SortOrder
   accessibility?: Prisma.SortOrder
   accuracy?: Prisma.SortOrder
+  reviewText?: Prisma.SortOrderInput | Prisma.SortOrder
+  visitDate?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderationStatus?: Prisma.SortOrder
+  moderationReason?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderatedById?: Prisma.SortOrderInput | Prisma.SortOrder
+  moderatedAt?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
   _count?: Prisma.FacilityRatingCountOrderByAggregateInput
@@ -323,6 +395,12 @@ export type FacilityRatingScalarWhereWithAggregatesInput = {
   safety?: Prisma.IntWithAggregatesFilter<"FacilityRating"> | number
   accessibility?: Prisma.IntWithAggregatesFilter<"FacilityRating"> | number
   accuracy?: Prisma.IntWithAggregatesFilter<"FacilityRating"> | number
+  reviewText?: Prisma.StringNullableWithAggregatesFilter<"FacilityRating"> | string | null
+  visitDate?: Prisma.DateTimeNullableWithAggregatesFilter<"FacilityRating"> | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusWithAggregatesFilter<"FacilityRating"> | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.StringNullableWithAggregatesFilter<"FacilityRating"> | string | null
+  moderatedById?: Prisma.StringNullableWithAggregatesFilter<"FacilityRating"> | string | null
+  moderatedAt?: Prisma.DateTimeNullableWithAggregatesFilter<"FacilityRating"> | Date | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"FacilityRating"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"FacilityRating"> | Date | string
 }
@@ -333,10 +411,17 @@ export type FacilityRatingCreateInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutRatingsInput
   user: Prisma.UserCreateNestedOneWithoutFacilityRatingsInput
+  reply?: Prisma.FacilityRatingReplyCreateNestedOneWithoutRatingInput
+  moderatedBy?: Prisma.UserCreateNestedOneWithoutModeratedRatingsInput
 }
 
 export type FacilityRatingUncheckedCreateInput = {
@@ -347,8 +432,15 @@ export type FacilityRatingUncheckedCreateInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedCreateNestedOneWithoutRatingInput
 }
 
 export type FacilityRatingUpdateInput = {
@@ -357,10 +449,17 @@ export type FacilityRatingUpdateInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutRatingsNestedInput
   user?: Prisma.UserUpdateOneRequiredWithoutFacilityRatingsNestedInput
+  reply?: Prisma.FacilityRatingReplyUpdateOneWithoutRatingNestedInput
+  moderatedBy?: Prisma.UserUpdateOneWithoutModeratedRatingsNestedInput
 }
 
 export type FacilityRatingUncheckedUpdateInput = {
@@ -371,8 +470,15 @@ export type FacilityRatingUncheckedUpdateInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedUpdateOneWithoutRatingNestedInput
 }
 
 export type FacilityRatingCreateManyInput = {
@@ -383,6 +489,12 @@ export type FacilityRatingCreateManyInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -393,6 +505,11 @@ export type FacilityRatingUpdateManyMutationInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -405,6 +522,12 @@ export type FacilityRatingUncheckedUpdateManyInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -432,6 +555,12 @@ export type FacilityRatingCountOrderByAggregateInput = {
   safety?: Prisma.SortOrder
   accessibility?: Prisma.SortOrder
   accuracy?: Prisma.SortOrder
+  reviewText?: Prisma.SortOrder
+  visitDate?: Prisma.SortOrder
+  moderationStatus?: Prisma.SortOrder
+  moderationReason?: Prisma.SortOrder
+  moderatedById?: Prisma.SortOrder
+  moderatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -451,6 +580,12 @@ export type FacilityRatingMaxOrderByAggregateInput = {
   safety?: Prisma.SortOrder
   accessibility?: Prisma.SortOrder
   accuracy?: Prisma.SortOrder
+  reviewText?: Prisma.SortOrder
+  visitDate?: Prisma.SortOrder
+  moderationStatus?: Prisma.SortOrder
+  moderationReason?: Prisma.SortOrder
+  moderatedById?: Prisma.SortOrder
+  moderatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -463,6 +598,12 @@ export type FacilityRatingMinOrderByAggregateInput = {
   safety?: Prisma.SortOrder
   accessibility?: Prisma.SortOrder
   accuracy?: Prisma.SortOrder
+  reviewText?: Prisma.SortOrder
+  visitDate?: Prisma.SortOrder
+  moderationStatus?: Prisma.SortOrder
+  moderationReason?: Prisma.SortOrder
+  moderatedById?: Prisma.SortOrder
+  moderatedAt?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
 }
@@ -474,6 +615,11 @@ export type FacilityRatingSumOrderByAggregateInput = {
   accuracy?: Prisma.SortOrder
 }
 
+export type FacilityRatingScalarRelationFilter = {
+  is?: Prisma.FacilityRatingWhereInput
+  isNot?: Prisma.FacilityRatingWhereInput
+}
+
 export type FacilityRatingCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutUserInput, Prisma.FacilityRatingUncheckedCreateWithoutUserInput> | Prisma.FacilityRatingCreateWithoutUserInput[] | Prisma.FacilityRatingUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutUserInput | Prisma.FacilityRatingCreateOrConnectWithoutUserInput[]
@@ -481,10 +627,24 @@ export type FacilityRatingCreateNestedManyWithoutUserInput = {
   connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
 }
 
+export type FacilityRatingCreateNestedManyWithoutModeratedByInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput> | Prisma.FacilityRatingCreateWithoutModeratedByInput[] | Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput[]
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput | Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput[]
+  createMany?: Prisma.FacilityRatingCreateManyModeratedByInputEnvelope
+  connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+}
+
 export type FacilityRatingUncheckedCreateNestedManyWithoutUserInput = {
   create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutUserInput, Prisma.FacilityRatingUncheckedCreateWithoutUserInput> | Prisma.FacilityRatingCreateWithoutUserInput[] | Prisma.FacilityRatingUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutUserInput | Prisma.FacilityRatingCreateOrConnectWithoutUserInput[]
   createMany?: Prisma.FacilityRatingCreateManyUserInputEnvelope
+  connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+}
+
+export type FacilityRatingUncheckedCreateNestedManyWithoutModeratedByInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput> | Prisma.FacilityRatingCreateWithoutModeratedByInput[] | Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput[]
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput | Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput[]
+  createMany?: Prisma.FacilityRatingCreateManyModeratedByInputEnvelope
   connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
 }
 
@@ -502,6 +662,20 @@ export type FacilityRatingUpdateManyWithoutUserNestedInput = {
   deleteMany?: Prisma.FacilityRatingScalarWhereInput | Prisma.FacilityRatingScalarWhereInput[]
 }
 
+export type FacilityRatingUpdateManyWithoutModeratedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput> | Prisma.FacilityRatingCreateWithoutModeratedByInput[] | Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput[]
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput | Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput[]
+  upsert?: Prisma.FacilityRatingUpsertWithWhereUniqueWithoutModeratedByInput | Prisma.FacilityRatingUpsertWithWhereUniqueWithoutModeratedByInput[]
+  createMany?: Prisma.FacilityRatingCreateManyModeratedByInputEnvelope
+  set?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  disconnect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  delete?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  update?: Prisma.FacilityRatingUpdateWithWhereUniqueWithoutModeratedByInput | Prisma.FacilityRatingUpdateWithWhereUniqueWithoutModeratedByInput[]
+  updateMany?: Prisma.FacilityRatingUpdateManyWithWhereWithoutModeratedByInput | Prisma.FacilityRatingUpdateManyWithWhereWithoutModeratedByInput[]
+  deleteMany?: Prisma.FacilityRatingScalarWhereInput | Prisma.FacilityRatingScalarWhereInput[]
+}
+
 export type FacilityRatingUncheckedUpdateManyWithoutUserNestedInput = {
   create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutUserInput, Prisma.FacilityRatingUncheckedCreateWithoutUserInput> | Prisma.FacilityRatingCreateWithoutUserInput[] | Prisma.FacilityRatingUncheckedCreateWithoutUserInput[]
   connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutUserInput | Prisma.FacilityRatingCreateOrConnectWithoutUserInput[]
@@ -513,6 +687,20 @@ export type FacilityRatingUncheckedUpdateManyWithoutUserNestedInput = {
   connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
   update?: Prisma.FacilityRatingUpdateWithWhereUniqueWithoutUserInput | Prisma.FacilityRatingUpdateWithWhereUniqueWithoutUserInput[]
   updateMany?: Prisma.FacilityRatingUpdateManyWithWhereWithoutUserInput | Prisma.FacilityRatingUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.FacilityRatingScalarWhereInput | Prisma.FacilityRatingScalarWhereInput[]
+}
+
+export type FacilityRatingUncheckedUpdateManyWithoutModeratedByNestedInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput> | Prisma.FacilityRatingCreateWithoutModeratedByInput[] | Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput[]
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput | Prisma.FacilityRatingCreateOrConnectWithoutModeratedByInput[]
+  upsert?: Prisma.FacilityRatingUpsertWithWhereUniqueWithoutModeratedByInput | Prisma.FacilityRatingUpsertWithWhereUniqueWithoutModeratedByInput[]
+  createMany?: Prisma.FacilityRatingCreateManyModeratedByInputEnvelope
+  set?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  disconnect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  delete?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  connect?: Prisma.FacilityRatingWhereUniqueInput | Prisma.FacilityRatingWhereUniqueInput[]
+  update?: Prisma.FacilityRatingUpdateWithWhereUniqueWithoutModeratedByInput | Prisma.FacilityRatingUpdateWithWhereUniqueWithoutModeratedByInput[]
+  updateMany?: Prisma.FacilityRatingUpdateManyWithWhereWithoutModeratedByInput | Prisma.FacilityRatingUpdateManyWithWhereWithoutModeratedByInput[]
   deleteMany?: Prisma.FacilityRatingScalarWhereInput | Prisma.FacilityRatingScalarWhereInput[]
 }
 
@@ -558,15 +746,40 @@ export type FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput = {
   deleteMany?: Prisma.FacilityRatingScalarWhereInput | Prisma.FacilityRatingScalarWhereInput[]
 }
 
+export type EnumReviewModerationStatusFieldUpdateOperationsInput = {
+  set?: $Enums.ReviewModerationStatus
+}
+
+export type FacilityRatingCreateNestedOneWithoutReplyInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutReplyInput, Prisma.FacilityRatingUncheckedCreateWithoutReplyInput>
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutReplyInput
+  connect?: Prisma.FacilityRatingWhereUniqueInput
+}
+
+export type FacilityRatingUpdateOneRequiredWithoutReplyNestedInput = {
+  create?: Prisma.XOR<Prisma.FacilityRatingCreateWithoutReplyInput, Prisma.FacilityRatingUncheckedCreateWithoutReplyInput>
+  connectOrCreate?: Prisma.FacilityRatingCreateOrConnectWithoutReplyInput
+  upsert?: Prisma.FacilityRatingUpsertWithoutReplyInput
+  connect?: Prisma.FacilityRatingWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.FacilityRatingUpdateToOneWithWhereWithoutReplyInput, Prisma.FacilityRatingUpdateWithoutReplyInput>, Prisma.FacilityRatingUncheckedUpdateWithoutReplyInput>
+}
+
 export type FacilityRatingCreateWithoutUserInput = {
   id?: string
   cleanliness: number
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   property: Prisma.PropertyCreateNestedOneWithoutRatingsInput
+  reply?: Prisma.FacilityRatingReplyCreateNestedOneWithoutRatingInput
+  moderatedBy?: Prisma.UserCreateNestedOneWithoutModeratedRatingsInput
 }
 
 export type FacilityRatingUncheckedCreateWithoutUserInput = {
@@ -576,8 +789,15 @@ export type FacilityRatingUncheckedCreateWithoutUserInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedCreateNestedOneWithoutRatingInput
 }
 
 export type FacilityRatingCreateOrConnectWithoutUserInput = {
@@ -587,6 +807,52 @@ export type FacilityRatingCreateOrConnectWithoutUserInput = {
 
 export type FacilityRatingCreateManyUserInputEnvelope = {
   data: Prisma.FacilityRatingCreateManyUserInput | Prisma.FacilityRatingCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type FacilityRatingCreateWithoutModeratedByInput = {
+  id?: string
+  cleanliness: number
+  safety: number
+  accessibility: number
+  accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property: Prisma.PropertyCreateNestedOneWithoutRatingsInput
+  user: Prisma.UserCreateNestedOneWithoutFacilityRatingsInput
+  reply?: Prisma.FacilityRatingReplyCreateNestedOneWithoutRatingInput
+}
+
+export type FacilityRatingUncheckedCreateWithoutModeratedByInput = {
+  id?: string
+  propertyId: string
+  userId: string
+  cleanliness: number
+  safety: number
+  accessibility: number
+  accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedCreateNestedOneWithoutRatingInput
+}
+
+export type FacilityRatingCreateOrConnectWithoutModeratedByInput = {
+  where: Prisma.FacilityRatingWhereUniqueInput
+  create: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput>
+}
+
+export type FacilityRatingCreateManyModeratedByInputEnvelope = {
+  data: Prisma.FacilityRatingCreateManyModeratedByInput | Prisma.FacilityRatingCreateManyModeratedByInput[]
   skipDuplicates?: boolean
 }
 
@@ -617,8 +883,30 @@ export type FacilityRatingScalarWhereInput = {
   safety?: Prisma.IntFilter<"FacilityRating"> | number
   accessibility?: Prisma.IntFilter<"FacilityRating"> | number
   accuracy?: Prisma.IntFilter<"FacilityRating"> | number
+  reviewText?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  visitDate?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFilter<"FacilityRating"> | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedById?: Prisma.StringNullableFilter<"FacilityRating"> | string | null
+  moderatedAt?: Prisma.DateTimeNullableFilter<"FacilityRating"> | Date | string | null
   createdAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"FacilityRating"> | Date | string
+}
+
+export type FacilityRatingUpsertWithWhereUniqueWithoutModeratedByInput = {
+  where: Prisma.FacilityRatingWhereUniqueInput
+  update: Prisma.XOR<Prisma.FacilityRatingUpdateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedUpdateWithoutModeratedByInput>
+  create: Prisma.XOR<Prisma.FacilityRatingCreateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedCreateWithoutModeratedByInput>
+}
+
+export type FacilityRatingUpdateWithWhereUniqueWithoutModeratedByInput = {
+  where: Prisma.FacilityRatingWhereUniqueInput
+  data: Prisma.XOR<Prisma.FacilityRatingUpdateWithoutModeratedByInput, Prisma.FacilityRatingUncheckedUpdateWithoutModeratedByInput>
+}
+
+export type FacilityRatingUpdateManyWithWhereWithoutModeratedByInput = {
+  where: Prisma.FacilityRatingScalarWhereInput
+  data: Prisma.XOR<Prisma.FacilityRatingUpdateManyMutationInput, Prisma.FacilityRatingUncheckedUpdateManyWithoutModeratedByInput>
 }
 
 export type FacilityRatingCreateWithoutPropertyInput = {
@@ -627,9 +915,16 @@ export type FacilityRatingCreateWithoutPropertyInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
   user: Prisma.UserCreateNestedOneWithoutFacilityRatingsInput
+  reply?: Prisma.FacilityRatingReplyCreateNestedOneWithoutRatingInput
+  moderatedBy?: Prisma.UserCreateNestedOneWithoutModeratedRatingsInput
 }
 
 export type FacilityRatingUncheckedCreateWithoutPropertyInput = {
@@ -639,8 +934,15 @@ export type FacilityRatingUncheckedCreateWithoutPropertyInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedCreateNestedOneWithoutRatingInput
 }
 
 export type FacilityRatingCreateOrConnectWithoutPropertyInput = {
@@ -669,6 +971,94 @@ export type FacilityRatingUpdateManyWithWhereWithoutPropertyInput = {
   data: Prisma.XOR<Prisma.FacilityRatingUpdateManyMutationInput, Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyInput>
 }
 
+export type FacilityRatingCreateWithoutReplyInput = {
+  id?: string
+  cleanliness: number
+  safety: number
+  accessibility: number
+  accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  property: Prisma.PropertyCreateNestedOneWithoutRatingsInput
+  user: Prisma.UserCreateNestedOneWithoutFacilityRatingsInput
+  moderatedBy?: Prisma.UserCreateNestedOneWithoutModeratedRatingsInput
+}
+
+export type FacilityRatingUncheckedCreateWithoutReplyInput = {
+  id?: string
+  propertyId: string
+  userId: string
+  cleanliness: number
+  safety: number
+  accessibility: number
+  accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FacilityRatingCreateOrConnectWithoutReplyInput = {
+  where: Prisma.FacilityRatingWhereUniqueInput
+  create: Prisma.XOR<Prisma.FacilityRatingCreateWithoutReplyInput, Prisma.FacilityRatingUncheckedCreateWithoutReplyInput>
+}
+
+export type FacilityRatingUpsertWithoutReplyInput = {
+  update: Prisma.XOR<Prisma.FacilityRatingUpdateWithoutReplyInput, Prisma.FacilityRatingUncheckedUpdateWithoutReplyInput>
+  create: Prisma.XOR<Prisma.FacilityRatingCreateWithoutReplyInput, Prisma.FacilityRatingUncheckedCreateWithoutReplyInput>
+  where?: Prisma.FacilityRatingWhereInput
+}
+
+export type FacilityRatingUpdateToOneWithWhereWithoutReplyInput = {
+  where?: Prisma.FacilityRatingWhereInput
+  data: Prisma.XOR<Prisma.FacilityRatingUpdateWithoutReplyInput, Prisma.FacilityRatingUncheckedUpdateWithoutReplyInput>
+}
+
+export type FacilityRatingUpdateWithoutReplyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  safety?: Prisma.IntFieldUpdateOperationsInput | number
+  accessibility?: Prisma.IntFieldUpdateOperationsInput | number
+  accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneRequiredWithoutRatingsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutFacilityRatingsNestedInput
+  moderatedBy?: Prisma.UserUpdateOneWithoutModeratedRatingsNestedInput
+}
+
+export type FacilityRatingUncheckedUpdateWithoutReplyInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  safety?: Prisma.IntFieldUpdateOperationsInput | number
+  accessibility?: Prisma.IntFieldUpdateOperationsInput | number
+  accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
 export type FacilityRatingCreateManyUserInput = {
   id?: string
   propertyId: string
@@ -676,6 +1066,29 @@ export type FacilityRatingCreateManyUserInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+}
+
+export type FacilityRatingCreateManyModeratedByInput = {
+  id?: string
+  propertyId: string
+  userId: string
+  cleanliness: number
+  safety: number
+  accessibility: number
+  accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -686,9 +1099,16 @@ export type FacilityRatingUpdateWithoutUserInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   property?: Prisma.PropertyUpdateOneRequiredWithoutRatingsNestedInput
+  reply?: Prisma.FacilityRatingReplyUpdateOneWithoutRatingNestedInput
+  moderatedBy?: Prisma.UserUpdateOneWithoutModeratedRatingsNestedInput
 }
 
 export type FacilityRatingUncheckedUpdateWithoutUserInput = {
@@ -698,8 +1118,15 @@ export type FacilityRatingUncheckedUpdateWithoutUserInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedUpdateOneWithoutRatingNestedInput
 }
 
 export type FacilityRatingUncheckedUpdateManyWithoutUserInput = {
@@ -709,6 +1136,65 @@ export type FacilityRatingUncheckedUpdateManyWithoutUserInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type FacilityRatingUpdateWithoutModeratedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  safety?: Prisma.IntFieldUpdateOperationsInput | number
+  accessibility?: Prisma.IntFieldUpdateOperationsInput | number
+  accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  property?: Prisma.PropertyUpdateOneRequiredWithoutRatingsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutFacilityRatingsNestedInput
+  reply?: Prisma.FacilityRatingReplyUpdateOneWithoutRatingNestedInput
+}
+
+export type FacilityRatingUncheckedUpdateWithoutModeratedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  safety?: Prisma.IntFieldUpdateOperationsInput | number
+  accessibility?: Prisma.IntFieldUpdateOperationsInput | number
+  accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedUpdateOneWithoutRatingNestedInput
+}
+
+export type FacilityRatingUncheckedUpdateManyWithoutModeratedByInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  propertyId?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  cleanliness?: Prisma.IntFieldUpdateOperationsInput | number
+  safety?: Prisma.IntFieldUpdateOperationsInput | number
+  accessibility?: Prisma.IntFieldUpdateOperationsInput | number
+  accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -720,6 +1206,12 @@ export type FacilityRatingCreateManyPropertyInput = {
   safety: number
   accessibility: number
   accuracy: number
+  reviewText?: string | null
+  visitDate?: Date | string | null
+  moderationStatus?: $Enums.ReviewModerationStatus
+  moderationReason?: string | null
+  moderatedById?: string | null
+  moderatedAt?: Date | string | null
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -730,9 +1222,16 @@ export type FacilityRatingUpdateWithoutPropertyInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   user?: Prisma.UserUpdateOneRequiredWithoutFacilityRatingsNestedInput
+  reply?: Prisma.FacilityRatingReplyUpdateOneWithoutRatingNestedInput
+  moderatedBy?: Prisma.UserUpdateOneWithoutModeratedRatingsNestedInput
 }
 
 export type FacilityRatingUncheckedUpdateWithoutPropertyInput = {
@@ -742,8 +1241,15 @@ export type FacilityRatingUncheckedUpdateWithoutPropertyInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  reply?: Prisma.FacilityRatingReplyUncheckedUpdateOneWithoutRatingNestedInput
 }
 
 export type FacilityRatingUncheckedUpdateManyWithoutPropertyInput = {
@@ -753,6 +1259,12 @@ export type FacilityRatingUncheckedUpdateManyWithoutPropertyInput = {
   safety?: Prisma.IntFieldUpdateOperationsInput | number
   accessibility?: Prisma.IntFieldUpdateOperationsInput | number
   accuracy?: Prisma.IntFieldUpdateOperationsInput | number
+  reviewText?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  visitDate?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  moderationStatus?: Prisma.EnumReviewModerationStatusFieldUpdateOperationsInput | $Enums.ReviewModerationStatus
+  moderationReason?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedById?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  moderatedAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -767,10 +1279,18 @@ export type FacilityRatingSelect<ExtArgs extends runtime.Types.Extensions.Intern
   safety?: boolean
   accessibility?: boolean
   accuracy?: boolean
+  reviewText?: boolean
+  visitDate?: boolean
+  moderationStatus?: boolean
+  moderationReason?: boolean
+  moderatedById?: boolean
+  moderatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reply?: boolean | Prisma.FacilityRating$replyArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }, ExtArgs["result"]["facilityRating"]>
 
 export type FacilityRatingSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -781,10 +1301,17 @@ export type FacilityRatingSelectCreateManyAndReturn<ExtArgs extends runtime.Type
   safety?: boolean
   accessibility?: boolean
   accuracy?: boolean
+  reviewText?: boolean
+  visitDate?: boolean
+  moderationStatus?: boolean
+  moderationReason?: boolean
+  moderatedById?: boolean
+  moderatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }, ExtArgs["result"]["facilityRating"]>
 
 export type FacilityRatingSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -795,10 +1322,17 @@ export type FacilityRatingSelectUpdateManyAndReturn<ExtArgs extends runtime.Type
   safety?: boolean
   accessibility?: boolean
   accuracy?: boolean
+  reviewText?: boolean
+  visitDate?: boolean
+  moderationStatus?: boolean
+  moderationReason?: boolean
+  moderatedById?: boolean
+  moderatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }, ExtArgs["result"]["facilityRating"]>
 
 export type FacilityRatingSelectScalar = {
@@ -809,22 +1343,32 @@ export type FacilityRatingSelectScalar = {
   safety?: boolean
   accessibility?: boolean
   accuracy?: boolean
+  reviewText?: boolean
+  visitDate?: boolean
+  moderationStatus?: boolean
+  moderationReason?: boolean
+  moderatedById?: boolean
+  moderatedAt?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type FacilityRatingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "propertyId" | "userId" | "cleanliness" | "safety" | "accessibility" | "accuracy" | "createdAt" | "updatedAt", ExtArgs["result"]["facilityRating"]>
+export type FacilityRatingOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "propertyId" | "userId" | "cleanliness" | "safety" | "accessibility" | "accuracy" | "reviewText" | "visitDate" | "moderationStatus" | "moderationReason" | "moderatedById" | "moderatedAt" | "createdAt" | "updatedAt", ExtArgs["result"]["facilityRating"]>
 export type FacilityRatingInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  reply?: boolean | Prisma.FacilityRating$replyArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }
 export type FacilityRatingIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }
 export type FacilityRatingIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   property?: boolean | Prisma.PropertyDefaultArgs<ExtArgs>
   user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+  moderatedBy?: boolean | Prisma.FacilityRating$moderatedByArgs<ExtArgs>
 }
 
 export type $FacilityRatingPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -832,6 +1376,8 @@ export type $FacilityRatingPayload<ExtArgs extends runtime.Types.Extensions.Inte
   objects: {
     property: Prisma.$PropertyPayload<ExtArgs>
     user: Prisma.$UserPayload<ExtArgs>
+    reply: Prisma.$FacilityRatingReplyPayload<ExtArgs> | null
+    moderatedBy: Prisma.$UserPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -841,6 +1387,12 @@ export type $FacilityRatingPayload<ExtArgs extends runtime.Types.Extensions.Inte
     safety: number
     accessibility: number
     accuracy: number
+    reviewText: string | null
+    visitDate: Date | null
+    moderationStatus: $Enums.ReviewModerationStatus
+    moderationReason: string | null
+    moderatedById: string | null
+    moderatedAt: Date | null
     createdAt: Date
     updatedAt: Date
   }, ExtArgs["result"]["facilityRating"]>
@@ -1239,6 +1791,8 @@ export interface Prisma__FacilityRatingClient<T, Null = never, ExtArgs extends r
   readonly [Symbol.toStringTag]: "PrismaPromise"
   property<T extends Prisma.PropertyDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.PropertyDefaultArgs<ExtArgs>>): Prisma.Prisma__PropertyClient<runtime.Types.Result.GetResult<Prisma.$PropertyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+  reply<T extends Prisma.FacilityRating$replyArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FacilityRating$replyArgs<ExtArgs>>): Prisma.Prisma__FacilityRatingReplyClient<runtime.Types.Result.GetResult<Prisma.$FacilityRatingReplyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  moderatedBy<T extends Prisma.FacilityRating$moderatedByArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.FacilityRating$moderatedByArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1275,6 +1829,12 @@ export interface FacilityRatingFieldRefs {
   readonly safety: Prisma.FieldRef<"FacilityRating", 'Int'>
   readonly accessibility: Prisma.FieldRef<"FacilityRating", 'Int'>
   readonly accuracy: Prisma.FieldRef<"FacilityRating", 'Int'>
+  readonly reviewText: Prisma.FieldRef<"FacilityRating", 'String'>
+  readonly visitDate: Prisma.FieldRef<"FacilityRating", 'DateTime'>
+  readonly moderationStatus: Prisma.FieldRef<"FacilityRating", 'ReviewModerationStatus'>
+  readonly moderationReason: Prisma.FieldRef<"FacilityRating", 'String'>
+  readonly moderatedById: Prisma.FieldRef<"FacilityRating", 'String'>
+  readonly moderatedAt: Prisma.FieldRef<"FacilityRating", 'DateTime'>
   readonly createdAt: Prisma.FieldRef<"FacilityRating", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"FacilityRating", 'DateTime'>
 }
@@ -1675,6 +2235,44 @@ export type FacilityRatingDeleteManyArgs<ExtArgs extends runtime.Types.Extension
    * Limit how many FacilityRatings to delete.
    */
   limit?: number
+}
+
+/**
+ * FacilityRating.reply
+ */
+export type FacilityRating$replyArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the FacilityRatingReply
+   */
+  select?: Prisma.FacilityRatingReplySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the FacilityRatingReply
+   */
+  omit?: Prisma.FacilityRatingReplyOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.FacilityRatingReplyInclude<ExtArgs> | null
+  where?: Prisma.FacilityRatingReplyWhereInput
+}
+
+/**
+ * FacilityRating.moderatedBy
+ */
+export type FacilityRating$moderatedByArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the User
+   */
+  select?: Prisma.UserSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the User
+   */
+  omit?: Prisma.UserOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.UserInclude<ExtArgs> | null
+  where?: Prisma.UserWhereInput
 }
 
 /**

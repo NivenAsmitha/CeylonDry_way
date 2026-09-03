@@ -78,6 +78,9 @@ export function Footer() {
               <Link className={footerLinkClass} to="/login">
                 {t("Sign in")}
               </Link>
+              <Link className={footerLinkClass} to="/support">
+                {t("Contact support")}
+              </Link>
             </nav>
           </div>
 

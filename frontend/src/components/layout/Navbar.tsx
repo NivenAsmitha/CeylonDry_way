@@ -169,6 +169,20 @@ export function Navbar() {
                 >
                   {t("Add properties")}
                 </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/staff/reviews"
+                  onClick={closeMenu}
+                >
+                  {t("Reviews")}
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/staff/support"
+                  onClick={closeMenu}
+                >
+                  {t("Support")}
+                </NavLink>
               </>
             ) : null}
             {isAuthenticated && hasAdminRole ? (
@@ -200,6 +214,20 @@ export function Navbar() {
                   onClick={closeMenu}
                 >
                   {t("Reports")}
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/staff/reviews"
+                  onClick={closeMenu}
+                >
+                  {t("Reviews")}
+                </NavLink>
+                <NavLink
+                  className={navLinkClass}
+                  to="/staff/support"
+                  onClick={closeMenu}
+                >
+                  {t("Support")}
                 </NavLink>
               </>
             ) : null}

@@ -61,6 +61,9 @@ export const ModelName = {
   AuditLog: 'AuditLog',
   PropertyReport: 'PropertyReport',
   FacilityRating: 'FacilityRating',
+  FacilityRatingReply: 'FacilityRatingReply',
+  SupportTicket: 'SupportTicket',
+  SupportMessage: 'SupportMessage',
   Notification: 'Notification',
   PropertyPhoto: 'PropertyPhoto',
   Amenity: 'Amenity',
@@ -246,11 +249,63 @@ export const FacilityRatingScalarFieldEnum = {
   safety: 'safety',
   accessibility: 'accessibility',
   accuracy: 'accuracy',
+  reviewText: 'reviewText',
+  visitDate: 'visitDate',
+  moderationStatus: 'moderationStatus',
+  moderationReason: 'moderationReason',
+  moderatedById: 'moderatedById',
+  moderatedAt: 'moderatedAt',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
 
 export type FacilityRatingScalarFieldEnum = (typeof FacilityRatingScalarFieldEnum)[keyof typeof FacilityRatingScalarFieldEnum]
+
+
+export const FacilityRatingReplyScalarFieldEnum = {
+  id: 'id',
+  ratingId: 'ratingId',
+  authorId: 'authorId',
+  message: 'message',
+  moderationStatus: 'moderationStatus',
+  moderationReason: 'moderationReason',
+  moderatedById: 'moderatedById',
+  moderatedAt: 'moderatedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type FacilityRatingReplyScalarFieldEnum = (typeof FacilityRatingReplyScalarFieldEnum)[keyof typeof FacilityRatingReplyScalarFieldEnum]
+
+
+export const SupportTicketScalarFieldEnum = {
+  id: 'id',
+  ticketNumber: 'ticketNumber',
+  createdById: 'createdById',
+  assignedReviewerId: 'assignedReviewerId',
+  relatedPropertyId: 'relatedPropertyId',
+  category: 'category',
+  priority: 'priority',
+  status: 'status',
+  subject: 'subject',
+  closedAt: 'closedAt',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type SupportTicketScalarFieldEnum = (typeof SupportTicketScalarFieldEnum)[keyof typeof SupportTicketScalarFieldEnum]
+
+
+export const SupportMessageScalarFieldEnum = {
+  id: 'id',
+  ticketId: 'ticketId',
+  authorId: 'authorId',
+  message: 'message',
+  isStaffNote: 'isStaffNote',
+  createdAt: 'createdAt'
+} as const
+
+export type SupportMessageScalarFieldEnum = (typeof SupportMessageScalarFieldEnum)[keyof typeof SupportMessageScalarFieldEnum]
 
 
 export const NotificationScalarFieldEnum = {

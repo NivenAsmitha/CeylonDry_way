@@ -8,6 +8,7 @@ import { usePublicPlace } from "../../features/places/hooks/usePlaces";
 import { getApiErrorMessage, normalizeApiError } from "../../types/api.types";
 import { ReportPlaceButton } from "../../features/reports/ReportPlaceButton";
 import { FacilityRatings } from "../../features/ratings/components/FacilityRatings";
+import { FacilityReviews } from "../../features/ratings/components/FacilityReviews";
 import { useLanguage } from "../../i18n/useLanguage";
 
 const LocationPreviewMap = lazy(() =>
@@ -170,6 +171,7 @@ export function PlaceDetailsPage() {
           ) : null}
 
           <FacilityRatings propertyId={place.propertyId} />
+          <FacilityReviews propertyId={place.propertyId} />
 
           <section className="mt-8 border-t border-slate-200 pt-7">
             <h2 className="text-2xl font-black text-slate-950">

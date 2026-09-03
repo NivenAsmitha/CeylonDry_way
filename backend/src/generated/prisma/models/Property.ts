@@ -204,6 +204,7 @@ export type PropertyWhereInput = {
   reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
   reports?: Prisma.PropertyReportListRelationFilter
   ratings?: Prisma.FacilityRatingListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
 }
 
 export type PropertyOrderByWithRelationInput = {
@@ -221,6 +222,7 @@ export type PropertyOrderByWithRelationInput = {
   reviewDecisions?: Prisma.ReviewDecisionOrderByRelationAggregateInput
   reports?: Prisma.PropertyReportOrderByRelationAggregateInput
   ratings?: Prisma.FacilityRatingOrderByRelationAggregateInput
+  supportTickets?: Prisma.SupportTicketOrderByRelationAggregateInput
 }
 
 export type PropertyWhereUniqueInput = Prisma.AtLeast<{
@@ -241,6 +243,7 @@ export type PropertyWhereUniqueInput = Prisma.AtLeast<{
   reviewDecisions?: Prisma.ReviewDecisionListRelationFilter
   reports?: Prisma.PropertyReportListRelationFilter
   ratings?: Prisma.FacilityRatingListRelationFilter
+  supportTickets?: Prisma.SupportTicketListRelationFilter
 }, "id" | "activeVersionId" | "workingVersionId">
 
 export type PropertyOrderByWithAggregationInput = {
@@ -281,6 +284,7 @@ export type PropertyCreateInput = {
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateInput = {
@@ -295,6 +299,7 @@ export type PropertyUncheckedCreateInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUpdateInput = {
@@ -309,6 +314,7 @@ export type PropertyUpdateInput = {
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateInput = {
@@ -323,6 +329,7 @@ export type PropertyUncheckedUpdateInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyCreateManyInput = {
@@ -568,6 +575,22 @@ export type PropertyUpdateOneRequiredWithoutRatingsNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutRatingsInput, Prisma.PropertyUpdateWithoutRatingsInput>, Prisma.PropertyUncheckedUpdateWithoutRatingsInput>
 }
 
+export type PropertyCreateNestedOneWithoutSupportTicketsInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutSupportTicketsInput, Prisma.PropertyUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutSupportTicketsInput
+  connect?: Prisma.PropertyWhereUniqueInput
+}
+
+export type PropertyUpdateOneWithoutSupportTicketsNestedInput = {
+  create?: Prisma.XOR<Prisma.PropertyCreateWithoutSupportTicketsInput, Prisma.PropertyUncheckedCreateWithoutSupportTicketsInput>
+  connectOrCreate?: Prisma.PropertyCreateOrConnectWithoutSupportTicketsInput
+  upsert?: Prisma.PropertyUpsertWithoutSupportTicketsInput
+  disconnect?: Prisma.PropertyWhereInput | boolean
+  delete?: Prisma.PropertyWhereInput | boolean
+  connect?: Prisma.PropertyWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.PropertyUpdateToOneWithWhereWithoutSupportTicketsInput, Prisma.PropertyUpdateWithoutSupportTicketsInput>, Prisma.PropertyUncheckedUpdateWithoutSupportTicketsInput>
+}
+
 export type PropertyCreateWithoutOwnerInput = {
   id?: string
   lifecycleStatus?: $Enums.PropertyStatus
@@ -579,6 +602,7 @@ export type PropertyCreateWithoutOwnerInput = {
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutOwnerInput = {
@@ -592,6 +616,7 @@ export type PropertyUncheckedCreateWithoutOwnerInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutOwnerInput = {
@@ -644,6 +669,7 @@ export type PropertyCreateWithoutVersionsInput = {
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutVersionsInput = {
@@ -657,6 +683,7 @@ export type PropertyUncheckedCreateWithoutVersionsInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutVersionsInput = {
@@ -675,6 +702,7 @@ export type PropertyCreateWithoutActiveVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutActiveVersionInput = {
@@ -688,6 +716,7 @@ export type PropertyUncheckedCreateWithoutActiveVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutActiveVersionInput = {
@@ -706,6 +735,7 @@ export type PropertyCreateWithoutWorkingVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutWorkingVersionInput = {
@@ -719,6 +749,7 @@ export type PropertyUncheckedCreateWithoutWorkingVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutWorkingVersionInput = {
@@ -748,6 +779,7 @@ export type PropertyUpdateWithoutVersionsInput = {
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutVersionsInput = {
@@ -761,6 +793,7 @@ export type PropertyUncheckedUpdateWithoutVersionsInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUpsertWithoutActiveVersionInput = {
@@ -785,6 +818,7 @@ export type PropertyUpdateWithoutActiveVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutActiveVersionInput = {
@@ -798,6 +832,7 @@ export type PropertyUncheckedUpdateWithoutActiveVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUpsertWithoutWorkingVersionInput = {
@@ -822,6 +857,7 @@ export type PropertyUpdateWithoutWorkingVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutWorkingVersionInput = {
@@ -835,6 +871,7 @@ export type PropertyUncheckedUpdateWithoutWorkingVersionInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReviewDecisionsInput = {
@@ -848,6 +885,7 @@ export type PropertyCreateWithoutReviewDecisionsInput = {
   workingVersion?: Prisma.PropertyVersionCreateNestedOneWithoutWorkingForPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReviewDecisionsInput = {
@@ -861,6 +899,7 @@ export type PropertyUncheckedCreateWithoutReviewDecisionsInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReviewDecisionsInput = {
@@ -890,6 +929,7 @@ export type PropertyUpdateWithoutReviewDecisionsInput = {
   workingVersion?: Prisma.PropertyVersionUpdateOneWithoutWorkingForPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReviewDecisionsInput = {
@@ -903,6 +943,7 @@ export type PropertyUncheckedUpdateWithoutReviewDecisionsInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyCreateWithoutReportsInput = {
@@ -916,6 +957,7 @@ export type PropertyCreateWithoutReportsInput = {
   workingVersion?: Prisma.PropertyVersionCreateNestedOneWithoutWorkingForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutReportsInput = {
@@ -929,6 +971,7 @@ export type PropertyUncheckedCreateWithoutReportsInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutReportsInput = {
@@ -958,6 +1001,7 @@ export type PropertyUpdateWithoutReportsInput = {
   workingVersion?: Prisma.PropertyVersionUpdateOneWithoutWorkingForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutReportsInput = {
@@ -971,6 +1015,7 @@ export type PropertyUncheckedUpdateWithoutReportsInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyCreateWithoutRatingsInput = {
@@ -984,6 +1029,7 @@ export type PropertyCreateWithoutRatingsInput = {
   workingVersion?: Prisma.PropertyVersionCreateNestedOneWithoutWorkingForPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyUncheckedCreateWithoutRatingsInput = {
@@ -997,6 +1043,7 @@ export type PropertyUncheckedCreateWithoutRatingsInput = {
   versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
   reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  supportTickets?: Prisma.SupportTicketUncheckedCreateNestedManyWithoutRelatedPropertyInput
 }
 
 export type PropertyCreateOrConnectWithoutRatingsInput = {
@@ -1026,6 +1073,7 @@ export type PropertyUpdateWithoutRatingsInput = {
   workingVersion?: Prisma.PropertyVersionUpdateOneWithoutWorkingForPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutRatingsInput = {
@@ -1039,6 +1087,79 @@ export type PropertyUncheckedUpdateWithoutRatingsInput = {
   versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
+}
+
+export type PropertyCreateWithoutSupportTicketsInput = {
+  id?: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  owner: Prisma.UserCreateNestedOneWithoutPropertiesInput
+  versions?: Prisma.PropertyVersionCreateNestedManyWithoutPropertyInput
+  activeVersion?: Prisma.PropertyVersionCreateNestedOneWithoutActiveForPropertyInput
+  workingVersion?: Prisma.PropertyVersionCreateNestedOneWithoutWorkingForPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.PropertyReportCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyUncheckedCreateWithoutSupportTicketsInput = {
+  id?: string
+  ownerUserId: string
+  lifecycleStatus?: $Enums.PropertyStatus
+  activeVersionId?: string | null
+  workingVersionId?: string | null
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  versions?: Prisma.PropertyVersionUncheckedCreateNestedManyWithoutPropertyInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedCreateNestedManyWithoutPropertyInput
+  reports?: Prisma.PropertyReportUncheckedCreateNestedManyWithoutPropertyInput
+  ratings?: Prisma.FacilityRatingUncheckedCreateNestedManyWithoutPropertyInput
+}
+
+export type PropertyCreateOrConnectWithoutSupportTicketsInput = {
+  where: Prisma.PropertyWhereUniqueInput
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutSupportTicketsInput, Prisma.PropertyUncheckedCreateWithoutSupportTicketsInput>
+}
+
+export type PropertyUpsertWithoutSupportTicketsInput = {
+  update: Prisma.XOR<Prisma.PropertyUpdateWithoutSupportTicketsInput, Prisma.PropertyUncheckedUpdateWithoutSupportTicketsInput>
+  create: Prisma.XOR<Prisma.PropertyCreateWithoutSupportTicketsInput, Prisma.PropertyUncheckedCreateWithoutSupportTicketsInput>
+  where?: Prisma.PropertyWhereInput
+}
+
+export type PropertyUpdateToOneWithWhereWithoutSupportTicketsInput = {
+  where?: Prisma.PropertyWhereInput
+  data: Prisma.XOR<Prisma.PropertyUpdateWithoutSupportTicketsInput, Prisma.PropertyUncheckedUpdateWithoutSupportTicketsInput>
+}
+
+export type PropertyUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  owner?: Prisma.UserUpdateOneRequiredWithoutPropertiesNestedInput
+  versions?: Prisma.PropertyVersionUpdateManyWithoutPropertyNestedInput
+  activeVersion?: Prisma.PropertyVersionUpdateOneWithoutActiveForPropertyNestedInput
+  workingVersion?: Prisma.PropertyVersionUpdateOneWithoutWorkingForPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+}
+
+export type PropertyUncheckedUpdateWithoutSupportTicketsInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  ownerUserId?: Prisma.StringFieldUpdateOperationsInput | string
+  lifecycleStatus?: Prisma.EnumPropertyStatusFieldUpdateOperationsInput | $Enums.PropertyStatus
+  activeVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  workingVersionId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  versions?: Prisma.PropertyVersionUncheckedUpdateManyWithoutPropertyNestedInput
+  reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
+  reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
+  ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
 }
 
 export type PropertyCreateManyOwnerInput = {
@@ -1061,6 +1182,7 @@ export type PropertyUpdateWithoutOwnerInput = {
   reviewDecisions?: Prisma.ReviewDecisionUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateWithoutOwnerInput = {
@@ -1074,6 +1196,7 @@ export type PropertyUncheckedUpdateWithoutOwnerInput = {
   reviewDecisions?: Prisma.ReviewDecisionUncheckedUpdateManyWithoutPropertyNestedInput
   reports?: Prisma.PropertyReportUncheckedUpdateManyWithoutPropertyNestedInput
   ratings?: Prisma.FacilityRatingUncheckedUpdateManyWithoutPropertyNestedInput
+  supportTickets?: Prisma.SupportTicketUncheckedUpdateManyWithoutRelatedPropertyNestedInput
 }
 
 export type PropertyUncheckedUpdateManyWithoutOwnerInput = {
@@ -1095,6 +1218,7 @@ export type PropertyCountOutputType = {
   reviewDecisions: number
   reports: number
   ratings: number
+  supportTickets: number
 }
 
 export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1102,6 +1226,7 @@ export type PropertyCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensio
   reviewDecisions?: boolean | PropertyCountOutputTypeCountReviewDecisionsArgs
   reports?: boolean | PropertyCountOutputTypeCountReportsArgs
   ratings?: boolean | PropertyCountOutputTypeCountRatingsArgs
+  supportTickets?: boolean | PropertyCountOutputTypeCountSupportTicketsArgs
 }
 
 /**
@@ -1142,6 +1267,13 @@ export type PropertyCountOutputTypeCountRatingsArgs<ExtArgs extends runtime.Type
   where?: Prisma.FacilityRatingWhereInput
 }
 
+/**
+ * PropertyCountOutputType without action
+ */
+export type PropertyCountOutputTypeCountSupportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.SupportTicketWhereInput
+}
+
 
 export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -1158,6 +1290,7 @@ export type PropertySelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
   ratings?: boolean | Prisma.Property$ratingsArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Property$supportTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["property"]>
 
@@ -1206,6 +1339,7 @@ export type PropertyInclude<ExtArgs extends runtime.Types.Extensions.InternalArg
   reviewDecisions?: boolean | Prisma.Property$reviewDecisionsArgs<ExtArgs>
   reports?: boolean | Prisma.Property$reportsArgs<ExtArgs>
   ratings?: boolean | Prisma.Property$ratingsArgs<ExtArgs>
+  supportTickets?: boolean | Prisma.Property$supportTicketsArgs<ExtArgs>
   _count?: boolean | Prisma.PropertyCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type PropertyIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1229,6 +1363,7 @@ export type $PropertyPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     reviewDecisions: Prisma.$ReviewDecisionPayload<ExtArgs>[]
     reports: Prisma.$PropertyReportPayload<ExtArgs>[]
     ratings: Prisma.$FacilityRatingPayload<ExtArgs>[]
+    supportTickets: Prisma.$SupportTicketPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1639,6 +1774,7 @@ export interface Prisma__PropertyClient<T, Null = never, ExtArgs extends runtime
   reviewDecisions<T extends Prisma.Property$reviewDecisionsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reviewDecisionsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewDecisionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   reports<T extends Prisma.Property$reportsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$reportsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PropertyReportPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   ratings<T extends Prisma.Property$ratingsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$ratingsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$FacilityRatingPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  supportTickets<T extends Prisma.Property$supportTicketsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Property$supportTicketsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$SupportTicketPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -2207,6 +2343,30 @@ export type Property$ratingsArgs<ExtArgs extends runtime.Types.Extensions.Intern
   take?: number
   skip?: number
   distinct?: Prisma.FacilityRatingScalarFieldEnum | Prisma.FacilityRatingScalarFieldEnum[]
+}
+
+/**
+ * Property.supportTickets
+ */
+export type Property$supportTicketsArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the SupportTicket
+   */
+  select?: Prisma.SupportTicketSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the SupportTicket
+   */
+  omit?: Prisma.SupportTicketOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.SupportTicketInclude<ExtArgs> | null
+  where?: Prisma.SupportTicketWhereInput
+  orderBy?: Prisma.SupportTicketOrderByWithRelationInput | Prisma.SupportTicketOrderByWithRelationInput[]
+  cursor?: Prisma.SupportTicketWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.SupportTicketScalarFieldEnum | Prisma.SupportTicketScalarFieldEnum[]
 }
 
 /**
